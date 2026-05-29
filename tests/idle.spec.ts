@@ -127,26 +127,29 @@ test.describe('Idle - Persistence', () => {
 
   test('game state restores after reload', async ({ page }) => {
     await page.goto(GAME_URL);
+    // Wait for game to fully initialize
+    await page.waitForTimeout(1000);
 
-    // Click donut a few times
+    // Click donut multiple times to generate coins
     const donutBtn = await page.locator('#donut-btn');
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
       await donutBtn.click();
-      await page.waitForTimeout(50);
+      await page.waitForTimeout(100);
     }
 
-    // Get coins
-    const coinAmount = await page.locator('#coin-amount');
-    const coinsBeforeReload = await coinAmount.textContent();
+    // Wait for autosave (5 second interval) to definitely persist to localStorage
+    await page.waitForTimeout(6000);
 
-    // Wait for autosave (5 second interval) to persist to localStorage
-    await page.waitForTimeout(5500);
+    // Get coins before reload
+    const coinsBeforeReload = await page.locator('#coin-amount').textContent();
+    expect(coinsBeforeReload).not.toBe('0'); // Verify we actually clicked
 
     // Reload
     await page.reload();
-    await page.waitForTimeout(1000);
+    // Wait for page to reload and game to reinitialize
+    await page.waitForTimeout(2000);
 
-    // Coins should be restored
+    // Coins should be restored from localStorage
     const coinsAfterReload = await page.locator('#coin-amount').textContent();
     expect(coinsAfterReload).toBe(coinsBeforeReload);
   });
