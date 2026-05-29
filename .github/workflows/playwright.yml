@@ -48,27 +48,30 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
+      - name: Kill any existing process on port 8000
+        run: |
+          lsof -i :8000 | grep -v COMMAND | awk '{print $2}' | xargs -r kill -9 || true
+          sleep 1
+
       - name: Start HTTP server
         run: |
           npx http-server -p 8000 -c-1 > /tmp/server.log 2>&1 &
+          SERVER_PID=$!
+          echo "Server PID: $SERVER_PID"
+
+          # Wait for server to be ready
           for i in {1..30}; do
             if curl -f http://localhost:8000 > /dev/null 2>&1; then
-              echo "Server started"
+              echo "✓ Server started successfully"
               exit 0
             fi
-            sleep 1
-          done
-          echo "Server failed to start"
-          cat /tmp/server.log
-          exit 1
-
-      - name: Wait for server to be ready
-        run: |
-          for i in {1..30}; do
-            curl -f http://localhost:8000 && break
             echo "Waiting for server... ($i/30)"
             sleep 1
           done
+
+          echo "✗ Server failed to start"
+          cat /tmp/server.log
+          exit 1
 
       - name: Run Playwright tests
         run: npx playwright test
@@ -83,4 +86,6 @@ jobs:
 
       - name: Stop HTTP server
         if: always()
-        run: pkill -f 'http-server' || true
+        run: |
+          pkill -f 'http-server' || true
+          sleep 1
