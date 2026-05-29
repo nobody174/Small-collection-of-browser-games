@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Donut Empire</title>
+
+  <link rel="stylesheet" href="../../shared/css/theme.css">
+  <link rel="stylesheet" href="../../shared/css/ui.css">
+  <link rel="stylesheet" href="../../shared/css/animations.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="idle-board">
+
+  <main class="ng-app">
+
+    <header class="idle-topbar">
+      <h1 class="ng-topbar__title">🍩 Donut Empire</h1>
+      <div class="stats">
+        <button class="btn btn--ghost btn--sm" id="btn-reset">Reset save</button>
+        <button class="btn btn--ghost btn--sm btn--icon" id="btn-mute" title="Mute">🔊</button>
+        <a class="btn btn--ghost btn--sm" href="../../index.html">← Hub</a>
+      </div>
+    </header>
+
+    <div class="idle-layout">
+
+      <!-- Left side: counter + clickable donut -->
+      <div class="coin-card" id="coin-card">
+        <div class="coin-amount" id="coin-amount">0</div>
+        <div class="coin-amount__label">coins</div>
+        <div class="coin-rate" id="coin-rate">0 coins / second</div>
+
+        <button class="donut-btn" id="donut-btn" aria-label="Bake a donut">🍩</button>
+
+        <div class="click-power" id="click-power">Click power: <b>1</b></div>
+      </div>
+
+      <!-- Right side: shop -->
+      <aside class="shop" id="shop">
+        <div id="shop-items"></div>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <script src="../../shared/js/utils.js"></script>
+  <script src="../../shared/js/save.js"></script>
+  <script src="../../shared/js/audio.js"></script>
+  <script src="../../shared/js/particles.js"></script>
+  <script src="../../shared/js/ui.js"></script>
+
+  <script src="js/idle.js"></script>
+</body>
+</html>

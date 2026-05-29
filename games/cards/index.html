@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Card Collection</title>
+
+  <link rel="stylesheet" href="../../shared/css/theme.css">
+  <link rel="stylesheet" href="../../shared/css/ui.css">
+  <link rel="stylesheet" href="../../shared/css/animations.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="ng-app">
+    <div class="ng-screen">
+
+      <div class="ng-topbar">
+        <h1 class="ng-topbar__title">🂡 Card Collection</h1>
+        <a class="btn btn--ghost btn--sm" href="../../index.html">← Hub</a>
+      </div>
+      <p>Pick a solitaire variant to play.</p>
+
+      <div class="variant-grid ng-pop">
+
+        <a class="variant-card" href="klondike.html">
+          <div class="variant-card__emoji">🂮</div>
+          <h2 class="variant-card__title">Klondike</h2>
+          <p class="variant-card__desc">The classic Windows Solitaire. 7 columns, 4 foundations.</p>
+          <span class="badge badge--success">Ready</span>
+        </a>
+
+        <a class="variant-card" href="spider.html">
+          <div class="variant-card__emoji">🕷️</div>
+          <h2 class="variant-card__title">Spider</h2>
+          <p class="variant-card__desc">Two decks, 10 columns. 1/2/4-suit difficulty.</p>
+          <span class="badge badge--success">Ready</span>
+        </a>
+
+        <a class="variant-card" href="freecell.html">
+          <div class="variant-card__emoji">♣</div>
+          <h2 class="variant-card__title">FreeCell</h2>
+          <p class="variant-card__desc">8 tableau columns + 4 free cells. Pure strategy.</p>
+          <span class="badge badge--success">Ready</span>
+        </a>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="../../shared/js/utils.js"></script>
+  <script src="../../shared/js/save.js"></script>
+  <script src="../../shared/js/audio.js"></script>
+  <script src="../../shared/js/particles.js"></script>
+  <script src="../../shared/js/ui.js"></script>
+</body>
+</html>

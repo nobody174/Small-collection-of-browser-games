@@ -1,0 +1,707 @@
+<testsuites id="" name="" tests="99" failures="0" skipped="0" errors="0" time="22.797726000000257">
+<testsuite name="blocks.spec.ts" timestamp="2026-05-29T21:49:36.538Z" hostname="chromium" tests="20" failures="0" skipped="0" time="26.422" errors="0">
+<testcase name="Color Block Escape (Blocks) › game page loads with correct title" classname="blocks.spec.ts" time="1.444">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape--eeb22-ge-loads-with-correct-title-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level 1 board renders" classname="blocks.spec.ts" time="1.459">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape-Blocks-level-1-board-renders-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › blocks are rendered on board" classname="blocks.spec.ts" time="0.704">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape--276ee-locks-are-rendered-on-board-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level header displays current level" classname="blocks.spec.ts" time="0.791">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape--c2d84-ader-displays-current-level-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › move counter starts at 0" classname="blocks.spec.ts" time="1.373">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape-Blocks-move-counter-starts-at-0-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › hint button is visible" classname="blocks.spec.ts" time="0.869">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape-Blocks-hint-button-is-visible-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › hint button pulses doors" classname="blocks.spec.ts" time="6.404">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape-Blocks-hint-button-pulses-doors-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › can select/deselect blocks" classname="blocks.spec.ts" time="1.531">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape-Blocks-can-select-deselect-blocks-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › undo button is visible" classname="blocks.spec.ts" time="0.642">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape-Blocks-undo-button-is-visible-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › reset button is visible" classname="blocks.spec.ts" time="0.648">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape-Blocks-reset-button-is-visible-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › mute button toggles state" classname="blocks.spec.ts" time="0.783">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape-Blocks-mute-button-toggles-state-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level picker modal opens and closes" classname="blocks.spec.ts" time="1.307">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape--e9615-cker-modal-opens-and-closes-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Color Block Escape (Blocks) › can navigate back to hub" classname="blocks.spec.ts" time="1.315">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Color-Block-Escape-Blocks-can-navigate-back-to-hub-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Blocks - Persistence › progress saves and restores" classname="blocks.spec.ts" time="0.927">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Blocks---Persistence-progress-saves-and-restores-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Blocks - Persistence › cleared localStorage starts fresh game" classname="blocks.spec.ts" time="1.286">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Blocks---Persistenc-48a30-alStorage-starts-fresh-game-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Blocks - Persistence › corrupted save does not crash game" classname="blocks.spec.ts" time="1.075">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Blocks---Persistenc-86d19-ed-save-does-not-crash-game-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Blocks - Movement › block movement increases move counter" classname="blocks.spec.ts" time="1.352">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Blocks---Movement-b-d9085-ment-increases-move-counter-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to mobile screen" classname="blocks.spec.ts" time="0.601">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Blocks---Responsive-ecfdc-ame-adapts-to-mobile-screen-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to tablet screen" classname="blocks.spec.ts" time="0.67">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Blocks---Responsive-6c533-ame-adapts-to-tablet-screen-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to desktop screen" classname="blocks.spec.ts" time="1.241">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\blocks-Blocks---Responsive-5f816-me-adapts-to-desktop-screen-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="cards.spec.ts" timestamp="2026-05-29T21:49:36.538Z" hostname="chromium" tests="24" failures="0" skipped="0" time="25.917" errors="0">
+<testcase name="Cards - Klondike Solitaire › klondike page loads with correct title" classname="cards.spec.ts" time="1.189">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Klondike-Sol-29c81-ge-loads-with-correct-title-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays board with piles" classname="cards.spec.ts" time="1.135">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Klondike-Sol-6e0a1-e-displays-board-with-piles-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays stats" classname="cards.spec.ts" time="1.458">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Klondike-Solitaire-klondike-displays-stats-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme button is visible" classname="cards.spec.ts" time="1.451">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Klondike-Sol-ca402-eck-theme-button-is-visible-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme selector opens modal" classname="cards.spec.ts" time="0.616">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can select different deck themes" classname="cards.spec.ts" time="1.347">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › theme selection persists" classname="cards.spec.ts" time="2.029">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › undo button is visible" classname="cards.spec.ts" time="0.705">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Klondike-Solitaire-undo-button-is-visible-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › new game button is visible" classname="cards.spec.ts" time="1.379">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Klondike-Solitaire-new-game-button-is-visible-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › mute button toggles" classname="cards.spec.ts" time="1.455">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can navigate back to variants" classname="cards.spec.ts" time="1.702">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider page loads with correct title" classname="cards.spec.ts" time="1.597">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Spider-Solit-3fabf-ge-loads-with-correct-title-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays board" classname="cards.spec.ts" time="0.839">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Spider-Solitaire-spider-displays-board-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider has difficulty selector" classname="cards.spec.ts" time="1.002">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Spider-Solit-d66e1-der-has-difficulty-selector-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays completed sets counter" classname="cards.spec.ts" time="1.208">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Spider-Solit-cf74d-lays-completed-sets-counter-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - FreeCell › freecell page loads with correct title" classname="cards.spec.ts" time="0.885">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---FreeCell-fre-7d0aa-ge-loads-with-correct-title-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - FreeCell › freecell displays free cells and foundations" classname="cards.spec.ts" time="0.919">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---FreeCell-fre-906de--free-cells-and-foundations-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Persistence › game state saves to localStorage" classname="cards.spec.ts" time="0.507">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Persistence › deck theme persists across games" classname="cards.spec.ts" time="0.907">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Persistence-deck-theme-persists-across-games-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Persistence › corrupted game save does not crash" classname="cards.spec.ts" time="0.575">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Persistence-corrupted-game-save-does-not-crash-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to mobile" classname="cards.spec.ts" time="0.849">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Responsive-Design-klondike-adapts-to-mobile-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to tablet" classname="cards.spec.ts" time="0.571">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Responsive-Design-klondike-adapts-to-tablet-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to desktop" classname="cards.spec.ts" time="0.613">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Responsive-Design-klondike-adapts-to-desktop-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Cards - Responsive Design › dark theme is applied" classname="cards.spec.ts" time="0.979">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Responsive-Design-dark-theme-is-applied-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger.spec.ts" timestamp="2026-05-29T21:49:36.538Z" hostname="chromium" tests="25" failures="0" skipped="0" time="30.32" errors="0">
+<testcase name="Around the World Digger › digger game page loads" classname="digger.spec.ts" time="0.924">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Around-the-World-Digger-digger-game-page-loads-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Around the World Digger › displays viewport with world" classname="digger.spec.ts" time="1.055">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Around-the-World-Digger-displays-viewport-with-world-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Around the World Digger › displays player sprite" classname="digger.spec.ts" time="0.795">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Around-the-World-Digger-displays-player-sprite-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Around the World Digger › displays topbar with stats" classname="digger.spec.ts" time="1.03">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Around-the-World-Digger-displays-topbar-with-stats-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Around the World Digger › displays gold counter" classname="digger.spec.ts" time="0.839">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Around-the-World-Digger-displays-gold-counter-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Around the World Digger › displays cart information" classname="digger.spec.ts" time="0.911">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Around-the-World-Digger-displays-cart-information-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Around the World Digger › shop button is visible" classname="digger.spec.ts" time="0.893">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Around-the-World-Digger-shop-button-is-visible-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Around the World Digger › reset button is visible" classname="digger.spec.ts" time="0.829">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Around-the-World-Digger-reset-button-is-visible-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Around the World Digger › mute button toggles state" classname="digger.spec.ts" time="1.069">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Around-the-World-Digger-mute-button-toggles-state-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Around the World Digger › can navigate back to hub" classname="digger.spec.ts" time="0.981">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Around-the-World-Digger-can-navigate-back-to-hub-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains tiles" classname="digger.spec.ts" time="1.14">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---World-Gameplay-world-contains-tiles-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains various tile types" classname="digger.spec.ts" time="1.181">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---World-Game-180ae-contains-various-tile-types-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › displays adjacent tile hints" classname="digger.spec.ts" time="1.183">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---World-Gameplay-displays-adjacent-tile-hints-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › elevator tiles are present" classname="digger.spec.ts" time="0.844">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---World-Gameplay-elevator-tiles-are-present-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › mineral visuals render" classname="digger.spec.ts" time="1.049">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---World-Gameplay-mineral-visuals-render-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - Persistence › world state saves to localStorage" classname="digger.spec.ts" time="6.676">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---Persistenc-c242b-state-saves-to-localStorage-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - Persistence › world persists across reloads" classname="digger.spec.ts" time="1.354">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---Persistence-world-persists-across-reloads-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - Persistence › corrupted save does not crash game" classname="digger.spec.ts" time="1.341">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---Persistenc-34eed-ed-save-does-not-crash-game-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - Persistence › multiple countries maintain separate worlds" classname="digger.spec.ts" time="0.663">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---Persistenc-c3d4b-es-maintain-separate-worlds-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - Movement › player can click adjacent tiles" classname="digger.spec.ts" time="1.008">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---Movement-player-can-click-adjacent-tiles-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - Movement › keyboard arrow keys work" classname="digger.spec.ts" time="1.273">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---Movement-keyboard-arrow-keys-work-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - Movement › swipe/drag movement works on viewport" classname="digger.spec.ts" time="1.167">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---Movement-s-f4a38--movement-works-on-viewport-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to mobile" classname="digger.spec.ts" time="0.799">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---Responsive-Design-game-adapts-to-mobile-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to tablet" classname="digger.spec.ts" time="0.752">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---Responsive-Design-game-adapts-to-tablet-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to desktop" classname="digger.spec.ts" time="0.564">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\digger-Digger---Responsive-Design-game-adapts-to-desktop-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="example.spec.js" timestamp="2026-05-29T21:49:36.538Z" hostname="chromium" tests="2" failures="0" skipped="0" time="3.284" errors="0">
+<testcase name="has title" classname="example.spec.js" time="1.63">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\example-has-title-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="get started link" classname="example.spec.js" time="1.654">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\example-get-started-link-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="idle.spec.ts" timestamp="2026-05-29T21:49:36.538Z" hostname="chromium" tests="17" failures="0" skipped="0" time="23.972" errors="0">
+<testcase name="Donut Empire (Idle) › idle game page loads" classname="idle.spec.ts" time="1.171">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Donut-Empire-Idle-idle-game-page-loads-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin counter at 0" classname="idle.spec.ts" time="0.756">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Donut-Empire-Idle-displays-coin-counter-at-0-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin rate" classname="idle.spec.ts" time="0.932">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Donut-Empire-Idle-displays-coin-rate-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Donut Empire (Idle) › displays click power" classname="idle.spec.ts" time="0.779">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Donut-Empire-Idle-displays-click-power-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Donut Empire (Idle) › donut button is clickable" classname="idle.spec.ts" time="0.719">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Donut-Empire-Idle-donut-button-is-clickable-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Donut Empire (Idle) › clicking donut increases coins" classname="idle.spec.ts" time="1.049">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Donut-Empire-Idle-clicking-donut-increases-coins-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Donut Empire (Idle) › shop displays generators" classname="idle.spec.ts" time="0.517">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Donut-Empire-Idle-shop-displays-generators-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Donut Empire (Idle) › reset button is visible" classname="idle.spec.ts" time="0.77">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Donut-Empire-Idle-reset-button-is-visible-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Donut Empire (Idle) › mute button toggles state" classname="idle.spec.ts" time="0.646">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Donut-Empire-Idle-mute-button-toggles-state-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Donut Empire (Idle) › can navigate back to hub" classname="idle.spec.ts" time="1.535">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Donut-Empire-Idle-can-navigate-back-to-hub-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Idle - Persistence › game state saves to localStorage" classname="idle.spec.ts" time="6.388">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Idle---Persistence-game-state-saves-to-localStorage-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Idle - Persistence › game state restores after reload" classname="idle.spec.ts" time="2.712">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Idle---Persistence-game-state-restores-after-reload-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Idle - Persistence › corrupted save does not crash game" classname="idle.spec.ts" time="1.534">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Idle---Persistence-corrupted-save-does-not-crash-game-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Idle - Persistence › offline earnings message appears" classname="idle.spec.ts" time="2.015">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Idle---Persistence-offline-earnings-message-appears-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to mobile" classname="idle.spec.ts" time="0.649">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Idle---Responsive-Design-game-adapts-to-mobile-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to tablet" classname="idle.spec.ts" time="1.102">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Idle---Responsive-Design-game-adapts-to-tablet-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to desktop" classname="idle.spec.ts" time="0.698">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\idle-Idle---Responsive-Design-game-adapts-to-desktop-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="site.spec.ts" timestamp="2026-05-29T21:49:36.538Z" hostname="chromium" tests="11" failures="0" skipped="0" time="7.17" errors="0">
+<testcase name="New Games - Site Smoke Tests › hub page loads with correct title" classname="site.spec.ts" time="0.487">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\site-New-Games---Site-Smok-81155-ge-loads-with-correct-title-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub displays hero header" classname="site.spec.ts" time="0.432">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\site-New-Games---Site-Smoke-Tests-hub-displays-hero-header-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub shows all 4 game cards" classname="site.spec.ts" time="0.561">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\site-New-Games---Site-Smoke-Tests-hub-shows-all-4-game-cards-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards have correct titles" classname="site.spec.ts" time="0.606">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\site-New-Games---Site-Smok-67b43-e-cards-have-correct-titles-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards are clickable links" classname="site.spec.ts" time="0.697">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\site-New-Games---Site-Smok-64733-e-cards-are-clickable-links-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hero button plays sound on click" classname="site.spec.ts" time="1.186">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\site-New-Games---Site-Smok-7fe0e-button-plays-sound-on-click-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="New Games - Site Smoke Tests › footer displays credit text" classname="site.spec.ts" time="0.454">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\site-New-Games---Site-Smok-abd3d-footer-displays-credit-text-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub navigation returns when clicking back from a game" classname="site.spec.ts" time="1.034">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\site-New-Games---Site-Smok-de69f-n-clicking-back-from-a-game-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to mobile viewport" classname="site.spec.ts" time="0.734">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\site-Hub-Responsiveness-layout-adapts-to-mobile-viewport-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to tablet viewport" classname="site.spec.ts" time="0.525">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\site-Hub-Responsiveness-layout-adapts-to-tablet-viewport-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to desktop viewport" classname="site.spec.ts" time="0.454">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\site-Hub-Responsiveness-layout-adapts-to-desktop-viewport-chromium\trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

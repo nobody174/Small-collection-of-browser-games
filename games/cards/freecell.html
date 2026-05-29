@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FreeCell</title>
+
+  <link rel="stylesheet" href="../../shared/css/theme.css">
+  <link rel="stylesheet" href="../../shared/css/ui.css">
+  <link rel="stylesheet" href="../../shared/css/animations.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* FreeCell has 8 columns — fits on desktop, shrinks fine on mobile */
+    .freecell-top {
+      display: flex;
+      gap: var(--pile-gap);
+      justify-content: space-between;
+      margin-bottom: var(--ng-space-4);
+    }
+    .freecell-top .group {
+      display: flex;
+      gap: var(--pile-gap);
+    }
+    /* Free cell hint = "★" */
+    .pile--free::after { content: "★"; }
+  </style>
+</head>
+<body class="cards-board">
+
+  <main class="ng-app">
+
+    <header class="cards-topbar" style="width:100%; max-width: 1000px;">
+      <h1 class="ng-topbar__title">♣ FreeCell</h1>
+
+      <div class="stats">
+        <span class="badge" id="stat-moves">Moves: 0</span>
+        <span class="badge badge--success" id="stat-score">Score: 0</span>
+        <span class="badge badge--primary" id="stat-time">Time: 0s</span>
+      </div>
+
+      <div class="stats">
+        <button class="btn btn--ghost btn--sm" id="btn-undo">↶ Undo</button>
+        <button class="btn btn--ghost btn--sm" id="btn-new">New game</button>
+        <button class="btn btn--ghost btn--sm" id="btn-deck" title="Deck theme">🂮</button>
+        <button class="btn btn--ghost btn--sm btn--icon" id="btn-mute" title="Mute">🔊</button>
+        <a class="btn btn--ghost btn--sm" href="index.html">← Variants</a>
+      </div>
+    </header>
+
+    <div class="board">
+
+      <!-- Top row: 4 free cells on left, 4 foundations on right -->
+      <div class="freecell-top">
+        <div class="group">
+          <div id="free-0" class="pile pile--free"></div>
+          <div id="free-1" class="pile pile--free"></div>
+          <div id="free-2" class="pile pile--free"></div>
+          <div id="free-3" class="pile pile--free"></div>
+        </div>
+        <div class="group">
+          <div id="foundation-0" class="pile pile--foundation" data-hint="A"></div>
+          <div id="foundation-1" class="pile pile--foundation" data-hint="A"></div>
+          <div id="foundation-2" class="pile pile--foundation" data-hint="A"></div>
+          <div id="foundation-3" class="pile pile--foundation" data-hint="A"></div>
+        </div>
+      </div>
+
+      <!-- 8 tableau columns -->
+      <div class="board-row">
+        <div id="tableau-0" class="pile pile--tableau"></div>
+        <div id="tableau-1" class="pile pile--tableau"></div>
+        <div id="tableau-2" class="pile pile--tableau"></div>
+        <div id="tableau-3" class="pile pile--tableau"></div>
+        <div id="tableau-4" class="pile pile--tableau"></div>
+        <div id="tableau-5" class="pile pile--tableau"></div>
+        <div id="tableau-6" class="pile pile--tableau"></div>
+        <div id="tableau-7" class="pile pile--tableau"></div>
+      </div>
+
+    </div>
+
+    <div class="win-banner" id="win-banner">
+      <div class="win-banner__card ng-pop">
+        <div class="win-banner__emoji">🏆</div>
+        <h2>Solved!</h2>
+        <p id="win-stats" class="ng-selectable" style="color: var(--ng-text-muted);"></p>
+        <div class="modal__actions" style="justify-content:center; margin-top: var(--ng-space-4);">
+          <button class="btn btn--primary" id="win-again">Play again</button>
+          <a class="btn btn--ghost" href="index.html">Variants</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="../../shared/js/utils.js"></script>
+  <script src="../../shared/js/save.js"></script>
+  <script src="../../shared/js/audio.js"></script>
+  <script src="../../shared/js/particles.js"></script>
+  <script src="../../shared/js/ui.js"></script>
+  <script src="js/card-engine.js"></script>
+  <script src="js/deck-themes.js"></script>
+  <script src="js/freecell.js"></script>
+</body>
+</html>

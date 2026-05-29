@@ -1,0 +1,340 @@
+/* ============================================================
+   style.css — Card-game-specific styling
+   ------------------------------------------------------------
+   Pulls all colors / spacing / radii from theme.css.
+   Adds card faces, pile slots, and the table-felt look.
+   Used by every variant page (klondike.html, spider.html, freecell.html).
+   ============================================================ */
+
+/* --------------------------------------------------------
+   Game-wide accent — Card games use mint green for their CTA
+   -------------------------------------------------------- */
+:root {
+  --ng-game-accent: var(--ng-color-success);
+
+  /* Card sizing — derived once here so every layout is consistent.
+     On smaller screens the CSS at the bottom shrinks these.        */
+  --card-w: 84px;
+  --card-h: 118px;
+  --card-radius: 10px;
+  --pile-gap: var(--ng-space-3);
+}
+
+/* The "felt" background you see behind the cards */
+body.cards-board {
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(80,70,140,0.15), transparent 60%),
+    linear-gradient(180deg, #2a2640 0%, #1f1a35 100%);
+}
+
+/* Topbar tweaks for the card games */
+.cards-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--ng-space-3);
+  margin-bottom: var(--ng-space-4);
+}
+
+.cards-topbar .stats {
+  display: flex;
+  gap: var(--ng-space-2);
+  flex-wrap: wrap;
+}
+
+
+/* ============================================================
+   Board — the playing surface
+   ============================================================ */
+
+.board {
+  position: relative;
+  margin: 0 auto;
+  padding: var(--ng-space-4);
+  max-width: 1000px;
+}
+
+.board-row {
+  display: flex;
+  gap: var(--pile-gap);
+  margin-bottom: var(--ng-space-4);
+}
+
+.board-row--top { justify-content: space-between; }
+
+
+/* ============================================================
+   Piles — empty slot + container for cards
+   ============================================================ */
+
+.pile {
+  position: relative;
+  width:  var(--card-w);
+  height: var(--card-h);
+  border-radius: var(--card-radius);
+  background: rgba(124, 92, 255, 0.07);
+  box-shadow: inset 0 0 0 2px rgba(124, 92, 255, 0.18);
+  flex: 0 0 auto;
+}
+
+/* Fan-down (tableau) piles need extra vertical room */
+.pile--tableau { min-height: 300px; height: auto; }
+
+/* Subtle hint icon inside an empty foundation/free pile */
+.pile--foundation::after,
+.pile--free::after {
+  content: attr(data-hint);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: rgba(124, 92, 255, 0.35);
+  pointer-events: none;
+}
+
+.pile--stock::after {
+  content: "↻";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  color: rgba(124, 92, 255, 0.35);
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   Card — face up / face down
+   ============================================================ */
+
+.card {
+  position: absolute;
+  left: 0; top: 0;
+  width:  var(--card-w);
+  height: var(--card-h);
+  border-radius: var(--card-radius);
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  transition: transform 240ms cubic-bezier(.22,1,.36,1),
+              box-shadow 200ms ease;
+  box-shadow: 0 2px 4px rgba(20, 15, 60, 0.12);
+  will-change: transform;
+}
+
+.card:hover { box-shadow: 0 4px 10px rgba(20, 15, 60, 0.18); }
+.card.is-dragging { cursor: grabbing; transition: none; box-shadow: 0 10px 24px rgba(20, 15, 60, 0.28); }
+
+/* Face-flip "pulse" — animates ONLY box-shadow so it never overrides
+   the layout's transform: translate(...). This was the bug: ng-pop
+   touched transform and made flipped cards jump to the pile origin. */
+@keyframes card-flip-pulse {
+  0%   { box-shadow: 0 2px 4px  rgba(20, 15, 60, 0.12); }
+  40%  { box-shadow: 0 0 18px 6px rgba(124, 92, 255, 0.55); }
+  100% { box-shadow: 0 2px 4px  rgba(20, 15, 60, 0.12); }
+}
+.card.card-flip-pulse { animation: card-flip-pulse 320ms ease-out; }
+
+.card__back, .card__front {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+
+/* Face down — show only back */
+.card.is-face-down .card__front { display: none; }
+.card.is-face-up   .card__back  { display: none; }
+
+/* Card back — themed patterns based on deck selection */
+.card__back {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #7c5cff 0px, #7c5cff 6px,
+      #5a3fd9 6px, #5a3fd9 12px
+    );
+  border: 2px solid #5a3fd9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+/* Deck themes */
+body.deck-standard .card__back {
+  background: repeating-linear-gradient(45deg, #7c5cff 0px, #7c5cff 6px, #5a3fd9 6px, #5a3fd9 12px);
+}
+
+body.deck-superman .card__back {
+  background: linear-gradient(135deg, #003da5 0%, #0055d4 50%, #ffcc00 100%);
+  border-color: #ffcc00;
+}
+body.deck-superman .card__back::before { content: "🦸"; }
+
+body.deck-ironman .card__back {
+  background: linear-gradient(135deg, #8b0000 0%, #ffa500 50%, #ffff00 100%);
+  border-color: #ffff00;
+}
+body.deck-ironman .card__back::before { content: "🤖"; }
+
+body.deck-spiderman .card__back {
+  background: linear-gradient(135deg, #c41e3a 0%, #ffffff 50%, #c41e3a 100%);
+  border-color: #c41e3a;
+}
+body.deck-spiderman .card__back::before { content: "🕷️"; }
+
+body.deck-incredibles .card__back {
+  background: linear-gradient(135deg, #cc0000 0%, #000000 50%, #ffcc00 100%);
+  border-color: #ffcc00;
+}
+body.deck-incredibles .card__back::before { content: "👨‍👩‍👧‍👦"; }
+
+body.deck-hulk .card__back {
+  background: linear-gradient(135deg, #2d5016 0%, #6ba539 50%, #a0c468 100%);
+  border-color: #a0c468;
+}
+body.deck-hulk .card__back::before { content: "💚"; }
+
+body.deck-captain .card__back {
+  background: linear-gradient(135deg, #0c0c7b 0%, #ffffff 50%, #dc0d1e 100%);
+  border-color: #ffffff;
+}
+body.deck-captain .card__back::before { content: "🛡️"; }
+
+body.deck-daredevil .card__back {
+  background: linear-gradient(135deg, #8b0000 0%, #333333 50%, #ffff00 100%);
+  border-color: #ffff00;
+}
+body.deck-daredevil .card__back::before { content: "👁️"; }
+
+/* Card front — soft off-white with colored pip */
+.card__front {
+  background: #f8f9fb;
+  border: 1px solid var(--ng-border);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 6px 8px;
+  font-family: var(--ng-font-display);
+}
+
+.card__front--red   { color: #e53550; }
+.card__front--black { color: #1a1a1a; }
+
+.card__corner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  font-weight: var(--ng-weight-bold);
+  width: max-content;
+}
+.card__corner--tl { align-self: start; justify-self: start; }
+.card__corner--br { align-self: end;   justify-self: end; transform: rotate(180deg); }
+
+.card__rank { font-size: 16px; }
+.card__suit { font-size: 14px; margin-top: 1px; }
+
+.card__pip {
+  align-self: center;
+  justify-self: center;
+  font-size: 38px;
+  font-weight: var(--ng-weight-black);
+}
+
+
+/* ============================================================
+   Win banner
+   ============================================================ */
+
+.win-banner {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 15, 40, 0.45);
+  z-index: var(--ng-z-modal);
+}
+.win-banner.is-open { display: flex; }
+
+.win-banner__card {
+  background: var(--ng-bg-surface);
+  border-radius: var(--ng-radius-xl);
+  box-shadow: var(--ng-shadow-lg);
+  padding: var(--ng-space-6);
+  text-align: center;
+  max-width: 420px;
+}
+.win-banner__emoji { font-size: 64px; margin-bottom: var(--ng-space-3); }
+
+
+/* ============================================================
+   Responsive — shrink cards on small screens
+   ============================================================ */
+
+@media (max-width: 760px) {
+  :root {
+    --card-w: 64px;
+    --card-h: 90px;
+    --pile-gap: var(--ng-space-2);
+  }
+  .card__rank { font-size: 13px; }
+  .card__suit { font-size: 11px; }
+  .card__pip  { font-size: 28px; }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --card-w: 48px;
+    --card-h: 68px;
+  }
+  .card__rank { font-size: 11px; }
+  .card__suit { font-size: 9px; }
+  .card__pip  { font-size: 22px; }
+  .board { padding: var(--ng-space-2); }
+}
+
+
+/* ============================================================
+   Variant picker (cards/index.html)
+   ============================================================ */
+
+.variant-grid {
+  display: grid;
+  gap: var(--ng-space-5);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  width: 100%;
+  max-width: 900px;
+}
+
+.variant-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ng-space-3);
+  padding: var(--ng-space-5);
+  background: var(--ng-bg-surface);
+  border-radius: var(--ng-radius-lg);
+  box-shadow: var(--ng-shadow-soft);
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--ng-dur-md) var(--ng-ease-pop),
+              box-shadow var(--ng-dur-md) var(--ng-ease-out);
+}
+.variant-card:hover { transform: translateY(-4px); box-shadow: var(--ng-shadow-md); }
+.variant-card.is-soon { opacity: 0.55; pointer-events: none; }
+
+.variant-card__emoji { font-size: 56px; }
+.variant-card__title {
+  font-family: var(--ng-font-display);
+  font-weight: var(--ng-weight-black);
+  font-size: var(--ng-text-lg);
+  color: var(--ng-text-strong);
+  margin: 0;
+}
+.variant-card__desc { color: var(--ng-text-muted); font-size: var(--ng-text-sm); margin: 0; }

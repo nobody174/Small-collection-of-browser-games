@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>New Games — Hub</title>
+
+  <!-- Shared studio identity (loaded by EVERY game / page) -->
+  <link rel="stylesheet" href="shared/css/theme.css">
+  <link rel="stylesheet" href="shared/css/ui.css">
+  <link rel="stylesheet" href="shared/css/animations.css">
+
+  <!-- Hub-only styles (kept inline because this page is tiny) -->
+  <style>
+    /* Big gradient hero at the top */
+    .hero {
+      width: 100%;
+      max-width: 1100px;
+      padding: var(--ng-space-7) var(--ng-space-5);
+      border-radius: var(--ng-radius-xl);
+      background: linear-gradient(135deg, #7c5cff 0%, #ff8fb1 100%);
+      color: var(--ng-text-on-color);
+      text-align: center;
+      box-shadow: var(--ng-shadow-lg);
+    }
+    .hero h1 {
+      color: var(--ng-text-on-color);
+      font-size: var(--ng-text-3xl);
+      margin: 0 0 var(--ng-space-2);
+    }
+    .hero p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: var(--ng-text-lg);
+    }
+
+    /* Grid of game cards */
+    .games-grid {
+      display: grid;
+      gap: var(--ng-space-5);
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .game-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--ng-space-3);
+      padding: var(--ng-space-5);
+      background: var(--ng-bg-surface);
+      border-radius: var(--ng-radius-lg);
+      box-shadow: var(--ng-shadow-soft);
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: transform var(--ng-dur-md) var(--ng-ease-pop),
+                  box-shadow var(--ng-dur-md) var(--ng-ease-out);
+    }
+    .game-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--ng-shadow-md);
+    }
+    .game-card__emoji {
+      font-size: 56px;
+      line-height: 1;
+    }
+    .game-card__title {
+      font-family: var(--ng-font-display);
+      font-weight: var(--ng-weight-black);
+      font-size: var(--ng-text-xl);
+      color: var(--ng-text-strong);
+      margin: 0;
+    }
+    .game-card__desc {
+      color: var(--ng-text-muted);
+      font-size: var(--ng-text-sm);
+      margin: 0;
+    }
+    .game-card__cta {
+      margin-top: auto;
+      align-self: flex-start;
+    }
+
+    /* "Coming soon" cards look dimmer */
+    .game-card.is-soon { opacity: 0.55; cursor: not-allowed; }
+    .game-card.is-soon:hover { transform: none; }
+
+    /* Footer credit */
+    footer {
+      margin-top: var(--ng-space-6);
+      color: var(--ng-text-muted);
+      font-size: var(--ng-text-sm);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main class="ng-app">
+
+    <!-- Hero header -->
+    <header class="hero ng-pop">
+      <h1>New Games</h1>
+      <p>A small collection of cozy browser games.</p>
+    </header>
+
+    <!-- Game grid (added below the hero) -->
+    <section class="games-grid" style="margin-top: var(--ng-space-6);">
+
+      <!-- GAME 1 — Cards -->
+      <a class="game-card" href="games/cards/index.html">
+        <div class="game-card__emoji">🂡</div>
+        <h2 class="game-card__title">Card Collection</h2>
+        <p class="game-card__desc">Solitaire, Spider, FreeCell — relaxing card classics.</p>
+        <span class="badge badge--success game-card__cta">Play</span>
+      </a>
+
+      <!-- GAME 2 — Blocks -->
+      <a class="game-card" href="games/blocks/index.html">
+        <div class="game-card__emoji">🧩</div>
+        <h2 class="game-card__title">Color Block Escape</h2>
+        <p class="game-card__desc">Slide colored blocks to their matching doors.</p>
+        <span class="badge badge--success game-card__cta">Play</span>
+      </a>
+
+      <!-- GAME 3 — Idle -->
+      <a class="game-card" href="games/idle/index.html">
+        <div class="game-card__emoji">🍩</div>
+        <h2 class="game-card__title">Donut Empire</h2>
+        <p class="game-card__desc">Bake, automate, expand. Cozy clicker progression.</p>
+        <span class="badge badge--success game-card__cta">Play</span>
+      </a>
+
+      <!-- GAME 4 — Digger -->
+      <a class="game-card" href="games/digger/index.html">
+        <div class="game-card__emoji">⛏️</div>
+        <h2 class="game-card__title">Around the World Digger</h2>
+        <p class="game-card__desc">Dig deeper across countries to find treasure.</p>
+        <span class="badge badge--success game-card__cta">Play</span>
+      </a>
+
+    </section>
+
+    <footer>
+      <p>Built by Nobody174 · <a href="shared/test.html">framework test page</a></p>
+    </footer>
+  </main>
+
+  <!-- Shared JS (load order matters: utils first) -->
+  <script src="shared/js/utils.js"></script>
+  <script src="shared/js/save.js"></script>
+  <script src="shared/js/audio.js"></script>
+  <script src="shared/js/particles.js"></script>
+  <script src="shared/js/ui.js"></script>
+
+  <script>
+    // Tiny click feedback on the hero (proves the framework works)
+    NG.on(NG.$('.hero'), 'click', (e) => {
+      NG.audio.play('pop');
+      NG.particles.burst(e.clientX, e.clientY, { count: 14, spread: 90 });
+    });
+  </script>
+</body>
+</html>

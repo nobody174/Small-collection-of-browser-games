@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Around the World Digger</title>
+
+  <link rel="stylesheet" href="../../shared/css/theme.css">
+  <link rel="stylesheet" href="../../shared/css/ui.css">
+  <link rel="stylesheet" href="../../shared/css/animations.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="digger-board country-norway">
+
+  <main class="ng-app">
+
+    <!-- Topbar: title + meta -->
+    <header class="digger-topbar">
+      <h1 class="ng-topbar__title">⛏️ Around the World Digger</h1>
+      <div class="digger-stats">
+        <button class="btn btn--primary btn--sm" id="btn-shop">🏠 Shop</button>
+        <button class="btn btn--ghost btn--sm" id="btn-reset">Reset</button>
+        <button class="btn btn--ghost btn--sm btn--icon" id="btn-mute" title="Mute">🔊</button>
+        <a class="btn btn--ghost btn--sm" href="../../index.html">← Hub</a>
+      </div>
+    </header>
+
+    <!-- Stat strip -->
+    <div class="digger-stats" style="width:100%; max-width:980px; margin-bottom: var(--ng-space-3);">
+      <span class="badge" id="stat-country">🇳🇴 Norway</span>
+      <span class="badge badge--warning" id="stat-gold">💰 0</span>
+      <span class="badge" id="stat-depth">⛏️ Depth 0</span>
+      <span class="badge badge--success" id="stat-cart">🛒 0/20</span>
+      <span class="badge badge--primary" id="stat-pickaxe">⛏️ Wooden Pickaxe (str 1)</span>
+    </div>
+
+    <!-- The mine -->
+    <div class="viewport">
+      <div id="world" class="world"></div>
+    </div>
+
+    <!-- Cart contents -->
+    <div class="cart">
+      <span class="cart__label">Cart:</span>
+      <div id="cart-chips" style="display:flex; gap:var(--ng-space-2); flex-wrap:wrap;"></div>
+    </div>
+
+    <p style="margin-top: var(--ng-space-3); color: var(--ng-text-muted); max-width: 980px;">
+      Click a highlighted tile next to your character to dig or walk. Arrow keys also work.
+      Return to the 🏠 to sell your cart and buy upgrades.
+    </p>
+
+  </main>
+
+  <script src="../../shared/js/utils.js"></script>
+  <script src="../../shared/js/save.js"></script>
+  <script src="../../shared/js/audio.js"></script>
+  <script src="../../shared/js/particles.js"></script>
+  <script src="../../shared/js/ui.js"></script>
+
+  <script src="js/countries.js"></script>
+  <script src="js/digger.js"></script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+/* ============================================================
+   animations.css — Reusable @keyframes library
+   ------------------------------------------------------------
+   Tiny, name-spaced animations every game can use.
+   Keep durations short and easing snappy — casual games feel
+   "juicy" because motion is fast and slightly bouncy.
+
+   Trick to replay an animation (from Delve):
+     el.classList.remove('ng-pop');
+     void el.offsetWidth;         // forces reflow
+     el.classList.add('ng-pop');
+
+   Naming: .ng-<effect>  for the class that triggers an animation
+           @keyframes ng-<effect>  for the underlying keyframe set
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   POP — quick bouncy scale-in (great for new elements/cards)
+   ------------------------------------------------------------ */
+@keyframes ng-pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.ng-pop { animation: ng-pop var(--ng-dur-md) var(--ng-ease-pop) both; }
+
+
+/* ------------------------------------------------------------
+   FADE-IN — gentle opacity fade (modals' backdrop, etc.)
+   ------------------------------------------------------------ */
+@keyframes ng-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.ng-fade-in { animation: ng-fade-in var(--ng-dur-md) var(--ng-ease-out) both; }
+
+
+/* ------------------------------------------------------------
+   SLIDE-DOWN — toast notifications coming in from above
+   ------------------------------------------------------------ */
+@keyframes ng-slide-down {
+  from { transform: translateY(-20px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+.ng-slide-down { animation: ng-slide-down var(--ng-dur-md) var(--ng-ease-pop) both; }
+
+
+/* ------------------------------------------------------------
+   SLIDE-UP — element rising up while fading
+   ------------------------------------------------------------ */
+@keyframes ng-slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.ng-slide-up { animation: ng-slide-up var(--ng-dur-md) var(--ng-ease-pop) both; }
+
+
+/* ------------------------------------------------------------
+   SHAKE — error / invalid action
+   ------------------------------------------------------------ */
+@keyframes ng-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(3px); }
+}
+.ng-shake { animation: ng-shake var(--ng-dur-slow) var(--ng-ease-in-out) both; }
+
+
+/* ------------------------------------------------------------
+   HIT-FLASH — quick white flash (target took damage)
+   ------------------------------------------------------------ */
+@keyframes ng-hit-flash {
+  0%   { filter: brightness(1); }
+  30%  { filter: brightness(1.8); }
+  100% { filter: brightness(1); }
+}
+.ng-hit-flash { animation: ng-hit-flash var(--ng-dur-md) var(--ng-ease-out) both; }
+
+
+/* ------------------------------------------------------------
+   PRESS — button squish on click (used in addition to :active)
+   ------------------------------------------------------------ */
+@keyframes ng-press {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+.ng-press { animation: ng-press var(--ng-dur-fast) var(--ng-ease-pop) both; }
+
+
+/* ------------------------------------------------------------
+   PULSE-RING — radial ripple from center (click feedback)
+   ------------------------------------------------------------ */
+@keyframes ng-pulse-ring {
+  0%   { box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.7); }
+  100% { box-shadow: 0 0 0 24px rgba(255, 255, 255, 0); }
+}
+.ng-pulse-ring { animation: ng-pulse-ring 600ms var(--ng-ease-out) forwards; }
+
+
+/* ------------------------------------------------------------
+   GLOW-PULSE — gentle attention pulse (hint button, etc.)
+   ------------------------------------------------------------ */
+@keyframes ng-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0   rgba(124, 92, 255, 0.45); }
+  50%      { box-shadow: 0 0 0 12px rgba(124, 92, 255, 0.00); }
+}
+.ng-glow-pulse { animation: ng-glow-pulse 1600ms var(--ng-ease-in-out) infinite; }
+
+
+/* ------------------------------------------------------------
+   FLOAT-UP — damage/coin numbers rising and fading
+   Used by .float-num--anim (see ui.css for the .float-num base)
+   ------------------------------------------------------------ */
+@keyframes ng-float-up {
+  0%   { transform: translate(-50%, 0)     scale(0.6); opacity: 0; }
+  20%  { transform: translate(-50%, -8px)  scale(1.1); opacity: 1; }
+  100% { transform: translate(-50%, -64px) scale(1);   opacity: 0; }
+}
+.float-num--anim { animation: ng-float-up 900ms var(--ng-ease-out) forwards; }
+
+
+/* ------------------------------------------------------------
+   SPIN — generic rotating loader/spinner
+   ------------------------------------------------------------ */
+@keyframes ng-spin {
+  to { transform: rotate(360deg); }
+}
+.ng-spin { animation: ng-spin 900ms linear infinite; }
+
+
+/* ------------------------------------------------------------
+   CONFETTI-FALL — used by particles.js when celebrating wins
+   ------------------------------------------------------------ */
+@keyframes ng-confetti-fall {
+  0%   { transform: translate(0, 0)     rotate(0deg);   opacity: 1; }
+  100% { transform: translate(var(--dx, 0), var(--dy, 200px)) rotate(var(--rot, 360deg)); opacity: 0; }
+}
+.ng-confetti { animation: ng-confetti-fall 1200ms var(--ng-ease-out) forwards; }
+
+
+/* ------------------------------------------------------------
+   REDUCED MOTION — respect user OS setting
+   If a user has "reduce motion" turned on, kill animations.
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

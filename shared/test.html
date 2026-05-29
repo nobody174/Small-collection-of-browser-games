@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Framework Test Page</title>
+
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <style>
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--ng-space-3);
+      align-items: center;
+      margin-bottom: var(--ng-space-4);
+    }
+    .stage {
+      position: relative;     /* needed for floatText */
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+    }
+  </style>
+</head>
+<body>
+  <main class="ng-app">
+    <div class="ng-screen">
+
+      <div class="ng-topbar">
+        <h1 class="ng-topbar__title">Framework Test</h1>
+        <a class="btn btn--ghost btn--sm" href="../index.html">← Back to hub</a>
+      </div>
+      <p>Use this page to confirm every shared system works before building a real game.</p>
+
+      <!-- BUTTONS -->
+      <section class="panel">
+        <h2 class="panel__title">Buttons</h2>
+        <div class="demo-row">
+          <button class="btn btn--primary">Primary</button>
+          <button class="btn btn--secondary">Secondary</button>
+          <button class="btn btn--ghost">Ghost</button>
+          <button class="btn btn--danger">Danger</button>
+          <button class="btn btn--primary btn--sm">Small</button>
+          <button class="btn btn--primary btn--lg">Large</button>
+          <button class="btn btn--primary btn--pill">Pill</button>
+          <button class="btn btn--ghost btn--icon" title="icon">🔔</button>
+        </div>
+      </section>
+
+      <!-- BADGES -->
+      <section class="panel">
+        <h2 class="panel__title">Badges</h2>
+        <div class="demo-row">
+          <span class="badge">Default</span>
+          <span class="badge badge--primary">Primary</span>
+          <span class="badge badge--success">Success</span>
+          <span class="badge badge--warning">Warning</span>
+          <span class="badge badge--danger">Danger</span>
+        </div>
+      </section>
+
+      <!-- TOASTS -->
+      <section class="panel">
+        <h2 class="panel__title">Toasts</h2>
+        <div class="demo-row">
+          <button class="btn btn--primary" id="t-info">Info toast</button>
+          <button class="btn btn--secondary" id="t-success">Success toast</button>
+          <button class="btn btn--danger" id="t-error">Error toast</button>
+        </div>
+      </section>
+
+      <!-- MODAL -->
+      <section class="panel">
+        <h2 class="panel__title">Modal</h2>
+        <div class="demo-row">
+          <button class="btn btn--primary" id="m-open">Open modal</button>
+          <button class="btn btn--ghost"  id="m-confirm">Open confirm</button>
+        </div>
+      </section>
+
+      <!-- SOUNDS -->
+      <section class="panel">
+        <h2 class="panel__title">Sounds</h2>
+        <div class="demo-row">
+          <button class="btn btn--ghost" data-sound="click">click</button>
+          <button class="btn btn--ghost" data-sound="pop">pop</button>
+          <button class="btn btn--ghost" data-sound="coin">coin</button>
+          <button class="btn btn--ghost" data-sound="success">success</button>
+          <button class="btn btn--ghost" data-sound="error">error</button>
+          <button class="btn btn--ghost" data-sound="swoosh">swoosh</button>
+          <button class="btn btn--ghost" data-sound="upgrade">upgrade</button>
+          <button class="btn btn--ghost" data-sound="flip">flip</button>
+          <button class="btn btn--ghost" id="mute">🔊 Mute</button>
+        </div>
+      </section>
+
+      <!-- PARTICLES -->
+      <section class="panel">
+        <h2 class="panel__title">Particles</h2>
+        <div class="stage panel panel--tight" id="stage">🎯</div>
+        <div class="demo-row" style="margin-top: var(--ng-space-3);">
+          <button class="btn btn--primary" id="p-burst">Burst (anywhere)</button>
+          <button class="btn btn--secondary" id="p-float">Float number</button>
+          <button class="btn btn--accent" id="p-confetti">Confetti</button>
+        </div>
+      </section>
+
+      <!-- SAVE -->
+      <section class="panel">
+        <h2 class="panel__title">Save system</h2>
+        <p>Clicks: <strong id="save-count">0</strong>
+           <span class="badge" id="save-meta" style="margin-left:8px;"></span></p>
+        <div class="demo-row">
+          <button class="btn btn--primary" id="s-click">+1 click</button>
+          <button class="btn btn--ghost"   id="s-save">Save now</button>
+          <button class="btn btn--ghost"   id="s-load">Reload from disk</button>
+          <button class="btn btn--danger"  id="s-clear">Clear save</button>
+        </div>
+      </section>
+
+      <!-- ANIMATIONS -->
+      <section class="panel">
+        <h2 class="panel__title">Animations</h2>
+        <div class="demo-row">
+          <button class="btn btn--primary"   id="a-pop">Replay pop</button>
+          <button class="btn btn--secondary" id="a-shake">Shake</button>
+          <button class="btn btn--ghost"     id="a-flash">Hit flash</button>
+        </div>
+        <div id="anim-target" class="panel panel--tight" style="text-align:center; font-size: 48px;">✨</div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Shared JS -->
+  <script src="js/utils.js"></script>
+  <script src="js/save.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/ui.js"></script>
+
+  <script>
+  // ----------------------------------------------------------
+  // Wire up all the demo buttons
+  // ----------------------------------------------------------
+
+  // Toasts
+  NG.on(NG.$('#t-info'),    'click', () => NG.toast('Hello there!'));
+  NG.on(NG.$('#t-success'), 'click', () => NG.toast('Saved successfully', { type: 'success' }));
+  NG.on(NG.$('#t-error'),   'click', () => NG.toast('Something went wrong', { type: 'danger' }));
+
+  // Modal
+  NG.on(NG.$('#m-open'), 'click', () => {
+    NG.modal.open({
+      title: 'Modal demo',
+      body:  'This is a reusable modal. Click outside or press Esc to close.',
+      actions: [{ label: 'Got it', variant: 'primary', autofocus: true }]
+    });
+  });
+  NG.on(NG.$('#m-confirm'), 'click', async () => {
+    const ok = await NG.modal.confirm({
+      title: 'Wipe your save?',
+      body:  'This cannot be undone.',
+      danger: true,
+      confirmLabel: 'Yes, wipe it',
+    });
+    NG.toast(ok ? 'You said yes' : 'You said no', { type: ok ? 'danger' : 'info' });
+  });
+
+  // Sounds
+  NG.$$('[data-sound]').forEach(b => {
+    NG.on(b, 'click', () => NG.audio.play(b.dataset.sound));
+  });
+  NG.on(NG.$('#mute'), 'click', () => {
+    const muted = NG.audio.toggleMuted();
+    NG.$('#mute').textContent = muted ? '🔇 Unmute' : '🔊 Mute';
+  });
+
+  // Particles
+  NG.on(NG.$('#p-burst'),    'click', (e) => NG.particles.burst(e.clientX, e.clientY));
+  NG.on(NG.$('#p-float'),    'click', () => NG.particles.floatText(NG.$('#stage'), '+10', { color: 'var(--ng-color-success)' }));
+  NG.on(NG.$('#p-confetti'), 'click', () => NG.particles.confetti());
+
+  // SAVE — uses NG.save.create()
+  const store = NG.save.create('framework-test', { version: 1 });
+  let state = store.read() || { clicks: 0 };
+
+  function renderSave() {
+    NG.$('#save-count').textContent = state.clicks;
+    const m = store.meta();
+    NG.$('#save-meta').textContent = m
+      ? 'last saved ' + new Date(m.savedAt).toLocaleTimeString()
+      : 'no save yet';
+  }
+  renderSave();
+
+  NG.on(NG.$('#s-click'), 'click', (e) => {
+    state.clicks++;
+    renderSave();
+    NG.audio.play('click');
+    NG.particles.burst(e.clientX, e.clientY, { count: 6, spread: 40 });
+  });
+  NG.on(NG.$('#s-save'), 'click', () => {
+    store.write(state);
+    renderSave();
+    NG.toast('Saved!', { type: 'success' });
+  });
+  NG.on(NG.$('#s-load'), 'click', () => {
+    state = store.read() || { clicks: 0 };
+    renderSave();
+    NG.toast('Reloaded');
+  });
+  NG.on(NG.$('#s-clear'), 'click', async () => {
+    const ok = await NG.modal.confirm({
+      title: 'Clear save?',
+      body:  'Resets the click counter.',
+      danger: true,
+      confirmLabel: 'Clear'
+    });
+    if (ok) {
+      store.clear();
+      state = { clicks: 0 };
+      renderSave();
+      NG.toast('Cleared', { type: 'warning' });
+    }
+  });
+
+  // Animations
+  const animTarget = NG.$('#anim-target');
+  NG.on(NG.$('#a-pop'),   'click', () => NG.replayAnim(animTarget, 'ng-pop'));
+  NG.on(NG.$('#a-shake'), 'click', () => NG.replayAnim(animTarget, 'ng-shake'));
+  NG.on(NG.$('#a-flash'), 'click', () => NG.replayAnim(animTarget, 'ng-hit-flash'));
+
+  // Autosave every 10s as a smoke test
+  store.startAutosave(() => state, 10000);
+  </script>
+</body>
+</html>

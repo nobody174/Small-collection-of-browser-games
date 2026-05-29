@@ -1,0 +1,476 @@
+/* ============================================================
+   blocks.js — Color Block Escape gameplay
+   ------------------------------------------------------------
+   Movement rule: a swipe slides a block in that direction until
+   it hits another block or a wall. If the block reaches a grid
+   edge with a matching-colour door, it exits the board.
+
+   Architecture:
+     - The grid is just a 2D array (board[y][x]) of block IDs.
+     - Each block has {id, x, y, color, exited, el}.
+     - The DOM uses CSS variables --cell, --gap to size cells.
+     - Blocks are positioned via transform: translate(...) so the
+       browser smoothly animates moves via CSS transition.
+     - Doors are absolutely positioned outside the .bb-board area.
+
+   Input:
+     - Pointer (mouse + touch unified) — drag a block in a
+       direction, release to commit the swipe.
+     - Keyboard — click a block to select, then arrow keys.
+   ============================================================ */
+
+(function () {
+
+  const $ = NG.$;
+  const LEVELS = NG.blocks.LEVELS;
+  const COLORS = NG.blocks.COLORS;
+
+  // --- Game state -----------------------------------------------------------
+  let level = null;        // current level definition
+  let board = [];          // board[y][x] = block id or null
+  let blocks = {};         // id → { id, x, y, color, exited, el }
+  let history = [];        // undo stack (board snapshots)
+  let moves = 0;
+  let currentIdx = 0;      // index into LEVELS
+  let selectedId = null;   // for keyboard mode
+
+  const save = NG.save.create('blocks', { version: 1 });
+
+  /* --------------------------------------------------------
+     Persisted progress (across sessions)
+       { currentIdx, cleared: { levelId: bestMoves } }
+     -------------------------------------------------------- */
+  let progress = save.read() || { currentIdx: 0, cleared: {} };
+  function persistProgress() { save.write(progress); }
+
+  /* ============================================================
+     LOAD / RENDER A LEVEL
+     ============================================================ */
+  function loadLevel(idx) {
+    currentIdx = NG.clamp(idx, 0, LEVELS.length - 1);
+    level = LEVELS[currentIdx];
+    moves = 0;
+    history = [];
+    selectedId = null;
+
+    // Reset board
+    board = [];
+    for (let y = 0; y < level.rows; y++) {
+      board.push(new Array(level.cols).fill(null));
+    }
+
+    blocks = {};
+    let nextId = 1;
+    level.blocks.forEach(b => {
+      const id = 'b' + (nextId++);
+      const size = b.size || '1x1';
+      blocks[id] = { id, x: b.x, y: b.y, color: b.color, size, exited: false, el: null };
+      // Mark all cells occupied by this block
+      if (size === '1x1') {
+        board[b.y][b.x] = id;
+      } else if (size === '2x2') {
+        board[b.y][b.x] = id;
+        board[b.y][b.x+1] = id;
+        board[b.y+1][b.x] = id;
+        board[b.y+1][b.x+1] = id;
+      } else if (size === 'L') {
+        // L-shape is stored as top-left anchor, rendering handles it
+        board[b.y][b.x] = id;
+      }
+    });
+
+    render();
+    updateHeader();
+    progress.currentIdx = currentIdx;
+    persistProgress();
+  }
+
+  function render() {
+    const boardEl = $('#bb-board');
+    boardEl.innerHTML = '';
+    boardEl.style.setProperty('--cols', level.cols);
+    boardEl.style.setProperty('--rows', level.rows);
+
+    // Empty cell backgrounds (purely visual)
+    for (let y = 0; y < level.rows; y++) {
+      for (let x = 0; x < level.cols; x++) {
+        const c = document.createElement('div');
+        c.className = 'bb-cell';
+        c.style.transform = cellTransform(x, y);
+        boardEl.appendChild(c);
+      }
+    }
+
+    // Blocks
+    Object.values(blocks).forEach(b => {
+      const el = document.createElement('div');
+      el.className = 'bb-block' + (b.size === '2x2' ? ' bb-block--2x2' : b.size === 'L' ? ' bb-block--L' : '');
+      el.style.setProperty('--block-color', COLORS[b.color]);
+      el.style.transform = cellTransform(b.x, b.y);
+      el.dataset.id = b.id;
+      el.dataset.size = b.size;
+      boardEl.appendChild(el);
+      b.el = el;
+    });
+
+    // Doors
+    level.doors.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'bb-door';
+      el.dataset.side = d.side;
+      el.style.setProperty('--door-color', COLORS[d.color]);
+      Object.assign(el.style, doorPosition(d));
+      boardEl.appendChild(el);
+    });
+  }
+
+  /* CSS helper: translate(x, y) inside the .bb-board grid */
+  function cellTransform(x, y) {
+    return `translate(calc(${x} * (var(--cell) + var(--gap))),` +
+           `           calc(${y} * (var(--cell) + var(--gap))))`;
+  }
+
+  function doorPosition(d) {
+    const along = `calc(${d.pos} * (var(--cell) + var(--gap)))`;
+    if (d.side === 'top')    return { left: along, top:    '-22px' };
+    if (d.side === 'bottom') return { left: along, bottom: '-22px' };
+    if (d.side === 'left')   return { top:  along, left:   '-22px' };
+    if (d.side === 'right')  return { top:  along, right:  '-22px' };
+    return {};
+  }
+
+  /* ============================================================
+     SLIDE LOGIC
+     A swipe direction (dx, dy) ∈ {(-1,0),(1,0),(0,-1),(0,1)}.
+     maxDist = max cells to move (1 for short swipe, undefined for slide-to-wall)
+     The block moves cell-by-cell until blocked or it reaches a
+     matching door at the edge, or it reaches maxDist.
+     ============================================================ */
+  function attemptSlide(blockId, dx, dy, maxDist = undefined) {
+    const b = blocks[blockId];
+    if (!b || b.exited) return;
+
+    let x = b.x, y = b.y;
+    let cellsMoved = 0;
+    while (true) {
+      // Check if we've hit the max distance limit
+      if (maxDist !== undefined && cellsMoved >= maxDist) break;
+
+      const nx = x + dx, ny = y + dy;
+
+      // Off-grid → check for matching door
+      if (nx < 0 || nx >= level.cols || ny < 0 || ny >= level.rows) {
+        const side = ny < 0 ? 'top' : ny >= level.rows ? 'bottom'
+                   : nx < 0 ? 'left' : 'right';
+        const pos  = (side === 'top' || side === 'bottom') ? x : y;
+        const door = level.doors.find(d =>
+          d.side === side && d.pos === pos && d.color === b.color
+        );
+        if (door) {
+          // Exit through door — animate + remove
+          if (x !== b.x || y !== b.y) commitMoveSnapshot();
+          moveTo(b, x, y);
+          exitBlock(b, side);
+          afterMove();
+          return;
+        }
+        break;   // hit a wall
+      }
+
+      // In-grid — blocked by another block?
+      if (board[ny][nx] != null) break;
+
+      // Move into the empty cell and continue
+      x = nx; y = ny;
+      cellsMoved++;
+    }
+
+    // Final commit if the block actually moved
+    if (x !== b.x || y !== b.y) {
+      commitMoveSnapshot();
+      moveTo(b, x, y);
+      NG.audio.play('flip');
+      afterMove();
+    } else {
+      // Didn't move at all — small bump feedback
+      NG.audio.play('error');
+      NG.replayAnim(b.el, 'ng-shake');
+    }
+  }
+
+  function moveTo(b, x, y) {
+    board[b.y][b.x] = null;
+    b.x = x; b.y = y;
+    board[y][x] = b.id;
+    b.el.style.transform = cellTransform(x, y);
+  }
+
+  function exitBlock(b, side) {
+    b.exited = true;
+    board[b.y][b.x] = null;
+    // Animate the block flying through the door
+    const dirX = side === 'left' ? -120 : side === 'right' ?  120 : 0;
+    const dirY = side === 'top'  ? -120 : side === 'bottom' ? 120 : 0;
+    b.el.style.setProperty('--exit-transform',
+      `${cellTransform(b.x, b.y).replace('translate(', 'translate(')}`);
+    // Replace transform with combined translate so it slides further out
+    b.el.style.transform =
+      `translate(calc(${b.x} * (var(--cell) + var(--gap)) + ${dirX}px),` +
+      `           calc(${b.y} * (var(--cell) + var(--gap)) + ${dirY}px))`;
+    b.el.classList.add('is-exiting');
+    NG.audio.play('coin');
+
+    // Confetti at the door for a tiny celebration
+    const r = b.el.getBoundingClientRect();
+    NG.particles.burst(r.left + r.width / 2, r.top + r.height / 2, {
+      count: 8, spread: 50, colors: [COLORS[b.color]],
+    });
+
+    // Remove from DOM after animation
+    setTimeout(() => b.el.remove(), 400);
+  }
+
+  /* ============================================================
+     HISTORY / UNDO  (board snapshot per move)
+     ============================================================ */
+  function commitMoveSnapshot() {
+    const snap = {
+      moves,
+      blocks: Object.values(blocks).map(b => ({
+        id: b.id, x: b.x, y: b.y, exited: b.exited,
+      })),
+    };
+    history.push(snap);
+    if (history.length > 60) history.shift();
+  }
+
+  function undo() {
+    if (history.length === 0) { NG.toast('Nothing to undo'); return; }
+    const prev = history.pop();
+    moves = prev.moves;
+
+    // Rebuild board state from snapshot
+    for (let y = 0; y < level.rows; y++) board[y].fill(null);
+    prev.blocks.forEach(rec => {
+      const b = blocks[rec.id];
+      if (!b) return;
+      b.exited = rec.exited;
+      b.x = rec.x; b.y = rec.y;
+      if (!rec.exited) {
+        board[rec.y][rec.x] = rec.id;
+        // If the block had been removed, re-add it
+        if (!b.el.isConnected) {
+          $('#bb-board').appendChild(b.el);
+        }
+        b.el.classList.remove('is-exiting');
+        b.el.style.transform = cellTransform(rec.x, rec.y);
+      }
+    });
+    updateHeader();
+    NG.audio.play('swoosh');
+  }
+
+  /* ============================================================
+     AFTER-MOVE: counter, win check, save
+     ============================================================ */
+  function afterMove() {
+    moves++;
+    updateHeader();
+    if (Object.values(blocks).every(b => b.exited)) {
+      onLevelComplete();
+    }
+  }
+
+  function onLevelComplete() {
+    // Record best-moves for this level
+    const lvl = level.id;
+    const prevBest = progress.cleared[lvl];
+    if (prevBest == null || moves < prevBest) progress.cleared[lvl] = moves;
+    persistProgress();
+
+    NG.audio.play('success');
+    setTimeout(() => NG.particles.confetti({ count: 120 }), 200);
+
+    $('#banner-title').textContent = 'Level cleared!';
+    $('#banner-stats').textContent =
+      `${moves} moves` + (prevBest != null ? ` · best ${progress.cleared[lvl]}` : '');
+    const next = currentIdx + 1 < LEVELS.length;
+    $('#banner-next').style.display = next ? '' : 'none';
+    $('#banner-final').style.display = next ? 'none' : '';
+    $('#level-banner').classList.add('is-open');
+  }
+
+  /* ============================================================
+     INPUT — pointer (swipe) and keyboard (arrow keys)
+     ============================================================ */
+  function attachInput() {
+    const boardEl = $('#bb-board');
+
+    let dragState = null;
+
+    boardEl.addEventListener('pointerdown', (e) => {
+      const blockEl = e.target.closest('.bb-block');
+      if (!blockEl) { selectBlock(null); return; }
+      const id = blockEl.dataset.id;
+      selectBlock(id);
+      dragState = {
+        id, startX: e.clientX, startY: e.clientY,
+        moved: false,
+      };
+      blockEl.classList.add('is-dragging');
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!dragState) return;
+      const dx = e.clientX - dragState.startX;
+      const dy = e.clientY - dragState.startY;
+      if (!dragState.moved && Math.abs(dx) + Math.abs(dy) > 5) dragState.moved = true;
+    });
+
+    window.addEventListener('pointerup', (e) => {
+      if (!dragState) return;
+      const dx = e.clientX - dragState.startX;
+      const dy = e.clientY - dragState.startY;
+      const b = blocks[dragState.id];
+      if (b) b.el.classList.remove('is-dragging');
+
+      // Decide direction and distance from swipe
+      const THRESHOLD = 30;
+      const absX = Math.abs(dx), absY = Math.abs(dy);
+      const maxDist = Math.max(absX, absY);
+
+      if (maxDist >= THRESHOLD) {
+        let mx = 0, my = 0;
+        if (absX > absY) mx = dx > 0 ? 1 : -1;
+        else             my = dy > 0 ? 1 : -1;
+
+        // Estimate cell size (~76px = cell + gap). One swipe = cell-based distance
+        // short swipe = 1 cell, medium = 2 cells, long = all the way
+        const CELL_SIZE = 76;
+        const cellsDist = Math.round(maxDist / CELL_SIZE);
+        const cellsToMove = Math.max(1, Math.min(cellsDist, 2));  // clamp to 1-2
+        const moveAll = cellsDist >= 3;  // 3+ cells = slide to wall
+
+        attemptSlide(dragState.id, mx, my, moveAll ? undefined : cellsToMove);
+      }
+      dragState = null;
+    });
+
+    // Keyboard: arrow keys move the selected block
+    window.addEventListener('keydown', (e) => {
+      if (!selectedId) return;
+      let dx = 0, dy = 0;
+      if (e.key === 'ArrowLeft')  dx = -1;
+      else if (e.key === 'ArrowRight') dx = 1;
+      else if (e.key === 'ArrowUp')    dy = -1;
+      else if (e.key === 'ArrowDown')  dy = 1;
+      else return;
+      e.preventDefault();
+      attemptSlide(selectedId, dx, dy);
+    });
+  }
+
+  function selectBlock(id) {
+    if (selectedId === id) return;
+    if (selectedId && blocks[selectedId])
+      blocks[selectedId].el.classList.remove('is-selected');
+    selectedId = id;
+    if (id && blocks[id]) blocks[id].el.classList.add('is-selected');
+  }
+
+  /* ============================================================
+     HINT — pulse the doors of remaining blocks
+     ============================================================ */
+  function showHint() {
+    const remainingColors = new Set(
+      Object.values(blocks).filter(b => !b.exited).map(b => b.color)
+    );
+    NG.$$('.bb-door').forEach(el => {
+      el.classList.add('is-hinting');
+    });
+    // Remove hint after 4 animation cycles (1400ms × 3 + 200ms fade)
+    setTimeout(() => {
+      NG.$$('.bb-door.is-hinting').forEach(el => {
+        el.classList.remove('is-hinting');
+      });
+    }, 4200);
+    NG.audio.play('flip');
+  }
+
+  /* ============================================================
+     LEVEL PICKER MODAL
+     ============================================================ */
+  function openLevelPicker() {
+    const grid = document.createElement('div');
+    grid.className = 'level-picker';
+    LEVELS.forEach((lv, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'level-pick-btn';
+      const cleared = progress.cleared[lv.id] != null;
+      const unlocked = i === 0 || progress.cleared[LEVELS[i - 1].id] != null
+        || i <= progress.currentIdx;
+      if (cleared) btn.classList.add('is-cleared');
+      if (!unlocked) btn.classList.add('is-locked');
+      btn.textContent = i + 1;
+      btn.addEventListener('click', () => {
+        if (!unlocked) return;
+        NG.modal.close();
+        loadLevel(i);
+      });
+      grid.appendChild(btn);
+    });
+    NG.modal.open({
+      title: 'Pick a level',
+      body: grid,
+      actions: [{ label: 'Close', variant: 'ghost' }],
+    });
+  }
+
+  /* ============================================================
+     HEADER UPDATE
+     ============================================================ */
+  function updateHeader() {
+    $('#level-name').textContent = level.name;
+    $('#level-num').textContent = 'Level ' + (currentIdx + 1) + ' / ' + LEVELS.length;
+    $('#stat-moves').textContent = 'Moves: ' + moves;
+    const best = progress.cleared[level.id];
+    $('#stat-best').textContent = best != null ? 'Best: ' + best : '';
+  }
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  function init() {
+    loadLevel(progress.currentIdx || 0);
+    attachInput();
+
+    NG.on($('#btn-undo'),  'click', undo);
+    NG.on($('#btn-reset'), 'click', () => loadLevel(currentIdx));
+    NG.on($('#btn-hint'),  'click', showHint);
+    NG.on($('#btn-levels'), 'click', openLevelPicker);
+
+    NG.on($('#banner-next'), 'click', () => {
+      $('#level-banner').classList.remove('is-open');
+      loadLevel(currentIdx + 1);
+    });
+    NG.on($('#banner-replay'), 'click', () => {
+      $('#level-banner').classList.remove('is-open');
+      loadLevel(currentIdx);
+    });
+    NG.on($('#banner-close'),  'click', () => {
+      $('#level-banner').classList.remove('is-open');
+    });
+
+    NG.on($('#btn-mute'), 'click', () => {
+      const m = NG.audio.toggleMuted();
+      $('#btn-mute').textContent = m ? '🔇' : '🔊';
+    });
+    if (NG.audio.isMuted()) $('#btn-mute').textContent = '🔇';
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

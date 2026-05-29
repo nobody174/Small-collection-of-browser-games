@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Spider Solitaire</title>
+
+  <link rel="stylesheet" href="../../shared/css/theme.css">
+  <link rel="stylesheet" href="../../shared/css/ui.css">
+  <link rel="stylesheet" href="../../shared/css/animations.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Spider has 10 columns — let the row scroll horizontally on narrow screens */
+    .spider-board .board-row {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: var(--ng-space-3);
+    }
+    /* Slightly smaller cards for Spider so the 10 columns breathe */
+    body.spider-board {
+      --card-w: 76px;
+      --card-h: 108px;
+    }
+    @media (max-width: 900px) {
+      body.spider-board { --card-w: 62px; --card-h: 88px; }
+    }
+    @media (max-width: 600px) {
+      body.spider-board { --card-w: 50px; --card-h: 72px; }
+    }
+
+    .difficulty-row {
+      display: flex;
+      gap: var(--ng-space-2);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .difficulty-row .btn.is-active {
+      background: var(--ng-color-primary);
+      color: var(--ng-text-on-color);
+    }
+
+    /* "Stock" looks like a stacked deck — show count badge on top */
+    .stock-stack { position: relative; }
+    .stock-stack__count {
+      position: absolute;
+      top: -8px; right: -8px;
+      background: var(--ng-color-primary);
+      color: var(--ng-text-on-color);
+      border-radius: var(--ng-radius-pill);
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: var(--ng-weight-bold);
+      box-shadow: var(--ng-shadow-soft);
+      z-index: 50;
+    }
+  </style>
+</head>
+<body class="cards-board spider-board">
+
+  <main class="ng-app">
+
+    <header class="cards-topbar" style="width:100%; max-width: 1100px;">
+      <h1 class="ng-topbar__title">🕷️ Spider</h1>
+
+      <div class="stats">
+        <span class="badge" id="stat-moves">Moves: 0</span>
+        <span class="badge badge--success" id="stat-score">Score: 500</span>
+        <span class="badge badge--primary" id="stat-time">Time: 0s</span>
+        <span class="badge badge--warning" id="stat-completed">Sets: 0/8</span>
+      </div>
+
+      <div class="stats">
+        <button class="btn btn--ghost btn--sm" id="btn-undo">↶ Undo</button>
+        <button class="btn btn--ghost btn--sm" id="btn-new">New game</button>
+        <button class="btn btn--ghost btn--sm" id="btn-deck" title="Deck theme">🂮</button>
+        <button class="btn btn--ghost btn--sm btn--icon" id="btn-mute" title="Mute">🔊</button>
+        <a class="btn btn--ghost btn--sm" href="index.html">← Variants</a>
+      </div>
+    </header>
+
+    <!-- Difficulty -->
+    <div class="difficulty-row" style="width:100%; max-width: 1100px; margin-bottom: var(--ng-space-3);">
+      <span style="color: var(--ng-text-muted); font-size: var(--ng-text-sm);">Difficulty:</span>
+      <button class="btn btn--ghost btn--sm" data-suits="1">1 suit (easy)</button>
+      <button class="btn btn--ghost btn--sm" data-suits="2">2 suits</button>
+      <button class="btn btn--ghost btn--sm" data-suits="4">4 suits (hard)</button>
+    </div>
+
+    <div class="board" style="max-width: 1100px;">
+
+      <!-- Top row: stock only -->
+      <div class="board-row" style="overflow: visible;">
+        <div class="stock-stack">
+          <div id="stock" class="pile pile--stock"></div>
+          <div class="stock-stack__count" id="stock-count">5</div>
+        </div>
+      </div>
+
+      <!-- 10 tableau columns -->
+      <div class="board-row">
+        <div id="tableau-0" class="pile pile--tableau"></div>
+        <div id="tableau-1" class="pile pile--tableau"></div>
+        <div id="tableau-2" class="pile pile--tableau"></div>
+        <div id="tableau-3" class="pile pile--tableau"></div>
+        <div id="tableau-4" class="pile pile--tableau"></div>
+        <div id="tableau-5" class="pile pile--tableau"></div>
+        <div id="tableau-6" class="pile pile--tableau"></div>
+        <div id="tableau-7" class="pile pile--tableau"></div>
+        <div id="tableau-8" class="pile pile--tableau"></div>
+        <div id="tableau-9" class="pile pile--tableau"></div>
+      </div>
+
+    </div>
+
+    <!-- Win banner -->
+    <div class="win-banner" id="win-banner">
+      <div class="win-banner__card ng-pop">
+        <div class="win-banner__emoji">🕸️</div>
+        <h2>You cleared the web!</h2>
+        <p id="win-stats" class="ng-selectable" style="color: var(--ng-text-muted);"></p>
+        <div class="modal__actions" style="justify-content:center; margin-top: var(--ng-space-4);">
+          <button class="btn btn--primary" id="win-again">Play again</button>
+          <a class="btn btn--ghost" href="index.html">Variants</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="../../shared/js/utils.js"></script>
+  <script src="../../shared/js/save.js"></script>
+  <script src="../../shared/js/audio.js"></script>
+  <script src="../../shared/js/particles.js"></script>
+  <script src="../../shared/js/ui.js"></script>
+  <script src="js/card-engine.js"></script>
+  <script src="js/deck-themes.js"></script>
+  <script src="js/spider.js"></script>
+</body>
+</html>

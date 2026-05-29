@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Color Block Escape</title>
+
+  <link rel="stylesheet" href="../../shared/css/theme.css">
+  <link rel="stylesheet" href="../../shared/css/ui.css">
+  <link rel="stylesheet" href="../../shared/css/animations.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="blocks-board">
+
+  <main class="ng-app">
+
+    <!-- Top bar -->
+    <header class="blocks-topbar">
+      <h1 class="ng-topbar__title">🧩 Color Block Escape</h1>
+
+      <div class="stats">
+        <span class="badge" id="stat-moves">Moves: 0</span>
+        <span class="badge badge--success" id="stat-best"></span>
+      </div>
+
+      <div class="stats">
+        <button class="btn btn--ghost btn--sm" id="btn-undo">↶ Undo</button>
+        <button class="btn btn--ghost btn--sm" id="btn-reset">Reset</button>
+        <button class="btn btn--ghost btn--sm" id="btn-hint">💡 Hint</button>
+        <button class="btn btn--ghost btn--sm" id="btn-levels">Levels</button>
+        <button class="btn btn--ghost btn--sm btn--icon" id="btn-mute" title="Mute">🔊</button>
+        <a class="btn btn--ghost btn--sm" href="../../index.html">← Hub</a>
+      </div>
+    </header>
+
+    <!-- Level header -->
+    <div class="level-header">
+      <div>
+        <span class="level-num" id="level-num">Level 1</span>
+        <h2 id="level-name" style="display:inline-block;">…</h2>
+      </div>
+      <span style="color: var(--ng-text-muted); font-size: var(--ng-text-sm);">
+        Swipe a block — or click then use arrow keys.
+      </span>
+    </div>
+
+    <!-- Board -->
+    <div class="board-wrap">
+      <div id="bb-board" class="bb-board"></div>
+    </div>
+
+  </main>
+
+  <!-- Level-complete banner -->
+  <div class="level-banner" id="level-banner">
+    <div class="level-banner__card ng-pop">
+      <div class="level-banner__emoji">🎉</div>
+      <h2 id="banner-title">Level cleared!</h2>
+      <p id="banner-stats" class="ng-selectable" style="color: var(--ng-text-muted);"></p>
+      <div class="modal__actions" style="justify-content:center; margin-top: var(--ng-space-4); flex-wrap: wrap;">
+        <button class="btn btn--ghost" id="banner-replay">Replay</button>
+        <button class="btn btn--primary" id="banner-next">Next level →</button>
+        <button class="btn btn--primary" id="banner-final" style="display:none;">Done!</button>
+        <button class="btn btn--ghost" id="banner-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/js/utils.js"></script>
+  <script src="../../shared/js/save.js"></script>
+  <script src="../../shared/js/audio.js"></script>
+  <script src="../../shared/js/particles.js"></script>
+  <script src="../../shared/js/ui.js"></script>
+
+  <script src="js/levels.js"></script>
+  <script src="js/blocks.js"></script>
+</body>
+</html>

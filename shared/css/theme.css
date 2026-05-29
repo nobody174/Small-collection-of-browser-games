@@ -1,0 +1,188 @@
+/* ============================================================
+   theme.css — Studio design tokens
+   ------------------------------------------------------------
+   This file defines the look-and-feel that every game shares:
+   colors, fonts, spacing, radii, shadows, transitions.
+
+   Everything lives in CSS variables (custom properties) so a
+   single edit here updates ALL 4 games at once. That is the
+   whole point of having a "studio identity".
+
+   How to use in a game:
+     --ng-color-primary       → main brand color (buttons, accents)
+     --ng-space-3             → standard padding
+     --ng-radius-md           → typical rounded-corner amount
+     --ng-shadow-soft         → subtle drop shadow
+
+   Variable naming:
+     --ng-<category>-<name>   (ng = "New Games")
+   ============================================================ */
+
+:root {
+  /* --------------------------------------------------------
+     COLOR PALETTE
+     Soft, modern, casual-game vibe. Avoid dark/gritty.
+     Each game may add a single accent color of its own,
+     but should pull base UI colors from here.
+     -------------------------------------------------------- */
+
+  /* Backgrounds — soft gradients/neutrals */
+  --ng-bg-page:        #f5f0ff;   /* page background — soft lavender */
+  --ng-bg-surface:     #ffffff;   /* cards, panels, modals */
+  --ng-bg-surface-2:   #f0ebfa;   /* nested panels / hover */
+  --ng-bg-overlay:     rgba(20, 15, 40, 0.45); /* modal backdrop */
+
+  /* Brand & accent colors — colorful but not loud */
+  --ng-color-primary:     #7c5cff;  /* purple — main brand */
+  --ng-color-primary-2:   #5a3fd9;  /* darker purple (hover/active) */
+  --ng-color-secondary:   #ff8fb1;  /* warm pink — secondary CTAs */
+  --ng-color-success:     #4ad295;  /* mint green */
+  --ng-color-warning:     #ffc46b;  /* warm amber */
+  --ng-color-danger:      #ff6b6b;  /* coral red */
+  --ng-color-info:        #57c7ff;  /* sky blue */
+
+  /* Text */
+  --ng-text-strong:    #1f1b2e;   /* headings, important text */
+  --ng-text-body:      #3d384f;   /* normal copy */
+  --ng-text-muted:     #7a7590;   /* secondary / hint text */
+  --ng-text-on-color:  #ffffff;   /* text sitting on a colored button */
+
+  /* Borders / dividers */
+  --ng-border:         #e4dff0;
+  --ng-border-strong:  #c9bfe0;
+
+  /* Per-game accent slot — each game can override this */
+  --ng-game-accent:    var(--ng-color-primary);
+
+  /* --------------------------------------------------------
+     TYPOGRAPHY
+     System font stack = zero downloads, fast, native feel.
+     Display font is the same stack but heavier weight.
+     -------------------------------------------------------- */
+  --ng-font-body:   -apple-system, BlinkMacSystemFont, "Segoe UI",
+                    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ng-font-display: var(--ng-font-body); /* same family, bolder weight */
+
+  --ng-text-xs:   12px;
+  --ng-text-sm:   14px;
+  --ng-text-md:   16px;   /* base body */
+  --ng-text-lg:   20px;
+  --ng-text-xl:   26px;
+  --ng-text-2xl:  34px;
+  --ng-text-3xl:  44px;   /* hero / titles */
+
+  --ng-weight-regular: 400;
+  --ng-weight-medium:  500;
+  --ng-weight-bold:    700;
+  --ng-weight-black:   900;
+
+  --ng-leading-tight: 1.2;
+  --ng-leading-body:  1.5;
+
+  /* --------------------------------------------------------
+     SPACING SCALE
+     Use these instead of arbitrary pixel values so spacing
+     stays consistent across games.
+     -------------------------------------------------------- */
+  --ng-space-1:   4px;
+  --ng-space-2:   8px;
+  --ng-space-3:  12px;
+  --ng-space-4:  16px;
+  --ng-space-5:  24px;
+  --ng-space-6:  32px;
+  --ng-space-7:  48px;
+  --ng-space-8:  64px;
+
+  /* --------------------------------------------------------
+     RADII — rounded corners are a key part of the casual feel
+     -------------------------------------------------------- */
+  --ng-radius-sm:    6px;
+  --ng-radius-md:   12px;
+  --ng-radius-lg:   18px;
+  --ng-radius-xl:   28px;
+  --ng-radius-pill: 999px;  /* pill-shaped buttons */
+
+  /* --------------------------------------------------------
+     SHADOWS — soft, never harsh. Used for depth & lift.
+     -------------------------------------------------------- */
+  --ng-shadow-soft:   0 2px 6px  rgba(40, 25, 80, 0.08);
+  --ng-shadow-md:     0 6px 16px rgba(40, 25, 80, 0.12);
+  --ng-shadow-lg:     0 14px 32px rgba(40, 25, 80, 0.18);
+  --ng-shadow-glow:   0 0 0 4px  rgba(124, 92, 255, 0.25); /* focus ring */
+  --ng-shadow-inset:  inset 0 -3px 0 rgba(0, 0, 0, 0.10); /* button press */
+
+  /* --------------------------------------------------------
+     MOTION — keep durations short and consistent.
+     Casual games feel "juicy" because motion is snappy.
+     -------------------------------------------------------- */
+  --ng-dur-fast:   120ms;
+  --ng-dur-md:     220ms;
+  --ng-dur-slow:   420ms;
+
+  /* Easing curves (the "bounce" comes from these) */
+  --ng-ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ng-ease-pop:    cubic-bezier(0.34, 1.56, 0.64, 1);  /* slight overshoot */
+  --ng-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* --------------------------------------------------------
+     Z-INDEX layers — name them so we don't fight stacking later
+     -------------------------------------------------------- */
+  --ng-z-base:      1;
+  --ng-z-floating:  10;
+  --ng-z-modal:    100;
+  --ng-z-toast:    200;
+  --ng-z-tooltip:  300;
+}
+
+/* ============================================================
+   BASE RESET + DEFAULTS
+   Light-touch reset so every game starts from the same baseline.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--ng-font-body);
+  font-size: var(--ng-text-md);
+  line-height: var(--ng-leading-body);
+  color: var(--ng-text-body);
+  background: var(--ng-bg-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--ng-font-display);
+  color: var(--ng-text-strong);
+  line-height: var(--ng-leading-tight);
+  margin: 0 0 var(--ng-space-3);
+  font-weight: var(--ng-weight-bold);
+}
+
+h1 { font-size: var(--ng-text-3xl); font-weight: var(--ng-weight-black); }
+h2 { font-size: var(--ng-text-2xl); }
+h3 { font-size: var(--ng-text-xl); }
+h4 { font-size: var(--ng-text-lg); }
+
+p { margin: 0 0 var(--ng-space-3); }
+
+a {
+  color: var(--ng-color-primary);
+  text-decoration: none;
+  transition: color var(--ng-dur-fast) var(--ng-ease-out);
+}
+a:hover { color: var(--ng-color-primary-2); }
+
+button { font-family: inherit; }
+
+/* Make images and emoji scale nicely */
+img, svg { max-width: 100%; display: block; }
+
+/* Disable tap highlight on mobile — feels cleaner in games */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Stop user-select on game UI by default; opt back in with .ng-selectable */
+body { user-select: none; -webkit-user-select: none; }
+.ng-selectable { user-select: text; -webkit-user-select: text; }
