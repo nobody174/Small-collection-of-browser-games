@@ -139,12 +139,15 @@ test.describe('Idle - Persistence', () => {
     const coinAmount = await page.locator('#coin-amount');
     const coinsBeforeReload = await coinAmount.textContent();
 
+    // Wait for autosave (5 second interval) to persist to localStorage
+    await page.waitForTimeout(5500);
+
     // Reload
     await page.reload();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
 
     // Coins should be restored
-    const coinsAfterReload = await coinAmount.textContent();
+    const coinsAfterReload = await page.locator('#coin-amount').textContent();
     expect(coinsAfterReload).toBe(coinsBeforeReload);
   });
 
