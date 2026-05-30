@@ -126,6 +126,14 @@
       }
     }
 
+    // Flag and house at top of surface (uses CSS variables)
+    const flagEl = document.createElement('div');
+    flagEl.className = 'surface-flag';
+    flagEl.style.position = 'absolute';
+    flagEl.style.transform = `translate(calc(${WORLD.shopCol} * var(--tile) - 10px), calc(${WORLD.surfaceRow} * var(--tile) - 35px))`;
+    flagEl.innerHTML = `<div style="font-size: 24px;">🏠</div><div style="font-size: 18px; margin-top: -8px;">var(--flag)</div>`;
+    worldEl.appendChild(flagEl);
+
     // Player sprite
     const p = document.createElement('div');
     p.className = 'player';
@@ -214,9 +222,24 @@
     }
   }
 
+  function updateCursor() {
+    const pickaxe = PICKAXES[state.pickaxeIdx];
+    const viewport = $('.viewport');
+    // Map pickaxe names to emoji cursors
+    const cursorMap = {
+      'Pickaxe': '⛏️',
+      'Laser Drill': '🔦',
+      'Dynamite': '💣',
+    };
+    const cursorEmoji = cursorMap[pickaxe.name] || '⛏️';
+    viewport.style.cursor = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="24">${cursorEmoji}</text></svg>') 0 0, auto`;
+  }
+
   /* --------------------------------------------------------
      INPUT — click a tile or use arrow keys
      -------------------------------------------------------- */
+  let holdDigState = null;
+
   function onTileClick(e) {
     const tEl = e.target.closest('.tile');
     if (!tEl) return;
@@ -226,6 +249,50 @@
     const dist = Math.abs(r - player.row) + Math.abs(c - player.col);
     if (dist !== 1) return;     // must be adjacent (orthogonal)
     interact(r, c);
+  }
+
+  function attachHoldToDigInput() {
+    const viewport = $('.viewport');
+    viewport.addEventListener('pointerdown', (e) => {
+      const tEl = e.target.closest('.tile');
+      if (!tEl) return;
+      const r = parseInt(tEl.dataset.row);
+      const c = parseInt(tEl.dataset.col);
+      const { player } = getWorld();
+      const dist = Math.abs(r - player.row) + Math.abs(c - player.col);
+      if (dist !== 1) return;
+
+      const world = getWorld();
+      const t = world.tiles[r][c];
+      if (t.dug) return;  // only dig solid tiles
+
+      // Start holding to dig
+      holdDigState = { row: r, col: c, intervalId: null };
+
+      // Dig immediately
+      dig(r, c);
+
+      // Continue digging while held (every 200ms)
+      holdDigState.intervalId = setInterval(() => {
+        if (holdDigState && holdDigState.row === r && holdDigState.col === c) {
+          dig(r, c);
+        }
+      }, 200);
+    });
+
+    viewport.addEventListener('pointerup', () => {
+      if (holdDigState && holdDigState.intervalId) {
+        clearInterval(holdDigState.intervalId);
+      }
+      holdDigState = null;
+    });
+
+    viewport.addEventListener('pointerleave', () => {
+      if (holdDigState && holdDigState.intervalId) {
+        clearInterval(holdDigState.intervalId);
+      }
+      holdDigState = null;
+    });
   }
 
   function onKey(e) {
@@ -422,6 +489,13 @@
      SHOP — auto-sell + upgrade store
      -------------------------------------------------------- */
   function openShop() {
+    const world = getWorld();
+    // Only sell if player is at the shop
+    if (world.player.row !== WORLD.surfaceRow || world.player.col !== WORLD.shopCol) {
+      NG.toast('You must be at the shop to sell!', { type: 'warning' });
+      return;
+    }
+
     NG.audio.play('coin');
     const sellTotal = Object.entries(state.cart)
       .reduce((s, [id, n]) => s + n * MINERALS[id].value, 0);
@@ -451,6 +525,7 @@
         () => {
           state.gold -= next.cost;
           state.pickaxeIdx++;
+          updateCursor();
           NG.audio.play('upgrade');
           NG.modal.close();
           openShop();
@@ -472,6 +547,28 @@
           NG.audio.play('upgrade');
           NG.modal.close();
           openShop();
+        }
+      ));
+    }
+
+    // Return to surface (elevator)
+    const world = getWorld();
+    if (world.player.row !== WORLD.surfaceRow) {
+      body.appendChild(shopRow(
+        '🛗 Return to Surface',
+        'Take the elevator back up',
+        0,
+        true,
+        () => {
+          world.player.row = WORLD.surfaceRow;
+          world.player.col = WORLD.shopCol;
+          placePlayer($('#player-sprite'), WORLD.surfaceRow, WORLD.shopCol);
+          updateAdjacency();
+          updateViewport();
+          NG.modal.close();
+          NG.audio.play('coin');
+          updateUI();
+          flushSave();
         }
       ));
     }
@@ -641,9 +738,11 @@
   function init() {
     if (!tryRestore()) initState();
     render();
+    updateCursor();
 
     $('#world').addEventListener('click', onTileClick);
     attachSwipeInput();
+    attachHoldToDigInput();
     window.addEventListener('keydown', onKey);
 
     NG.on($('#btn-shop'), 'click', openShop);

@@ -24,7 +24,7 @@
   --stone-2: #545a64;
   --hardstone: #3a3e48;
   --bedrock: #1f222a;
-  --char: '⛷️';
+  --char: '🧔'; /* Viking with beard */
   --flag: '🇳🇴';
   --surface-decor: '🌲';
 
@@ -372,6 +372,22 @@ body.country-mexico {
   --surface-decor:'🌵';
 }
 
+body.country-norway {
+  --sky-1:        #c8e6f7;
+  --sky-2:        #a8d4ee;
+  --surface:      #f8fcff;
+  --surface-edge: #d7eaff;
+  --dirt:         #6b4a36;
+  --dirt-2:       #5a3e2c;
+  --stone:        #6a6f7a;
+  --stone-2:      #545a64;
+  --hardstone:    #3a3e48;
+  --bedrock:      #1f222a;
+  --char:         '🧔';
+  --flag:         '🇳🇴';
+  --surface-decor:'🌲';
+}
+
 body.country-japan {
   --sky-1:        #fbdde9;
   --sky-2:        #f3b5cc;
@@ -386,4 +402,36 @@ body.country-japan {
   --char:         '🥷';
   --flag:         '🇯🇵';
   --surface-decor:'🏮';
+}
+
+body.country-egypt {
+  --sky-1:        #ffe5a8;
+  --sky-2:        #ffd966;
+  --surface:      #f4d991;
+  --surface-edge: #d4b560;
+  --dirt:         #9b7653;
+  --dirt-2:       #7a5e3d;
+  --stone:        #a89968;
+  --stone-2:      #8b7a56;
+  --hardstone:    #6b5e4d;
+  --bedrock:      #3d3a33;
+  --char:         '🧑‍🏭';
+  --flag:         '🇪🇬';
+  --surface-decor:'🗿';
+}
+
+body.country-sweden {
+  --sky-1:        #d4e8f5;
+  --sky-2:        #b0d8f0;
+  --surface:      #e8f0ff;
+  --surface-edge: #c8dff0;
+  --dirt:         #5a4a3a;
+  --dirt-2:       #4a3a2a;
+  --stone:        #5a6a7a;
+  --stone-2:      #4a5a6a;
+  --hardstone:    #3a4a5a;
+  --bedrock:      #1a2a3a;
+  --char:         '🧔‍♂️';
+  --flag:         '🇸🇪';
+  --surface-decor:'❄️';
 }
