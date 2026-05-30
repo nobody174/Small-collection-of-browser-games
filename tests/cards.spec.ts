@@ -170,8 +170,8 @@ test.describe('Cards - Spider Solitaire', () => {
 
   test('spider has difficulty selector', async ({ page }) => {
 
-    // Spider should have difficulty buttons (1-suit, 2-suit, 4-suit)
-    const difficultyBtns = await page.locator('button:has-text("suit")');
+    // Spider should have difficulty buttons (Easy, Medium, Hard)
+    const difficultyBtns = await page.locator('[data-suits]');
     expect(await difficultyBtns.count()).toBeGreaterThan(0);
   });
 
