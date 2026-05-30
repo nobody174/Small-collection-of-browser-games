@@ -126,12 +126,13 @@
       }
     }
 
-    // Flag and house at top of surface (uses CSS variables)
+    // Flag and house at top of surface
     const flagEl = document.createElement('div');
     flagEl.className = 'surface-flag';
     flagEl.style.position = 'absolute';
     flagEl.style.transform = `translate(calc(${WORLD.shopCol} * var(--tile) - 10px), calc(${WORLD.surfaceRow} * var(--tile) - 35px))`;
-    flagEl.innerHTML = `<div style="font-size: 24px;">🏠</div><div style="font-size: 18px; margin-top: -8px;">var(--flag)</div>`;
+    const flagEmoji = getComputedStyle(document.documentElement).getPropertyValue('--flag').trim() || '🇳🇴';
+    flagEl.innerHTML = `<div style="font-size: 24px;">🏠</div><div style="font-size: 18px; margin-top: -8px;">${flagEmoji}</div>`;
     worldEl.appendChild(flagEl);
 
     // Player sprite
@@ -225,14 +226,15 @@
   function updateCursor() {
     const pickaxe = PICKAXES[state.pickaxeIdx];
     const viewport = $('.viewport');
-    // Map pickaxe names to emoji cursors
     const cursorMap = {
       'Pickaxe': '⛏️',
       'Laser Drill': '🔦',
       'Dynamite': '💣',
     };
     const cursorEmoji = cursorMap[pickaxe.name] || '⛏️';
-    viewport.style.cursor = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="24">${cursorEmoji}</text></svg>') 0 0, auto`;
+    const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="24">${cursorEmoji}</text></svg>`;
+    const encoded = encodeURIComponent(svgStr);
+    viewport.style.cursor = `url('data:image/svg+xml,${encoded}') 0 0, auto`;
   }
 
   /* --------------------------------------------------------

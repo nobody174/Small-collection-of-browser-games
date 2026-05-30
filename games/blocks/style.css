@@ -28,6 +28,14 @@ body.blocks-board {
     linear-gradient(180deg, #fff5fa 0%, #ecf3ff 100%);
 }
 
+@media (prefers-color-scheme: dark) {
+  body.blocks-board {
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(255, 143, 177, 0.08), transparent 60%),
+      linear-gradient(180deg, #2d2535 0%, #1a1620 100%);
+  }
+}
+
 .blocks-topbar {
   display: flex;
   align-items: center;
