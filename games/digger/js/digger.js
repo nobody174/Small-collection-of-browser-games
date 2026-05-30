@@ -105,6 +105,12 @@
     worldEl.style.height = `calc(${WORLD.rows} * var(--tile))`;
     worldEl.innerHTML = '';
 
+    // Apply country body class first (so CSS variables are ready)
+    document.body.classList.forEach(c => {
+      if (c.startsWith('country-')) document.body.classList.remove(c);
+    });
+    document.body.classList.add('country-' + state.countryId);
+
     for (let r = 0; r < WORLD.rows; r++) {
       for (let c = 0; c < WORLD.cols; c++) {
         const t = world.tiles[r][c];
@@ -145,12 +151,6 @@
     updateAdjacency();
     updateViewport();
     updateUI();
-
-    // Apply country body class
-    document.body.classList.forEach(c => {
-      if (c.startsWith('country-')) document.body.classList.remove(c);
-    });
-    document.body.classList.add('country-' + state.countryId);
   }
 
   function tileClass(t) {
