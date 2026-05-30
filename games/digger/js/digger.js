@@ -105,12 +105,6 @@
     worldEl.style.height = `calc(${WORLD.rows} * var(--tile))`;
     worldEl.innerHTML = '';
 
-    // Apply country body class first (so CSS variables are ready)
-    document.body.classList.forEach(c => {
-      if (c.startsWith('country-')) document.body.classList.remove(c);
-    });
-    document.body.classList.add('country-' + state.countryId);
-
     for (let r = 0; r < WORLD.rows; r++) {
       for (let c = 0; c < WORLD.cols; c++) {
         const t = world.tiles[r][c];
@@ -124,22 +118,11 @@
           const m = document.createElement('div');
           m.className = 'tile__mineral';
           m.dataset.mineral = t.mineral;
-          const mineral = MINERALS[t.mineral];
-          m.innerHTML = `${mineral.icon}<span class="tile__mineral-price">💰${mineral.value}</span>`;
           el.appendChild(m);
         }
         worldEl.appendChild(el);
       }
     }
-
-    // Flag and house at top of surface
-    const flagEl = document.createElement('div');
-    flagEl.className = 'surface-flag';
-    flagEl.style.position = 'absolute';
-    flagEl.style.transform = `translate(calc(${WORLD.shopCol} * var(--tile) - 10px), calc(${WORLD.surfaceRow} * var(--tile) - 35px))`;
-    const flagEmoji = getComputedStyle(document.documentElement).getPropertyValue('--flag').trim() || '🇳🇴';
-    flagEl.innerHTML = `<div style="font-size: 24px;">🏠</div><div style="font-size: 18px; margin-top: -8px;">${flagEmoji}</div>`;
-    worldEl.appendChild(flagEl);
 
     // Player sprite
     const p = document.createElement('div');
@@ -151,6 +134,12 @@
     updateAdjacency();
     updateViewport();
     updateUI();
+
+    // Apply country body class
+    document.body.classList.forEach(c => {
+      if (c.startsWith('country-')) document.body.classList.remove(c);
+    });
+    document.body.classList.add('country-' + state.countryId);
   }
 
   function tileClass(t) {
@@ -223,16 +212,9 @@
     }
   }
 
-  function updateCursor() {
-    // Cursor customization feature - using emoji cursors via SVG data URIs
-    // Skipped due to complexity with encoding - can be reimplemented later with direct emoji rendering
-  }
-
   /* --------------------------------------------------------
      INPUT — click a tile or use arrow keys
      -------------------------------------------------------- */
-  let holdDigState = null;
-
   function onTileClick(e) {
     const tEl = e.target.closest('.tile');
     if (!tEl) return;
@@ -242,50 +224,6 @@
     const dist = Math.abs(r - player.row) + Math.abs(c - player.col);
     if (dist !== 1) return;     // must be adjacent (orthogonal)
     interact(r, c);
-  }
-
-  function attachHoldToDigInput() {
-    const viewport = $('.viewport');
-    viewport.addEventListener('pointerdown', (e) => {
-      const tEl = e.target.closest('.tile');
-      if (!tEl) return;
-      const r = parseInt(tEl.dataset.row);
-      const c = parseInt(tEl.dataset.col);
-      const { player } = getWorld();
-      const dist = Math.abs(r - player.row) + Math.abs(c - player.col);
-      if (dist !== 1) return;
-
-      const world = getWorld();
-      const t = world.tiles[r][c];
-      if (t.dug) return;  // only dig solid tiles
-
-      // Start holding to dig
-      holdDigState = { row: r, col: c, intervalId: null };
-
-      // Dig immediately
-      dig(r, c);
-
-      // Continue digging while held (every 200ms)
-      holdDigState.intervalId = setInterval(() => {
-        if (holdDigState && holdDigState.row === r && holdDigState.col === c) {
-          dig(r, c);
-        }
-      }, 200);
-    });
-
-    viewport.addEventListener('pointerup', () => {
-      if (holdDigState && holdDigState.intervalId) {
-        clearInterval(holdDigState.intervalId);
-      }
-      holdDigState = null;
-    });
-
-    viewport.addEventListener('pointerleave', () => {
-      if (holdDigState && holdDigState.intervalId) {
-        clearInterval(holdDigState.intervalId);
-      }
-      holdDigState = null;
-    });
   }
 
   function onKey(e) {
@@ -415,89 +353,17 @@
   }
 
   /* --------------------------------------------------------
-     SALES RECEIPT — show mineral breakdown and totals
-     -------------------------------------------------------- */
-  function showSalesReceipt(cart, total) {
-    const body = document.createElement('div');
-    body.style.display = 'flex';
-    body.style.flexDirection = 'column';
-    body.style.gap = 'var(--ng-space-3)';
-    body.style.padding = 'var(--ng-space-3) 0';
-
-    // Mineral line items
-    const items = document.createElement('div');
-    items.style.display = 'flex';
-    items.style.flexDirection = 'column';
-    items.style.gap = 'var(--ng-space-2)';
-    items.style.paddingBottom = 'var(--ng-space-3)';
-    items.style.borderBottom = '1px solid var(--ng-border)';
-
-    Object.entries(cart).forEach(([id, count]) => {
-      if (count <= 0) return;
-      const mineral = MINERALS[id];
-      const itemTotal = count * mineral.value;
-      const line = document.createElement('div');
-      line.style.display = 'flex';
-      line.style.justifyContent = 'space-between';
-      line.style.alignItems = 'center';
-      line.style.fontSize = 'var(--ng-text-sm)';
-      line.innerHTML = `
-        <div style="display: flex; gap: var(--ng-space-2); align-items: center;">
-          <span style="font-size: 20px;">${mineral.icon}</span>
-          <div>
-            <div style="font-weight: var(--ng-weight-bold);">${mineral.name}</div>
-            <div style="color: var(--ng-text-muted);">×${count} @ 💰 ${fmt(mineral.value)}</div>
-          </div>
-        </div>
-        <div style="font-weight: var(--ng-weight-bold);">💰 ${fmt(itemTotal)}</div>
-      `;
-      items.appendChild(line);
-    });
-
-    body.appendChild(items);
-
-    // Total
-    const total_line = document.createElement('div');
-    total_line.style.display = 'flex';
-    total_line.style.justifyContent = 'space-between';
-    total_line.style.alignItems = 'center';
-    total_line.style.fontSize = 'var(--ng-text-lg)';
-    total_line.style.fontWeight = 'var(--ng-weight-bold)';
-    total_line.style.color = 'var(--ng-color-success)';
-    total_line.innerHTML = `
-      <div>Total Earnings</div>
-      <div>💰 ${fmt(total)}</div>
-    `;
-    body.appendChild(total_line);
-
-    NG.modal.open({
-      title: '💰 Sale Receipt',
-      body,
-      actions: [{ label: 'Continue to Shop', variant: 'primary' }],
-      onClose: openShop,
-    });
-  }
-
-  /* --------------------------------------------------------
      SHOP — auto-sell + upgrade store
      -------------------------------------------------------- */
   function openShop() {
-    const world = getWorld();
-    const atShop = world.player.row === WORLD.surfaceRow && world.player.col === WORLD.shopCol;
-
-    if (atShop) {
-      NG.audio.play('coin');
-    }
-
-    const sellTotal = atShop ? Object.entries(state.cart)
-      .reduce((s, [id, n]) => s + n * MINERALS[id].value, 0) : 0;
+    NG.audio.play('coin');
+    const sellTotal = Object.entries(state.cart)
+      .reduce((s, [id, n]) => s + n * MINERALS[id].value, 0);
 
     if (sellTotal > 0) {
       state.gold += sellTotal;
-      // Build receipt before clearing cart
-      const cartSnapshot = { ...state.cart };
-      showSalesReceipt(cartSnapshot, sellTotal);
       state.cart = {};
+      NG.toast(`Sold cart for 💰 ${fmt(sellTotal)}`, { type: 'success' });
     }
 
     // Build the shop content
@@ -505,19 +371,6 @@
     body.style.display = 'flex';
     body.style.flexDirection = 'column';
     body.style.gap = 'var(--ng-space-3)';
-
-    // Show warning if not at shop (cart can't be sold)
-    if (!atShop && sellTotal === 0) {
-      const warning = document.createElement('div');
-      warning.style.padding = 'var(--ng-space-3)';
-      warning.style.backgroundColor = 'rgba(255, 107, 107, 0.1)';
-      warning.style.border = '1px solid rgba(255, 107, 107, 0.3)';
-      warning.style.borderRadius = 'var(--ng-radius-md)';
-      warning.style.color = 'var(--ng-text-strong)';
-      warning.style.fontSize = 'var(--ng-text-sm)';
-      warning.textContent = '⚠️ You\'re underground. Use the "Return to Surface" button to access the shop!';
-      body.appendChild(warning);
-    }
 
     // Pickaxe upgrade
     if (state.pickaxeIdx + 1 < PICKAXES.length) {
@@ -530,7 +383,6 @@
         () => {
           state.gold -= next.cost;
           state.pickaxeIdx++;
-          updateCursor();
           NG.audio.play('upgrade');
           NG.modal.close();
           openShop();
@@ -552,28 +404,6 @@
           NG.audio.play('upgrade');
           NG.modal.close();
           openShop();
-        }
-      ));
-    }
-
-    // Return to surface (elevator)
-    const world = getWorld();
-    if (world.player.row !== WORLD.surfaceRow) {
-      body.appendChild(shopRow(
-        '🛗 Return to Surface',
-        'Take the elevator back up',
-        0,
-        true,
-        () => {
-          world.player.row = WORLD.surfaceRow;
-          world.player.col = WORLD.shopCol;
-          placePlayer($('#player-sprite'), WORLD.surfaceRow, WORLD.shopCol);
-          updateAdjacency();
-          updateViewport();
-          NG.modal.close();
-          NG.audio.play('coin');
-          updateUI();
-          flushSave();
         }
       ));
     }
@@ -743,11 +573,9 @@
   function init() {
     if (!tryRestore()) initState();
     render();
-    updateCursor();
 
     $('#world').addEventListener('click', onTileClick);
     attachSwipeInput();
-    attachHoldToDigInput();
     window.addEventListener('keydown', onKey);
 
     NG.on($('#btn-shop'), 'click', openShop);
