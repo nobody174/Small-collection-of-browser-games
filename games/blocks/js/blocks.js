@@ -146,6 +146,34 @@
      The block moves cell-by-cell until blocked or it reaches a
      matching door at the edge, or it reaches maxDist.
      ============================================================ */
+  function getBlockCells(blockId, cx, cy) {
+    // Return all cells occupied by a block at position (cx, cy)
+    const b = blocks[blockId];
+    const cells = [];
+    if (b.size === '2x2') {
+      cells.push([cx, cy], [cx + 1, cy], [cx, cy + 1], [cx + 1, cy + 1]);
+    } else if (b.size === 'L') {
+      // L-shape: 3 cells in L configuration
+      cells.push([cx, cy], [cx + 1, cy], [cx, cy + 1]);
+    } else {
+      // 1x1
+      cells.push([cx, cy]);
+    }
+    return cells;
+  }
+
+  function canPlaceBlock(blockId, cx, cy) {
+    // Check if block can be placed at (cx, cy) without colliding
+    const cells = getBlockCells(blockId, cx, cy);
+    for (const [x, y] of cells) {
+      // Out of bounds
+      if (x < 0 || x >= level.cols || y < 0 || y >= level.rows) return false;
+      // Occupied by another block
+      if (board[y][x] != null && board[y][x] !== blockId) return false;
+    }
+    return true;
+  }
+
   function attemptSlide(blockId, dx, dy, maxDist = undefined) {
     const b = blocks[blockId];
     if (!b || b.exited) return;
@@ -158,27 +186,35 @@
 
       const nx = x + dx, ny = y + dy;
 
-      // Off-grid → check for matching door
-      if (nx < 0 || nx >= level.cols || ny < 0 || ny >= level.rows) {
-        const side = ny < 0 ? 'top' : ny >= level.rows ? 'bottom'
-                   : nx < 0 ? 'left' : 'right';
-        const pos  = (side === 'top' || side === 'bottom') ? x : y;
-        const door = level.doors.find(d =>
-          d.side === side && d.pos === pos && d.color === b.color
+      // Try to move to (nx, ny)
+      if (!canPlaceBlock(blockId, nx, ny)) {
+        // Check if we're exiting through a door
+        const cells = getBlockCells(blockId, nx, ny);
+        const outOfBoundsCells = cells.filter(([cx, cy]) =>
+          cx < 0 || cx >= level.cols || cy < 0 || cy >= level.rows
         );
-        if (door) {
-          // Exit through door — animate + remove
-          if (x !== b.x || y !== b.y) commitMoveSnapshot();
-          moveTo(b, x, y);
-          exitBlock(b, side);
-          afterMove();
-          return;
-        }
-        break;   // hit a wall
-      }
 
-      // In-grid — blocked by another block?
-      if (board[ny][nx] != null) break;
+        // If at least one cell would go out of bounds, check for door exit
+        if (outOfBoundsCells.length > 0) {
+          // For multi-cell blocks, only exit if the "leading edge" matches a door
+          const firstOutCell = outOfBoundsCells[0];
+          const side = firstOutCell[1] < 0 ? 'top' : firstOutCell[1] >= level.rows ? 'bottom'
+                     : firstOutCell[0] < 0 ? 'left' : 'right';
+          const pos  = (side === 'top' || side === 'bottom') ? x : y;
+          const door = level.doors.find(d =>
+            d.side === side && d.pos === pos && d.color === b.color
+          );
+          if (door) {
+            // Exit through door — animate + remove
+            if (x !== b.x || y !== b.y) commitMoveSnapshot();
+            moveTo(b, x, y);
+            exitBlock(b, side);
+            afterMove();
+            return;
+          }
+        }
+        break;   // blocked by wall or other block
+      }
 
       // Move into the empty cell and continue
       x = nx; y = ny;
@@ -199,9 +235,25 @@
   }
 
   function moveTo(b, x, y) {
-    board[b.y][b.x] = null;
+    // Clear old position (all cells this block occupied)
+    const oldCells = getBlockCells(b.id, b.x, b.y);
+    oldCells.forEach(([cx, cy]) => {
+      if (cy >= 0 && cy < level.rows && cx >= 0 && cx < level.cols) {
+        board[cy][cx] = null;
+      }
+    });
+
+    // Update position
     b.x = x; b.y = y;
-    board[y][x] = b.id;
+
+    // Mark new position (all cells this block occupies)
+    const newCells = getBlockCells(b.id, x, y);
+    newCells.forEach(([cx, cy]) => {
+      if (cy >= 0 && cy < level.rows && cx >= 0 && cx < level.cols) {
+        board[cy][cx] = b.id;
+      }
+    });
+
     b.el.style.transform = cellTransform(x, y);
   }
 
