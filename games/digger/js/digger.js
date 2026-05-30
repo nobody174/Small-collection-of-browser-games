@@ -36,6 +36,7 @@
       cartIdx: 0,            // index into CARTS
       cart: {},              // mineralId → count
       worlds: {},            // countryId → { tiles, player }
+      discoveredElevators: {},  // countryId → Set of discovered elevator rows
       lastSaveTime: Date.now(),
     };
   }
@@ -75,8 +76,17 @@
     const band = BANDS.find(b => r >= b.minRow && r <= b.maxRow) || BANDS[BANDS.length - 1];
 
     // Elevator shaft at the band's designated row (middle column)
+    // Start as a normal tile (not dug) - becomes elevator when dug
     if (r === band.elevatorRow && c === 4) {
-      return { type: 'elevator', dug: true, hp: 0, hardness: 0, mineral: null };
+      return {
+        type: band.tileType,  // Rock, not elevator yet (hidden until discovered)
+        dug: false,
+        hardness: band.hardness,
+        hp: band.hardness,
+        mineral: null,
+        isElevator: true,  // Mark this tile as an elevator hiding spot
+        elevatorRow: band.elevatorRow,
+      };
     }
 
     const mineral = pickWeighted(band.minerals);
@@ -169,9 +179,10 @@
     // Center the player vertically in the viewport
     const { player } = getWorld();
     const TILES_VISIBLE = 11;
-    // Center player: show 5 tiles above, player in middle, 5 tiles below
+    // For 11 visible tiles, center should be at position 5 (0-indexed: 0-10, middle is 5)
+    // So we want player.row - 5 to be the top of the visible area
     const targetRow = Math.max(0,
-      Math.min(WORLD.rows - TILES_VISIBLE, player.row - 5));
+      Math.min(WORLD.rows - TILES_VISIBLE, player.row - Math.floor(TILES_VISIBLE / 2)));
     $('#world').style.transform = `translateY(calc(-${targetRow} * var(--tile)))`;
   }
 
@@ -292,6 +303,21 @@
       // Tile is fully dug
       t.dug = true;
       const tEl = tileEl(r, c);
+
+      // Check if this is an elevator discovery
+      if (t.isElevator) {
+        // Reveal the elevator!
+        t.type = 'elevator';
+        if (!state.discoveredElevators[state.countryId]) {
+          state.discoveredElevators[state.countryId] = [];
+        }
+        if (!state.discoveredElevators[state.countryId].includes(t.elevatorRow)) {
+          state.discoveredElevators[state.countryId].push(t.elevatorRow);
+        }
+        NG.toast('🛗 Elevator discovered!', { type: 'info' });
+        NG.audio.play('upgrade');
+      }
+
       tEl.className = tileClass(t);
 
       // Mineral drop?
@@ -454,19 +480,35 @@
     body.style.flexDirection = 'column';
     body.style.gap = 'var(--ng-space-2)';
 
+    const discovered = state.discoveredElevators[state.countryId] || [];
+
     BANDS.forEach((b, idx) => {
+      const isDiscovered = discovered.includes(b.elevatorRow);
+      const isCurrentLayer = idx === currLayer;
+
       const btn = document.createElement('button');
       btn.className = 'shop-item';
-      if (idx === currLayer) btn.classList.add('is-unaffordable');  // current layer is disabled
+
+      if (isCurrentLayer) {
+        btn.classList.add('is-unaffordable');  // current layer is disabled
+      } else if (!isDiscovered) {
+        btn.classList.add('is-unaffordable');  // undiscovered layer is disabled
+      }
+
       const depthText = `${b.minRow}-${b.maxRow} (${b.tileType})`;
+      const status = isCurrentLayer ? '✓' : isDiscovered ? '↓' : '❓';
+      const labelText = isDiscovered ? `Layer ${idx + 1}` : '??? Unknown';
+      const subText = isDiscovered ? depthText : 'Undiscovered';
+
       btn.innerHTML = `
-        <div class="shop-item__icon">${idx === currLayer ? '✓' : '↓'}</div>
+        <div class="shop-item__icon">${status}</div>
         <div>
-          <div class="shop-item__name">Layer ${idx + 1}</div>
-          <div class="shop-item__sub">${depthText}</div>
+          <div class="shop-item__name">${labelText}</div>
+          <div class="shop-item__sub">${subText}</div>
         </div>
       `;
-      if (idx !== currLayer) {
+
+      if (isDiscovered && !isCurrentLayer) {
         btn.addEventListener('click', () => {
           world.player.row = b.elevatorRow;
           world.player.col = 4;
