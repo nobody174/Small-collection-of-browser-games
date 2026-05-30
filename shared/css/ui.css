@@ -321,6 +321,51 @@
 
 
 /* ============================================================
+   VOLUME SLIDER — inline mute button + volume range control
+   ============================================================ */
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: var(--ng-space-2);
+}
+
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 80px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--ng-border);
+  outline: none;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: background var(--ng-dur-fast);
+}
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--ng-color-primary);
+  cursor: pointer;
+  box-shadow: var(--ng-shadow-soft);
+}
+.volume-slider::-moz-range-thumb {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--ng-color-primary);
+  cursor: pointer;
+  border: none;
+  box-shadow: var(--ng-shadow-soft);
+}
+.volume-slider:hover { background: var(--ng-border-strong); }
+
+@media (max-width: 480px) {
+  .volume-slider { width: 56px; }
+}
+
+
+/* ============================================================
    RESPONSIVE — sensible mobile tweaks
    ============================================================ */
 

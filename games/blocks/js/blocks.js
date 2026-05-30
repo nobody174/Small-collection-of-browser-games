@@ -513,11 +513,6 @@
       $('#level-banner').classList.remove('is-open');
     });
 
-    NG.on($('#btn-mute'), 'click', () => {
-      const m = NG.audio.toggleMuted();
-      $('#btn-mute').textContent = m ? '🔇' : '🔊';
-    });
-    if (NG.audio.isMuted()) $('#btn-mute').textContent = '🔇';
   }
 
   if (document.readyState === 'loading') {

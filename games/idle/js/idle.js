@@ -291,11 +291,6 @@
 
     NG.on($('#donut-btn'), 'click', onDonutClick);
 
-    NG.on($('#btn-mute'), 'click', () => {
-      const m = NG.audio.toggleMuted();
-      $('#btn-mute').textContent = m ? '🔇' : '🔊';
-    });
-    if (NG.audio.isMuted()) $('#btn-mute').textContent = '🔇';
 
     NG.on($('#btn-reset'), 'click', async () => {
       const ok = await NG.modal.confirm({

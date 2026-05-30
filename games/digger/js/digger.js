@@ -634,11 +634,6 @@
         NG.toast('Fresh start!');
       }
     });
-    NG.on($('#btn-mute'), 'click', () => {
-      const m = NG.audio.toggleMuted();
-      $('#btn-mute').textContent = m ? '🔇' : '🔊';
-    });
-    if (NG.audio.isMuted()) $('#btn-mute').textContent = '🔇';
 
     // Autosave every 5s
     setInterval(flushSave, 5000);

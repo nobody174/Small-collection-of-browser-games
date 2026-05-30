@@ -29,10 +29,12 @@ NG.audio = (function () {
   let muted = false;
   let masterVolume = 0.35;   // overall volume cap (avoid being loud)
 
-  // Try to restore mute setting from a previous session
+  // Try to restore mute + volume settings from a previous session
   try {
     const stored = localStorage.getItem('newgames.muted');
     if (stored === '1') muted = true;
+    const storedVol = localStorage.getItem('newgames.volume');
+    if (storedVol !== null) masterVolume = parseFloat(storedVol);
   } catch {}
 
   /* --------------------------------------------------------
@@ -163,8 +165,16 @@ NG.audio = (function () {
   function toggleMuted() { setMuted(!muted); return muted; }
   function isMuted() { return muted; }
 
-  function setMasterVolume(v) { masterVolume = NG.clamp ? NG.clamp(v, 0, 1) : Math.max(0, Math.min(1, v)); }
+  function setMasterVolume(v) {
+    masterVolume = NG.clamp ? NG.clamp(v, 0, 1) : Math.max(0, Math.min(1, v));
+    try { localStorage.setItem('newgames.volume', masterVolume); } catch {}
+    // Auto-unmute when volume is turned up
+    if (masterVolume > 0 && muted) { setMuted(false); }
+    // Auto-mute when volume is set to 0
+    if (masterVolume === 0) { setMuted(true); }
+  }
+  function getMasterVolume() { return masterVolume; }
 
   /* Expose `tone` too, in case a game wants a custom sound */
-  return { play, tone, setMuted, toggleMuted, isMuted, setMasterVolume, presets };
+  return { play, tone, setMuted, toggleMuted, isMuted, setMasterVolume, getMasterVolume, presets };
 })();

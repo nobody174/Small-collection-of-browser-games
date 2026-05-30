@@ -401,11 +401,6 @@
       });
       if (ok) setDifficulty(suits, true);
     });
-    NG.on($('#btn-mute'), 'click', () => {
-      const m = NG.audio.toggleMuted();
-      $('#btn-mute').textContent = m ? '🔇' : '🔊';
-    });
-    if (NG.audio.isMuted()) $('#btn-mute').textContent = '🔇';
 
     // Difficulty buttons
     NG.$$('.difficulty-row .btn').forEach(btn => {

@@ -416,11 +416,6 @@
         startTimer();
       }
     });
-    NG.on($('#btn-mute'), 'click', () => {
-      const m = NG.audio.toggleMuted();
-      $('#btn-mute').textContent = m ? '🔇' : '🔊';
-    });
-    if (NG.audio.isMuted()) $('#btn-mute').textContent = '🔇';
 
     NG.on($('#win-again'), 'click', () => {
       $('#win-banner').classList.remove('is-open');

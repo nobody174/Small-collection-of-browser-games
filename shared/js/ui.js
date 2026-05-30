@@ -168,3 +168,50 @@ NG.modal = (function () {
 
   return { open, close, confirm };
 })();
+
+
+/* ============================================================
+   VOLUME SLIDER — auto-wires #volume-slider + #btn-mute
+   Called after DOM ready; each game HTML just needs those IDs.
+   ============================================================ */
+(function () {
+  function initVolumeControl() {
+    const slider = document.getElementById('volume-slider');
+    const muteBtn = document.getElementById('btn-mute');
+    if (!slider || !muteBtn) return;
+
+    // Restore saved volume
+    const savedVol = NG.audio.getMasterVolume();
+    slider.value = Math.round(savedVol * 100);
+
+    function updateMuteIcon() {
+      const vol = parseInt(slider.value, 10);
+      const muted = NG.audio.isMuted();
+      muteBtn.textContent = (muted || vol === 0) ? '🔇' : vol < 50 ? '🔉' : '🔊';
+    }
+
+    slider.addEventListener('input', () => {
+      const vol = parseInt(slider.value, 10) / 100;
+      NG.audio.setMasterVolume(vol);
+      updateMuteIcon();
+    });
+
+    muteBtn.addEventListener('click', () => {
+      const muted = NG.audio.toggleMuted();
+      if (!muted && parseInt(slider.value, 10) === 0) {
+        // Unmuting with slider at 0 — restore to 35%
+        slider.value = 35;
+        NG.audio.setMasterVolume(0.35);
+      }
+      updateMuteIcon();
+    });
+
+    updateMuteIcon();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVolumeControl);
+  } else {
+    initVolumeControl();
+  }
+})();
