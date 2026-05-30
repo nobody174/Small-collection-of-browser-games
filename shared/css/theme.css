@@ -135,6 +135,33 @@
 }
 
 /* ============================================================
+   DARK MODE — automatically activate when OS prefers dark colors
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Backgrounds — dark palette */
+    --ng-bg-page:        #1a1620;   /* dark page background */
+    --ng-bg-surface:     #2d2535;   /* dark cards, panels, modals */
+    --ng-bg-surface-2:   #3d3545;   /* dark nested panels / hover */
+    --ng-bg-overlay:     rgba(0, 0, 0, 0.65); /* dark modal backdrop */
+
+    /* Text — light colors for dark backgrounds */
+    --ng-text-strong:    #ffffff;   /* headings, important text */
+    --ng-text-body:      #e8e8f0;   /* normal copy */
+    --ng-text-muted:     #a8a0b8;   /* secondary / hint text */
+    --ng-text-on-color:  #ffffff;   /* text on colored buttons (unchanged) */
+
+    /* Borders / dividers — lighter for visibility on dark */
+    --ng-border:         #4a4258;   /* dark borders */
+    --ng-border-strong:  #6a6278;   /* dark strong borders */
+
+    /* Accent colors remain the same, high contrast against dark */
+    --ng-color-primary:     #9d7cff;  /* lighter purple for dark mode */
+    --ng-color-primary-2:   #b59cff;  /* lighter purple hover state */
+  }
+}
+
+/* ============================================================
    BASE RESET + DEFAULTS
    Light-touch reset so every game starts from the same baseline.
    ============================================================ */

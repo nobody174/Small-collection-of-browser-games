@@ -346,6 +346,8 @@ NG.cards.makeDraggable = function (rootEl, options) {
       c.el.style.zIndex = '';
       c.el.style.willChange = '';
     });
+    // Force a reflow to ensure DOM catches up before recalculating pile positions
+    pile.el.offsetHeight;
     pile.relayout();
   }
 
@@ -360,6 +362,8 @@ NG.cards.makeDraggable = function (rootEl, options) {
       c.el.style.willChange = '';
     });
     toPile.pushMany(group);
+    // Force a reflow on source pile to ensure correct positioning
+    fromPile.el.offsetHeight;
     fromPile.onChange(fromPile);
   }
 

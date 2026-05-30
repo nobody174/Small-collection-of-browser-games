@@ -166,11 +166,12 @@
   }
 
   function updateViewport() {
-    // Center the player vertically (roughly) in the viewport
+    // Center the player vertically in the viewport
     const { player } = getWorld();
     const TILES_VISIBLE = 11;
+    // Offset of 7 tiles centers player properly in 11-tile viewport
     const targetRow = Math.max(0,
-      Math.min(WORLD.rows - TILES_VISIBLE, player.row - Math.floor(TILES_VISIBLE / 2)));
+      Math.min(WORLD.rows - TILES_VISIBLE, player.row - 7));
     $('#world').style.transform = `translateY(calc(-${targetRow} * var(--tile)))`;
   }
 
