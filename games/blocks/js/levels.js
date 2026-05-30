@@ -148,33 +148,33 @@ const TUTORIAL = [
 function generateLevel(idx) {
   const level = idx + 1;
 
-  // Progressive difficulty curve
+  // Progressive difficulty curve - much more challenging
   let cols, rows, numBlocks, blockSizeVariety;
 
-  if (level < 20) {
-    // Easy: small boards, few blocks
-    cols = 4 + Math.min(2, Math.floor(level / 10));
-    rows = 4 + Math.min(2, Math.floor(level / 10));
-    numBlocks = 2 + Math.min(3, Math.floor(level / 7));
+  if (level < 15) {
+    // Easy: small boards, few blocks, simple 1x1
+    cols = 4;
+    rows = 4;
+    numBlocks = 2 + Math.floor(level / 5);
     blockSizeVariety = 0;  // only 1x1
-  } else if (level < 50) {
-    // Medium: medium boards, more blocks, some 2x2
-    cols = 5 + Math.min(3, Math.floor((level - 20) / 10));
-    rows = 5 + Math.min(3, Math.floor((level - 20) / 10));
-    numBlocks = 4 + Math.min(4, Math.floor((level - 20) / 8));
-    blockSizeVariety = Math.floor((level - 20) / 15);  // 0, 1
+  } else if (level < 35) {
+    // Medium: medium boards, more blocks, mostly 1x1 with some 2x2
+    cols = 5 + Math.floor((level - 15) / 10);
+    rows = 5 + Math.floor((level - 15) / 10);
+    numBlocks = 4 + Math.floor((level - 15) / 5);
+    blockSizeVariety = 1;  // introduce 2x2
   } else {
-    // Hard: large boards, many blocks, 2x2 and L-shapes
-    cols = 7 + Math.min(2, Math.floor((level - 50) / 25));
-    rows = 7 + Math.min(2, Math.floor((level - 50) / 25));
-    numBlocks = 7 + Math.min(3, Math.floor((level - 50) / 10));
-    blockSizeVariety = 2;  // 2x2 and L-shapes
+    // Hard: crowded boards with complex shapes and large blocks
+    cols = 6 + Math.floor((level - 35) / 15);
+    rows = 6 + Math.floor((level - 35) / 15);
+    numBlocks = 6 + Math.floor((level - 35) / 8);
+    blockSizeVariety = 2;  // 2x2 and L-shapes heavily
   }
 
   // Clamp board size
   cols = Math.min(8, cols);
   rows = Math.min(8, rows);
-  numBlocks = Math.min(6, numBlocks);
+  numBlocks = Math.min(10, numBlocks);
 
   const blocks = [];
   const usedPos = new Set();
@@ -190,8 +190,10 @@ function generateLevel(idx) {
 
       // Determine block size (1x1, 2x2, or L-shape)
       let size = '1x1';
-      if (blockSizeVariety > 0 && Math.random() < 0.3 && level > 20) {
-        size = Math.random() < 0.6 ? '2x2' : 'L';
+      if (blockSizeVariety === 1 && Math.random() < 0.4) {
+        size = '2x2';  // Medium difficulty: 40% 2x2 blocks
+      } else if (blockSizeVariety === 2 && Math.random() < 0.6) {
+        size = Math.random() < 0.7 ? '2x2' : 'L';  // Hard: 60% larger blocks
       }
 
       const positions = getBlockPositions(x, y, size, cols, rows);

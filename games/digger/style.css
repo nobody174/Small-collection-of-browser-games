@@ -24,7 +24,7 @@
   --stone-2: #545a64;
   --hardstone: #3a3e48;
   --bedrock: #1f222a;
-  --char: '🧔'; /* Viking with beard */
+  --char: '⛑️'; /* Viking with helmet */
   --flag: '🇳🇴';
   --surface-decor: '🌲';
 
@@ -383,7 +383,7 @@ body.country-norway {
   --stone-2:      #545a64;
   --hardstone:    #3a3e48;
   --bedrock:      #1f222a;
-  --char:         '🧔';
+  --char:         '⛑️';
   --flag:         '🇳🇴';
   --surface-decor:'🌲';
 }
