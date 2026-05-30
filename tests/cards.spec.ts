@@ -207,6 +207,10 @@ test.describe('Cards - Persistence', () => {
   test('game state saves to localStorage', async ({ page }) => {
     await page.goto(KLONDIKE_URL);
 
+    // Wait for game to initialize and write save
+    await page.waitForSelector('.pile--tableau', { timeout: 5000 });
+    await page.waitForTimeout(500);
+
     // Check localStorage for saved game
     const saveKey = 'newgames.cards.klondike.save';
     const gameSave = await page.evaluate((key) => {
