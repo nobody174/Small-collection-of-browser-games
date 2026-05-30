@@ -492,15 +492,14 @@
      -------------------------------------------------------- */
   function openShop() {
     const world = getWorld();
-    // Only sell if player is at the shop
-    if (world.player.row !== WORLD.surfaceRow || world.player.col !== WORLD.shopCol) {
-      NG.toast('You must be at the shop to sell!', { type: 'warning' });
-      return;
+    const atShop = world.player.row === WORLD.surfaceRow && world.player.col === WORLD.shopCol;
+
+    if (atShop) {
+      NG.audio.play('coin');
     }
 
-    NG.audio.play('coin');
-    const sellTotal = Object.entries(state.cart)
-      .reduce((s, [id, n]) => s + n * MINERALS[id].value, 0);
+    const sellTotal = atShop ? Object.entries(state.cart)
+      .reduce((s, [id, n]) => s + n * MINERALS[id].value, 0) : 0;
 
     if (sellTotal > 0) {
       state.gold += sellTotal;
@@ -515,6 +514,19 @@
     body.style.display = 'flex';
     body.style.flexDirection = 'column';
     body.style.gap = 'var(--ng-space-3)';
+
+    // Show warning if not at shop (cart can't be sold)
+    if (!atShop && sellTotal === 0) {
+      const warning = document.createElement('div');
+      warning.style.padding = 'var(--ng-space-3)';
+      warning.style.backgroundColor = 'rgba(255, 107, 107, 0.1)';
+      warning.style.border = '1px solid rgba(255, 107, 107, 0.3)';
+      warning.style.borderRadius = 'var(--ng-radius-md)';
+      warning.style.color = 'var(--ng-text-strong)';
+      warning.style.fontSize = 'var(--ng-text-sm)';
+      warning.textContent = '⚠️ You\'re underground. Use the "Return to Surface" button to access the shop!';
+      body.appendChild(warning);
+    }
 
     // Pickaxe upgrade
     if (state.pickaxeIdx + 1 < PICKAXES.length) {
