@@ -118,6 +118,8 @@
           const m = document.createElement('div');
           m.className = 'tile__mineral';
           m.dataset.mineral = t.mineral;
+          const mineral = MINERALS[t.mineral];
+          m.innerHTML = `${mineral.icon}<span class="tile__mineral-price">💰${mineral.value}</span>`;
           el.appendChild(m);
         }
         worldEl.appendChild(el);
@@ -353,6 +355,70 @@
   }
 
   /* --------------------------------------------------------
+     SALES RECEIPT — show mineral breakdown and totals
+     -------------------------------------------------------- */
+  function showSalesReceipt(cart, total) {
+    const body = document.createElement('div');
+    body.style.display = 'flex';
+    body.style.flexDirection = 'column';
+    body.style.gap = 'var(--ng-space-3)';
+    body.style.padding = 'var(--ng-space-3) 0';
+
+    // Mineral line items
+    const items = document.createElement('div');
+    items.style.display = 'flex';
+    items.style.flexDirection = 'column';
+    items.style.gap = 'var(--ng-space-2)';
+    items.style.paddingBottom = 'var(--ng-space-3)';
+    items.style.borderBottom = '1px solid var(--ng-border)';
+
+    Object.entries(cart).forEach(([id, count]) => {
+      if (count <= 0) return;
+      const mineral = MINERALS[id];
+      const itemTotal = count * mineral.value;
+      const line = document.createElement('div');
+      line.style.display = 'flex';
+      line.style.justifyContent = 'space-between';
+      line.style.alignItems = 'center';
+      line.style.fontSize = 'var(--ng-text-sm)';
+      line.innerHTML = `
+        <div style="display: flex; gap: var(--ng-space-2); align-items: center;">
+          <span style="font-size: 20px;">${mineral.icon}</span>
+          <div>
+            <div style="font-weight: var(--ng-weight-bold);">${mineral.name}</div>
+            <div style="color: var(--ng-text-muted);">×${count} @ 💰 ${fmt(mineral.value)}</div>
+          </div>
+        </div>
+        <div style="font-weight: var(--ng-weight-bold);">💰 ${fmt(itemTotal)}</div>
+      `;
+      items.appendChild(line);
+    });
+
+    body.appendChild(items);
+
+    // Total
+    const total_line = document.createElement('div');
+    total_line.style.display = 'flex';
+    total_line.style.justifyContent = 'space-between';
+    total_line.style.alignItems = 'center';
+    total_line.style.fontSize = 'var(--ng-text-lg)';
+    total_line.style.fontWeight = 'var(--ng-weight-bold)';
+    total_line.style.color = 'var(--ng-color-success)';
+    total_line.innerHTML = `
+      <div>Total Earnings</div>
+      <div>💰 ${fmt(total)}</div>
+    `;
+    body.appendChild(total_line);
+
+    NG.modal.open({
+      title: '💰 Sale Receipt',
+      body,
+      actions: [{ label: 'Continue to Shop', variant: 'primary' }],
+      onClose: openShop,
+    });
+  }
+
+  /* --------------------------------------------------------
      SHOP — auto-sell + upgrade store
      -------------------------------------------------------- */
   function openShop() {
@@ -362,8 +428,10 @@
 
     if (sellTotal > 0) {
       state.gold += sellTotal;
+      // Build receipt before clearing cart
+      const cartSnapshot = { ...state.cart };
+      showSalesReceipt(cartSnapshot, sellTotal);
       state.cart = {};
-      NG.toast(`Sold cart for 💰 ${fmt(sellTotal)}`, { type: 'success' });
     }
 
     // Build the shop content

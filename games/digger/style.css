@@ -228,6 +228,19 @@ body.digger-board {
   box-shadow: inset -1px -1px 3px rgba(100,150,255,0.4), inset 1px 1px 3px rgba(255,255,255,0.9);
 }
 
+.tile__mineral-price {
+  position: absolute;
+  bottom: -20px;
+  font-size: 10px;
+  font-weight: var(--ng-weight-bold);
+  white-space: nowrap;
+  background: rgba(0,0,0,0.5);
+  padding: 2px 4px;
+  border-radius: 3px;
+  color: #ffd700;
+  pointer-events: none;
+}
+
 /* Surface decorations (trees, cacti, lanterns…) appear ABOVE the surface tile */
 .tile--surface::before {
   content: var(--surface-decor);
