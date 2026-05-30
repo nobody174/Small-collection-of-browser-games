@@ -133,14 +133,14 @@
 ## 📝 Implementation Priority
 
 **CRITICAL (Game-Breaking Bugs):**
-1. ⚠️ **Cards - Fix drag & drop** — Cards unplayable with current implementation
-2. ⚠️ **Cards - Fix dark theme contrast** — Buttons text not visible
-3. ⚠️ **Digger - Fix character positioning** — 7-tile offset affecting all countries
+1. ✅ **DONE** - Cards - Fix drag & drop — Added reflow force to ensure timing
+2. ✅ **DONE** - Cards - Fix dark theme contrast — Added prefers-color-scheme dark palette
+3. ✅ **DONE** - Digger - Fix character positioning — Fixed viewport offset from 5 to 7 tiles
 
 **High Priority (Major Gameplay):**
-1. Digger - Sales receipt/summary after selling
-2. Digger - Mineral price tags on board
-3. Blocks - Difficulty progression system
+1. ✅ **DONE** - Digger - Sales receipt/summary after selling — Itemized receipt with totals
+2. ✅ **DONE** - Digger - Mineral price tags on board — Price badges under minerals
+3. ⏳ **IN PROGRESS** - Blocks - Difficulty progression system
 4. Digger - Elevator/exit mechanic
 5. Digger - Hold-to-dig on mobile
 
