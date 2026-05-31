@@ -161,7 +161,9 @@
   }
 
   function tileClass(t) {
-    return 'tile tile--' + t.type + (t.dug ? ' tile--dug' : '');
+    // Elevator and special tiles don't get tile--dug overlay (they have their own visual)
+    const skipDug = t.type === 'elevator' || t.type === 'shop' || t.type === 'surface' || t.type === 'sky';
+    return 'tile tile--' + t.type + (t.dug && !skipDug ? ' tile--dug' : '');
   }
 
   function placePlayer(el, row, col) {
@@ -399,7 +401,7 @@
       const cartSnapshot = { ...state.cart };
       state.gold += sellTotal;
       state.cart = {};
-      // Show receipt modal with X button before opening shop
+      // Show receipt modal — Continue goes directly to shop UI, not back through openShop
       const receiptBody = document.createElement('div');
       receiptBody.style.cssText = 'display:flex;flex-direction:column;gap:var(--ng-space-2);';
       Object.entries(cartSnapshot).forEach(([id, n]) => {
@@ -417,12 +419,17 @@
       NG.modal.open({
         title: '💰 Sale Receipt',
         body: receiptBody,
-        actions: [{ label: 'Continue to Shop', variant: 'primary', onClick: () => { NG.modal.close(); openShop(); } }],
+        actions: [{ label: 'Continue to Shop', variant: 'primary', onClick: () => { NG.modal.close(); openShopUI(); } }],
       });
       updateUI();
       flushSave();
       return;
     }
+
+    openShopUI();
+  }
+
+  function openShopUI() {
 
     // Build the shop content
     const body = document.createElement('div');
@@ -655,6 +662,8 @@
         stopDragWalk();
         dragWalkInterval = setInterval(() => {
           if (!dragState) { stopDragWalk(); return; }
+          // Stop walking if a modal is open (e.g. elevator menu opened)
+          if (document.querySelector('.modal.is-open')) { stopDragWalk(); dragState = null; return; }
           const ddx = dragState.lastX - dragState.startX;
           const ddy = dragState.lastY - dragState.startY;
           let dr = 0, dc = 0;
@@ -664,8 +673,8 @@
           const nr = player.row + dr, nc = player.col + dc;
           if (nr < 0 || nr >= WORLD.rows || nc < 0 || nc >= WORLD.cols) return;
           const t = getWorld().tiles[nr][nc];
-          // Only auto-walk into already-dug tiles (don't auto-dig)
-          if (t.dug) interact(nr, nc);
+          // Only auto-walk into dug tiles, skip elevators/shop (they open menus)
+          if (t.dug && t.type !== 'elevator' && t.type !== 'shop') interact(nr, nc);
         }, 180);
       }
     });

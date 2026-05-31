@@ -221,14 +221,11 @@ function generateLevel(idx) {
     placeBlock(COLORS_ARRAY[i % COLORS_ARRAY.length], false);
   }
 
-  // Place blocker blocks (gray, no door - must be moved out of the way)
-  for (let i = 0; i < numBlockers; i++) {
-    placeBlock('blocker', true);
-  }
-
-  // Generate exit doors (one per goal block only)
+  // Generate exit doors FIRST (one per goal block)
   const doors = [];
   const usedDoors = new Set();
+  const doorEdgeCells = new Set(); // cells adjacent to doors (blockers must avoid these)
+
   blocks.filter(b => !b.blocker).forEach((b) => {
     const sides = ['top', 'bottom', 'left', 'right'].sort(() => Math.random() - 0.5);
     for (const side of sides) {
@@ -236,13 +233,41 @@ function generateLevel(idx) {
         ? Math.floor(Math.random() * rows)
         : Math.floor(Math.random() * cols);
       const key = `${side}-${pos}`;
-      if (!usedDoors.has(key) && !blockedCells.has(side === 'top' || side === 'bottom' ? `${pos},${side === 'top' ? 0 : rows-1}` : `${side === 'left' ? 0 : cols-1},${pos}`)) {
+      if (!usedDoors.has(key)) {
         doors.push({ side, pos, color: b.color });
         usedDoors.add(key);
+        // Mark the cell adjacent to this door as off-limits for blockers
+        if (side === 'top')    doorEdgeCells.add(`${pos},0`);
+        if (side === 'bottom') doorEdgeCells.add(`${pos},${rows - 1}`);
+        if (side === 'left')   doorEdgeCells.add(`0,${pos}`);
+        if (side === 'right')  doorEdgeCells.add(`${cols - 1},${pos}`);
         break;
       }
     }
   });
+
+  // Place blocker blocks AFTER doors — avoid door-adjacent cells
+  function placeBlocker() {
+    let placed = false;
+    let attempts = 0;
+    while (!placed && attempts < 40) {
+      const x = Math.floor(Math.random() * cols);
+      const y = Math.floor(Math.random() * rows);
+      const positions = getBlockPositions(x, y, '1x1', cols, rows);
+      if (positions &&
+          !positions.some(p => usedPos.has(`${p.x},${p.y}`)) &&
+          !positions.some(p => doorEdgeCells.has(`${p.x},${p.y}`))) {
+        blocks.push({ x, y, color: 'blocker', size: '1x1', blocker: true });
+        positions.forEach(p => usedPos.add(`${p.x},${p.y}`));
+        placed = true;
+      }
+      attempts++;
+    }
+  }
+
+  for (let i = 0; i < numBlockers; i++) {
+    placeBlocker();
+  }
 
   return {
     id: `l${level}`,

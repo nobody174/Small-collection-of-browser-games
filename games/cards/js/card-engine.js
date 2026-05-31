@@ -316,8 +316,10 @@ NG.cards.makeDraggable = function (rootEl, options) {
       document.removeEventListener('pointermove', onMoveDrag);
       document.removeEventListener('pointerup',   onUpDrag);
 
+      // Cancel any pending animation frame so it doesn't run after we restore positions
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+
       if (!moved) {
-        // Treat as tap — restore and fire onTap
         snapBack(group, fromPile);
         onTap(group[0], fromPile);
         dragState = null;
@@ -326,7 +328,7 @@ NG.cards.makeDraggable = function (rootEl, options) {
 
       const target = findDropPile(ev.clientX, ev.clientY, group[0], fromPile);
       if (target) {
-        beforeMove(group[0], fromPile, target, group);   // snapshot pre-move state
+        beforeMove(group[0], fromPile, target, group);
         NG.audio.play('flip');
         moveGroup(group, fromPile, target);
         onMove(group[0], fromPile, target, group);
@@ -341,6 +343,8 @@ NG.cards.makeDraggable = function (rootEl, options) {
   function snapBack(group, pile) {
     group.forEach(c => {
       c.el.classList.remove('is-dragging');
+      // Re-attach to pile's container if it got detached or is in wrong place
+      if (c.el.parentElement !== pile.el) pile.el.appendChild(c.el);
       c.el.style.position = '';
       c.el.style.left = '';
       c.el.style.top  = '';
@@ -349,7 +353,7 @@ NG.cards.makeDraggable = function (rootEl, options) {
       c.el.style.willChange = '';
     });
     // Force a reflow to ensure DOM catches up before recalculating pile positions
-    pile.el.offsetHeight;
+    void pile.el.offsetHeight;
     pile.relayout();
   }
 

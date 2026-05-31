@@ -60,13 +60,15 @@
    SHAKE — error / invalid action
    ------------------------------------------------------------ */
 @keyframes ng-shake {
-  0%, 100% { transform: translateX(0); }
-  20%      { transform: translateX(-6px); }
-  40%      { transform: translateX(6px); }
-  60%      { transform: translateX(-4px); }
-  80%      { transform: translateX(3px); }
+  0%, 100% { outline-offset: 0px;  outline-color: rgba(255,100,100,0); }
+  25%      { outline-offset: 3px;  outline-color: rgba(255,100,100,0.7); }
+  50%      { outline-offset: 1px;  outline-color: rgba(255,100,100,0.5); }
+  75%      { outline-offset: 3px;  outline-color: rgba(255,100,100,0.4); }
 }
-.ng-shake { animation: ng-shake var(--ng-dur-slow) var(--ng-ease-in-out) both; }
+.ng-shake {
+  animation: ng-shake var(--ng-dur-slow) var(--ng-ease-in-out);
+  outline: 3px solid rgba(255,100,100,0);
+}
 
 
 /* ------------------------------------------------------------

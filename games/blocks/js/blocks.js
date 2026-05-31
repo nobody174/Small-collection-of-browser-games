@@ -191,6 +191,12 @@
   function attemptSlide(blockId, dx, dy, maxDist = undefined) {
     const b = blocks[blockId];
     if (!b || b.exited) return;
+    // Blocker blocks are immovable obstacles
+    if (b.blocker) {
+      NG.audio.play('error');
+      NG.replayAnim(b.el, 'ng-shake');
+      return;
+    }
 
     let x = b.x, y = b.y;
     let cellsMoved = 0;
@@ -210,16 +216,21 @@
 
         // If at least one cell would go out of bounds, check for door exit
         if (outOfBoundsCells.length > 0) {
-          // For multi-cell blocks, only exit if the "leading edge" matches a door
           const firstOutCell = outOfBoundsCells[0];
           const side = firstOutCell[1] < 0 ? 'top' : firstOutCell[1] >= level.rows ? 'bottom'
                      : firstOutCell[0] < 0 ? 'left' : 'right';
-          const pos  = (side === 'top' || side === 'bottom') ? x : y;
-          const door = level.doors.find(d =>
-            d.side === side && d.pos === pos && d.color === b.color
+          // For multi-cell blocks, check ALL cells on the leading edge for a door match
+          const leadingCells = getBlockCells(blockId, nx, ny).filter(([cx, cy]) =>
+            side === 'top' ? cy < 0 : side === 'bottom' ? cy >= level.rows :
+            side === 'left' ? cx < 0 : cx >= level.cols
           );
+          const door = level.doors.find(d => {
+            if (d.side !== side || d.color !== b.color) return false;
+            return leadingCells.some(([cx, cy]) =>
+              (side === 'top' || side === 'bottom') ? cx === d.pos : cy === d.pos
+            );
+          });
           if (door) {
-            // Exit through door — animate + remove
             if (x !== b.x || y !== b.y) commitMoveSnapshot();
             moveTo(b, x, y);
             exitBlock(b, side);
