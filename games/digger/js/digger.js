@@ -335,13 +335,16 @@
       if (t.mineral) {
         const m = MINERALS[t.mineral];
         state.cart[t.mineral] = (state.cart[t.mineral] || 0) + 1;
-        t._collected = true;     // show icon in the now-empty tile
         const mEl = document.createElement('div');
         mEl.className = 'tile__mineral';
         mEl.textContent = m.icon;
         tEl.appendChild(mEl);
         flyMineralToCart(tEl, m);
         NG.audio.play('coin');
+        // Remove mineral from board after fly animation
+        setTimeout(() => mEl.remove(), 720);
+        t.mineral = null;  // clear so it doesn't re-appear on render
+        t._collected = false;
       }
 
       // Move player into the just-dug tile
@@ -419,7 +422,7 @@
       NG.modal.open({
         title: '💰 Sale Receipt',
         body: receiptBody,
-        actions: [{ label: 'Continue to Shop', variant: 'primary', keepOpen: true, onClick: () => openShopUI() }],
+        actions: [{ label: 'Continue to Shop', variant: 'primary', keepOpen: true, onClick: () => { openShopUI(); } }],
       });
       updateUI();
       flushSave();
@@ -430,6 +433,7 @@
   }
 
   function openShopUI() {
+    const sellTotal = 0;  // cart already sold before this is called
 
     // Build the shop content
     const body = document.createElement('div');
@@ -654,8 +658,15 @@
     let dragWalkInterval = null;
     const TILE_PX = 52;  // matches --tile default; good enough for direction detection
 
+    const worldEl = () => $('#world');
+
     function stopDragWalk() {
-      if (dragWalkInterval) { clearInterval(dragWalkInterval); dragWalkInterval = null; }
+      if (dragWalkInterval) {
+        clearInterval(dragWalkInterval);
+        dragWalkInterval = null;
+        // Re-enable smooth transition on world scroll
+        const w = worldEl(); if (w) w.style.transition = '';
+      }
     }
 
     viewport.addEventListener('pointerdown', (e) => {
@@ -671,7 +682,8 @@
 
       if (!dragState.moved && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
         dragState.moved = true;
-        // Start continuous walk while dragging through dug tiles
+        // Disable world scroll transition during drag-walk so viewport stays in sync
+        const w = worldEl(); if (w) w.style.transition = 'none';
         stopDragWalk();
         dragWalkInterval = setInterval(() => {
           if (!dragState) { stopDragWalk(); return; }

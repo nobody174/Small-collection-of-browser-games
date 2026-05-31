@@ -245,21 +245,27 @@ function generateLevel(idx) {
   const usedDoors = new Set();
   const doorEdgeCells = new Set(); // cells adjacent to doors (blockers must avoid these)
 
+  // Build a set of all occupied cells for door placement check
+  const occupiedCells = new Set([...usedPos]);
+
   blocks.filter(b => !b.blocker).forEach((b) => {
     const sides = ['top', 'bottom', 'left', 'right'].sort(() => Math.random() - 0.5);
     for (const side of sides) {
-      const pos = (side === 'left' || side === 'right')
-        ? Math.floor(Math.random() * rows)
-        : Math.floor(Math.random() * cols);
-      const key = `${side}-${pos}`;
-      if (!usedDoors.has(key)) {
+      // Try multiple positions per side until we find one that's not blocked
+      const range = (side === 'left' || side === 'right') ? rows : cols;
+      const positions = Array.from({ length: range }, (_, i) => i).sort(() => Math.random() - 0.5);
+      for (const pos of positions) {
+        const key = `${side}-${pos}`;
+        if (usedDoors.has(key)) continue;
+        // Check the cell adjacent to this door — must not be occupied by any block
+        const adjCell = side === 'top' ? `${pos},0`
+          : side === 'bottom' ? `${pos},${rows - 1}`
+          : side === 'left'   ? `0,${pos}`
+          : `${cols - 1},${pos}`;
+        if (occupiedCells.has(adjCell)) continue;
         doors.push({ side, pos, color: b.color });
         usedDoors.add(key);
-        // Mark the cell adjacent to this door as off-limits for blockers
-        if (side === 'top')    doorEdgeCells.add(`${pos},0`);
-        if (side === 'bottom') doorEdgeCells.add(`${pos},${rows - 1}`);
-        if (side === 'left')   doorEdgeCells.add(`0,${pos}`);
-        if (side === 'right')  doorEdgeCells.add(`${cols - 1},${pos}`);
+        doorEdgeCells.add(adjCell);
         break;
       }
     }
