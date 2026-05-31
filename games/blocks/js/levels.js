@@ -195,17 +195,36 @@ function generateLevel(idx) {
   const blocks = [];
   const usedPos = new Set([...blockedCells]);
 
+  // Weighted block size picker per difficulty
+  function pickSize(isBlocker) {
+    if (isBlocker) return '1x1';
+    if (blockSizeVariety === 0) return '1x1';
+    if (blockSizeVariety === 1) {
+      const r = Math.random();
+      if (r < 0.45) return '1x1';
+      if (r < 0.65) return '1x2';
+      if (r < 0.80) return '2x1';
+      return '2x2';
+    }
+    // blockSizeVariety === 2 (hard)
+    const r = Math.random();
+    if (r < 0.20) return '1x1';
+    if (r < 0.35) return '1x2';
+    if (r < 0.50) return '2x1';
+    if (r < 0.60) return '1x3';
+    if (r < 0.70) return '3x1';
+    if (r < 0.82) return '2x2';
+    if (r < 0.92) return 'L';
+    return '2x3';
+  }
+
   function placeBlock(color, isBlocker) {
     let placed = false;
     let attempts = 0;
-    while (!placed && attempts < 40) {
+    while (!placed && attempts < 50) {
       const x = Math.floor(Math.random() * cols);
       const y = Math.floor(Math.random() * rows);
-      let size = '1x1';
-      if (!isBlocker) {
-        if (blockSizeVariety === 1 && Math.random() < 0.35) size = '2x2';
-        else if (blockSizeVariety === 2 && Math.random() < 0.55) size = Math.random() < 0.7 ? '2x2' : 'L';
-      }
+      const size = pickSize(isBlocker);
       const positions = getBlockPositions(x, y, size, cols, rows);
       if (positions && !positions.some(p => usedPos.has(`${p.x},${p.y}`))) {
         blocks.push({ x, y, color, size, blocker: isBlocker || false });
@@ -284,13 +303,31 @@ function getBlockPositions(x, y, size, cols, rows) {
 
   if (size === '1x1') {
     if (x < cols && y < rows) positions.push({ x, y });
+  } else if (size === '1x2') {
+    // Horizontal 1×2
+    if (x + 1 < cols) positions.push({ x, y }, { x: x+1, y });
+    else return null;
+  } else if (size === '1x3') {
+    // Horizontal 1×3
+    if (x + 2 < cols) positions.push({ x, y }, { x: x+1, y }, { x: x+2, y });
+    else return null;
+  } else if (size === '2x1') {
+    // Vertical 2×1
+    if (y + 1 < rows) positions.push({ x, y }, { x, y: y+1 });
+    else return null;
+  } else if (size === '3x1') {
+    // Vertical 3×1
+    if (y + 2 < rows) positions.push({ x, y }, { x, y: y+1 }, { x, y: y+2 });
+    else return null;
   } else if (size === '2x2') {
     if (x + 1 < cols && y + 1 < rows) {
       positions.push({ x, y }, { x: x+1, y }, { x, y: y+1 }, { x: x+1, y: y+1 });
-    }
+    } else return null;
+  } else if (size === '2x3') {
+    if (x + 1 < cols && y + 2 < rows) {
+      positions.push({ x, y }, { x: x+1, y }, { x, y: y+1 }, { x: x+1, y: y+1 }, { x, y: y+2 }, { x: x+1, y: y+2 });
+    } else return null;
   } else if (size === 'L') {
-    // L-shape: ██  or  ██  etc
-    //          █      █
     const rotations = [
       [{x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}],
       [{x: 0, y: 0}, {x: 1, y: 0}, {x: 1, y: 1}],

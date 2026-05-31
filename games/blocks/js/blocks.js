@@ -73,19 +73,10 @@
       const id = 'b' + (nextId++);
       const size = b.size || '1x1';
       blocks[id] = { id, x: b.x, y: b.y, color: b.color, size, blocker: b.blocker || false, exited: false, el: null };
-      // Mark all cells occupied by this block
-      if (size === '1x1') {
-        board[b.y][b.x] = id;
-      } else if (size === '2x2') {
-        board[b.y][b.x] = id;
-        board[b.y][b.x+1] = id;
-        board[b.y+1][b.x] = id;
-        board[b.y+1][b.x+1] = id;
-      } else if (size === 'L') {
-        board[b.y][b.x] = id;
-        board[b.y][b.x+1] = id;
-        board[b.y+1][b.x] = id;
-      }
+      // Mark all cells using getBlockCells (after blocks[id] is set)
+      getBlockCells(id, b.x, b.y).forEach(([cx, cy]) => {
+        if (cy >= 0 && cy < level.rows && cx >= 0 && cx < level.cols) board[cy][cx] = id;
+      });
     });
 
     render();
@@ -119,7 +110,7 @@
     // Blocks
     Object.values(blocks).forEach(b => {
       const el = document.createElement('div');
-      el.className = 'bb-block' + (b.size === '2x2' ? ' bb-block--2x2' : b.size === 'L' ? ' bb-block--L' : '') + (b.blocker ? ' bb-block--blocker' : '');
+      el.className = 'bb-block bb-block--' + b.size + (b.blocker ? ' bb-block--blocker' : '');
       el.style.setProperty('--block-color', COLORS[b.color]);
       el.style.transform = cellTransform(b.x, b.y);
       el.dataset.id = b.id;
@@ -163,19 +154,17 @@
      matching door at the edge, or it reaches maxDist.
      ============================================================ */
   function getBlockCells(blockId, cx, cy) {
-    // Return all cells occupied by a block at position (cx, cy)
     const b = blocks[blockId];
-    const cells = [];
-    if (b.size === '2x2') {
-      cells.push([cx, cy], [cx + 1, cy], [cx, cy + 1], [cx + 1, cy + 1]);
-    } else if (b.size === 'L') {
-      // L-shape: 3 cells in L configuration
-      cells.push([cx, cy], [cx + 1, cy], [cx, cy + 1]);
-    } else {
-      // 1x1
-      cells.push([cx, cy]);
+    switch (b.size) {
+      case '1x2': return [[cx, cy], [cx+1, cy]];
+      case '1x3': return [[cx, cy], [cx+1, cy], [cx+2, cy]];
+      case '2x1': return [[cx, cy], [cx, cy+1]];
+      case '3x1': return [[cx, cy], [cx, cy+1], [cx, cy+2]];
+      case '2x2': return [[cx, cy], [cx+1, cy], [cx, cy+1], [cx+1, cy+1]];
+      case '2x3': return [[cx, cy], [cx+1, cy], [cx, cy+1], [cx+1, cy+1], [cx, cy+2], [cx+1, cy+2]];
+      case 'L':   return [[cx, cy], [cx+1, cy], [cx, cy+1]];
+      default:    return [[cx, cy]];
     }
-    return cells;
   }
 
   function canPlaceBlock(blockId, cx, cy) {

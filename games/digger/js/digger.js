@@ -419,7 +419,7 @@
       NG.modal.open({
         title: '💰 Sale Receipt',
         body: receiptBody,
-        actions: [{ label: 'Continue to Shop', variant: 'primary', onClick: () => { NG.modal.close(); openShopUI(); } }],
+        actions: [{ label: 'Continue to Shop', variant: 'primary', keepOpen: true, onClick: () => openShopUI() }],
       });
       updateUI();
       flushSave();
@@ -623,9 +623,22 @@
     const data = save.read();
     if (!data) return false;
     state = data;
-    // Heal in case new mineral / country / etc. fields were added since save
+    // Heal in case new fields were added since save
     if (!state.countriesUnlocked) state.countriesUnlocked = { norway: true };
     if (!state.worlds) state.worlds = {};
+    if (!state.discoveredElevators) state.discoveredElevators = {};
+
+    // Heal worlds: if a world is missing elevatorCols (old save format),
+    // regenerate it fresh so old broken elevator tiles are cleared
+    Object.keys(state.worlds).forEach(countryId => {
+      const w = state.worlds[countryId];
+      if (!w.elevatorCols) {
+        // Old save - regenerate this world to avoid broken tile state
+        delete state.worlds[countryId];
+        if (state.discoveredElevators) delete state.discoveredElevators[countryId];
+      }
+    });
+
     return true;
   }
 
