@@ -146,6 +146,14 @@
     const p = document.createElement('div');
     p.className = 'player';
     p.id = 'player-sprite';
+    // Use custom image if available for this country
+    const charImages = { norway: 'viking.png' };
+    if (charImages[state.countryId]) {
+      const img = document.createElement('img');
+      img.src = charImages[state.countryId];
+      img.alt = state.countryId;
+      p.appendChild(img);
+    }
     placePlayer(p, world.player.row, world.player.col);
     worldEl.appendChild(p);
 

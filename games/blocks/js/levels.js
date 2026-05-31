@@ -153,31 +153,34 @@ function generateLevel(idx) {
   let cols, rows, numGoalBlocks, numBlockers, blockSizeVariety, useNonSquare;
 
   if (level < 15) {
+    // Easy: small board, 2-3 colored goal blocks, no blockers
     cols = 4; rows = 4;
-    numGoalBlocks = 2 + Math.floor(level / 5);
+    numGoalBlocks = 2 + Math.floor(level / 7);
     numBlockers = 0;
     blockSizeVariety = 0;
     useNonSquare = false;
   } else if (level < 35) {
+    // Medium: 5-6 board, 2-3 goal blocks, 2-4 blockers (more obstacles than goals)
     cols = 5 + Math.floor((level - 15) / 10);
     rows = 5 + Math.floor((level - 15) / 10);
-    numGoalBlocks = 3 + Math.floor((level - 15) / 7);
-    numBlockers = Math.floor((level - 15) / 8);  // 0-2 blocker blocks
+    numGoalBlocks = 2 + Math.floor((level - 15) / 10);  // max 3
+    numBlockers = 2 + Math.floor((level - 15) / 7);     // 2-4 blockers
     blockSizeVariety = 1;
     useNonSquare = level > 25;
   } else {
+    // Hard: 6-8 board, 2-4 goal blocks, 3-6 blockers filling the board
     cols = 6 + Math.floor((level - 35) / 15);
     rows = 6 + Math.floor((level - 35) / 15);
-    numGoalBlocks = 4 + Math.floor((level - 35) / 10);
-    numBlockers = 2 + Math.floor((level - 35) / 10);  // 2-4 blockers
+    numGoalBlocks = 2 + Math.floor((level - 35) / 15);  // max 4
+    numBlockers = 3 + Math.floor((level - 35) / 8);     // 3-6 blockers
     blockSizeVariety = 2;
     useNonSquare = true;
   }
 
   cols = Math.min(8, cols);
   rows = Math.min(8, rows);
-  numGoalBlocks = Math.min(6, numGoalBlocks);
-  numBlockers = Math.min(4, numBlockers);
+  numGoalBlocks = Math.min(4, numGoalBlocks);  // max 4 doors ever
+  numBlockers = Math.min(6, numBlockers);
 
   // Build list of valid cells (for non-square shapes, remove corners)
   const blockedCells = new Set();
@@ -249,15 +252,24 @@ function generateLevel(idx) {
   const occupiedCells = new Set([...usedPos]);
 
   blocks.filter(b => !b.blocker).forEach((b) => {
-    const sides = ['top', 'bottom', 'left', 'right'].sort(() => Math.random() - 0.5);
-    for (const side of sides) {
-      // Try multiple positions per side until we find one that's not blocked
+    // Prefer the side OPPOSITE to the block's position so the block must travel across the board
+    const bCenterX = b.x / cols;
+    const bCenterY = b.y / rows;
+    // Pick opposite side: if block is left half → right door, top half → bottom door, etc.
+    const preferredSides = bCenterX < 0.5
+      ? ['right', 'bottom', 'top', 'left']
+      : bCenterY < 0.5
+        ? ['bottom', 'right', 'left', 'top']
+        : ['left', 'top', 'right', 'bottom'];
+
+    let placed = false;
+    for (const side of preferredSides) {
+      if (placed) break;
       const range = (side === 'left' || side === 'right') ? rows : cols;
       const positions = Array.from({ length: range }, (_, i) => i).sort(() => Math.random() - 0.5);
       for (const pos of positions) {
         const key = `${side}-${pos}`;
         if (usedDoors.has(key)) continue;
-        // Check the cell adjacent to this door — must not be occupied by any block
         const adjCell = side === 'top' ? `${pos},0`
           : side === 'bottom' ? `${pos},${rows - 1}`
           : side === 'left'   ? `0,${pos}`
@@ -266,6 +278,7 @@ function generateLevel(idx) {
         doors.push({ side, pos, color: b.color });
         usedDoors.add(key);
         doorEdgeCells.add(adjCell);
+        placed = true;
         break;
       }
     }
