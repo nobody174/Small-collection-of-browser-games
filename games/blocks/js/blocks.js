@@ -61,10 +61,18 @@
 
     blocks = {};
     let nextId = 1;
+
+    // Mark blocked (walled-off) cells with a special sentinel
+    const blockedSet = new Set(level.blockedCells || []);
+    blockedSet.forEach(key => {
+      const [x, y] = key.split(',').map(Number);
+      if (y < level.rows && x < level.cols) board[y][x] = 'WALL';
+    });
+
     level.blocks.forEach(b => {
       const id = 'b' + (nextId++);
       const size = b.size || '1x1';
-      blocks[id] = { id, x: b.x, y: b.y, color: b.color, size, exited: false, el: null };
+      blocks[id] = { id, x: b.x, y: b.y, color: b.color, size, blocker: b.blocker || false, exited: false, el: null };
       // Mark all cells occupied by this block
       if (size === '1x1') {
         board[b.y][b.x] = id;
@@ -74,8 +82,9 @@
         board[b.y+1][b.x] = id;
         board[b.y+1][b.x+1] = id;
       } else if (size === 'L') {
-        // L-shape is stored as top-left anchor, rendering handles it
         board[b.y][b.x] = id;
+        board[b.y][b.x+1] = id;
+        board[b.y+1][b.x] = id;
       }
     });
 
@@ -91,11 +100,17 @@
     boardEl.style.setProperty('--cols', level.cols);
     boardEl.style.setProperty('--rows', level.rows);
 
-    // Empty cell backgrounds (purely visual)
+    const blockedSet = new Set(level.blockedCells || []);
+
+    // Cell backgrounds — skip walled-off cells (non-square shape)
     for (let y = 0; y < level.rows; y++) {
       for (let x = 0; x < level.cols; x++) {
         const c = document.createElement('div');
-        c.className = 'bb-cell';
+        if (blockedSet.has(`${x},${y}`)) {
+          c.className = 'bb-cell bb-cell--wall';
+        } else {
+          c.className = 'bb-cell';
+        }
         c.style.transform = cellTransform(x, y);
         boardEl.appendChild(c);
       }
@@ -104,11 +119,12 @@
     // Blocks
     Object.values(blocks).forEach(b => {
       const el = document.createElement('div');
-      el.className = 'bb-block' + (b.size === '2x2' ? ' bb-block--2x2' : b.size === 'L' ? ' bb-block--L' : '');
+      el.className = 'bb-block' + (b.size === '2x2' ? ' bb-block--2x2' : b.size === 'L' ? ' bb-block--L' : '') + (b.blocker ? ' bb-block--blocker' : '');
       el.style.setProperty('--block-color', COLORS[b.color]);
       el.style.transform = cellTransform(b.x, b.y);
       el.dataset.id = b.id;
       el.dataset.size = b.size;
+      if (b.blocker) el.title = 'Blocker — move it out of the way!';
       boardEl.appendChild(el);
       b.el = el;
     });
@@ -163,12 +179,10 @@
   }
 
   function canPlaceBlock(blockId, cx, cy) {
-    // Check if block can be placed at (cx, cy) without colliding
     const cells = getBlockCells(blockId, cx, cy);
     for (const [x, y] of cells) {
-      // Out of bounds
       if (x < 0 || x >= level.cols || y < 0 || y >= level.rows) return false;
-      // Occupied by another block
+      // Treat WALL sentinel and other blocks as obstacles
       if (board[y][x] != null && board[y][x] !== blockId) return false;
     }
     return true;
@@ -259,7 +273,13 @@
 
   function exitBlock(b, side) {
     b.exited = true;
-    board[b.y][b.x] = null;
+    // Clear ALL cells the block occupies (not just anchor)
+    const cells = getBlockCells(b.id, b.x, b.y);
+    cells.forEach(([cx, cy]) => {
+      if (cy >= 0 && cy < level.rows && cx >= 0 && cx < level.cols) {
+        board[cy][cx] = null;
+      }
+    });
     // Animate the block flying through the door
     const dirX = side === 'left' ? -120 : side === 'right' ?  120 : 0;
     const dirY = side === 'top'  ? -120 : side === 'bottom' ? 120 : 0;
@@ -309,7 +329,12 @@
       b.exited = rec.exited;
       b.x = rec.x; b.y = rec.y;
       if (!rec.exited) {
-        board[rec.y][rec.x] = rec.id;
+        // Mark ALL cells this block occupies (not just anchor)
+        getBlockCells(b.id, rec.x, rec.y).forEach(([cx, cy]) => {
+          if (cy >= 0 && cy < level.rows && cx >= 0 && cx < level.cols) {
+            board[cy][cx] = rec.id;
+          }
+        });
         // If the block had been removed, re-add it
         if (!b.el.isConnected) {
           $('#bb-board').appendChild(b.el);
@@ -328,7 +353,8 @@
   function afterMove() {
     moves++;
     updateHeader();
-    if (Object.values(blocks).every(b => b.exited)) {
+    // Win when all GOAL blocks (non-blockers) have exited — blockers don't need to exit
+    if (Object.values(blocks).every(b => b.blocker || b.exited)) {
       onLevelComplete();
     }
   }
@@ -434,19 +460,32 @@
      HINT — pulse the doors of remaining blocks
      ============================================================ */
   function showHint() {
+    // Only highlight doors for blocks still on the board
     const remainingColors = new Set(
       Object.values(blocks).filter(b => !b.exited).map(b => b.color)
     );
-    NG.$$('.bb-door').forEach(el => {
+    const doors = NG.$$('.bb-door');
+    if (!doors.length) { NG.toast('No doors visible!', { type: 'warning' }); return; }
+
+    doors.forEach(el => {
+      // Find if this door's color is still needed
+      const doorColor = level.doors.find(d => {
+        const pos = doorPosition(d);
+        return el.dataset.side === d.side;
+      });
+      el.classList.remove('is-hinting');
+      // Force reflow so animation restarts if already hinting
+      void el.offsetWidth;
       el.classList.add('is-hinting');
     });
-    // Remove hint after 4 animation cycles (1400ms × 3 + 200ms fade)
-    setTimeout(() => {
-      NG.$$('.bb-door.is-hinting').forEach(el => {
-        el.classList.remove('is-hinting');
-      });
-    }, 4200);
+
     NG.audio.play('flip');
+    NG.toast('💡 Find the matching door!', { type: 'info', duration: 1500 });
+
+    // Remove hint after 4 animation cycles
+    setTimeout(() => {
+      NG.$$('.bb-door.is-hinting').forEach(el => el.classList.remove('is-hinting'));
+    }, 4200);
   }
 
   /* ============================================================

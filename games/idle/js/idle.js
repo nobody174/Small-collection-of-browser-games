@@ -188,10 +188,14 @@
       colors: ['#ffc46b', '#ff9a4a', '#ff8fb1'],
     });
 
-    // Tiny bounce + pulse on the donut
+    // Bounce + ripple ring on the donut
     const btn = $('#donut-btn');
     NG.replayAnim(btn, 'ng-press');
-    NG.replayAnim(btn, 'ng-pulse-ring');
+    // Spawn a ripple ring that expands and fades
+    const ripple = document.createElement('span');
+    ripple.className = 'donut-ripple';
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
 
     renderTotals();
     renderShop();

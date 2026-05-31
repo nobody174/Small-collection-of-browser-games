@@ -267,6 +267,8 @@ NG.cards.makeDraggable = function (rootEl, options) {
 
   function startDrag(e, group, fromPile) {
     e.preventDefault();
+    // Capture pointer so we get all move events even if finger leaves the element
+    if (e.target.setPointerCapture) e.target.setPointerCapture(e.pointerId);
     const startX = e.clientX, startY = e.clientY;
 
     // Record each card's current screen position so we can offset relative

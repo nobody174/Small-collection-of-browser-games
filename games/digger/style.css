@@ -295,19 +295,7 @@ body.digger-board {
   z-index: 1;
 }
 
-/* Horned Viking helmet overlay on top of character for Norway */
-body.country-norway .player::after {
-  content: '⚔️';
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  font-size: calc(var(--tile) * 0.5);
-  padding-top: calc(var(--tile) * 0.05);
-  z-index: 2;
-  pointer-events: none;
-}
+/* Norway character overlay removed — user will provide custom image later */
 
 /* Bounce when player digs — touches only the inner ::before transform,
    so the outer player position is preserved. */

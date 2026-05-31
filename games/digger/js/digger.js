@@ -52,21 +52,28 @@
      WORLD GENERATION
      -------------------------------------------------------- */
   function generateWorld() {
+    // Assign a random column for each band's elevator (avoid col 0,1 and WORLD.cols-1 so it's not at the edge)
+    const elevatorCols = {};
+    BANDS.forEach(b => {
+      elevatorCols[b.minRow] = 1 + Math.floor(Math.random() * (WORLD.cols - 2));
+    });
+
     const tiles = [];
     for (let r = 0; r < WORLD.rows; r++) {
       tiles.push(new Array(WORLD.cols));
       for (let c = 0; c < WORLD.cols; c++) {
-        tiles[r][c] = makeTile(r, c);
+        tiles[r][c] = makeTile(r, c, elevatorCols);
       }
     }
     // Player starts on the shop tile (so first action is walking off it)
     return {
       tiles,
+      elevatorCols,  // store so we know where elevators are
       player: { row: WORLD.surfaceRow, col: WORLD.shopCol },
     };
   }
 
-  function makeTile(r, c) {
+  function makeTile(r, c, elevatorCols = {}) {
     if (r < WORLD.surfaceRow) return { type: 'sky',     dug: true,  hp: 0, hardness: 0, mineral: null };
     if (r === WORLD.surfaceRow) {
       if (c === WORLD.shopCol) return { type: 'shop',    dug: true,  hp: 0, hardness: 0, mineral: null };
@@ -75,17 +82,18 @@
     // Below surface: pick the band
     const band = BANDS.find(b => r >= b.minRow && r <= b.maxRow) || BANDS[BANDS.length - 1];
 
-    // Elevator shaft at the band's designated row (middle column)
-    // Start as a normal tile (not dug) - becomes elevator when dug
-    if (r === band.elevatorRow && c === 4) {
+    // Elevator: exactly 1 tile, at the band's random column and its designated row
+    const elevCol = elevatorCols[band.minRow];
+    if (r === band.elevatorRow && c === elevCol) {
       return {
-        type: band.tileType,  // Rock, not elevator yet (hidden until discovered)
+        type: band.tileType,  // Hidden as normal rock until dug
         dug: false,
         hardness: band.hardness,
         hp: band.hardness,
         mineral: null,
-        isElevator: true,  // Mark this tile as an elevator hiding spot
+        isElevator: true,
         elevatorRow: band.elevatorRow,
+        elevatorBandMin: band.minRow,
       };
     }
 
@@ -203,15 +211,16 @@
     const totalUnits = Object.values(state.cart).reduce((s, n) => s + n, 0);
     $('#stat-cart').textContent = `🛒 ${totalUnits}/${cart.size}`;
 
-    // Cart chips per mineral
+    // Cart chips per mineral (show count + total value)
     const cartEl = $('#cart-chips');
     cartEl.innerHTML = '';
     Object.entries(state.cart).forEach(([id, n]) => {
       if (n <= 0) return;
       const m = MINERALS[id];
+      const lineTotal = n * m.value;
       const chip = document.createElement('div');
       chip.className = 'cart__chip';
-      chip.innerHTML = `${m.icon} ${m.name} <b>×${n}</b>`;
+      chip.innerHTML = `${m.icon} ${m.name} <b>×${n}</b> <span style="color:var(--ng-color-warning);margin-left:4px;">💰${fmt(lineTotal)}</span>`;
       cartEl.appendChild(chip);
     });
     if (!cartEl.children.length) {
@@ -387,9 +396,32 @@
       .reduce((s, [id, n]) => s + n * MINERALS[id].value, 0);
 
     if (sellTotal > 0) {
+      const cartSnapshot = { ...state.cart };
       state.gold += sellTotal;
       state.cart = {};
-      NG.toast(`Sold cart for 💰 ${fmt(sellTotal)}`, { type: 'success' });
+      // Show receipt modal with X button before opening shop
+      const receiptBody = document.createElement('div');
+      receiptBody.style.cssText = 'display:flex;flex-direction:column;gap:var(--ng-space-2);';
+      Object.entries(cartSnapshot).forEach(([id, n]) => {
+        if (n <= 0) return;
+        const m = MINERALS[id];
+        const line = document.createElement('div');
+        line.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--ng-border);';
+        line.innerHTML = `<span>${m.icon} ${m.name} ×${n}</span><span style="color:var(--ng-color-warning);font-weight:bold;">💰 ${fmt(n * m.value)}</span>`;
+        receiptBody.appendChild(line);
+      });
+      const total = document.createElement('div');
+      total.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding-top:var(--ng-space-2);font-weight:bold;font-size:var(--ng-text-lg);';
+      total.innerHTML = `<span>Total</span><span style="color:var(--ng-color-success);">💰 ${fmt(sellTotal)}</span>`;
+      receiptBody.appendChild(total);
+      NG.modal.open({
+        title: '💰 Sale Receipt',
+        body: receiptBody,
+        actions: [{ label: 'Continue to Shop', variant: 'primary', onClick: () => { NG.modal.close(); openShop(); } }],
+      });
+      updateUI();
+      flushSave();
+      return;
     }
 
     // Build the shop content
@@ -480,6 +512,26 @@
     body.style.flexDirection = 'column';
     body.style.gap = 'var(--ng-space-2)';
 
+    // Home button always available
+    const homeBtn = document.createElement('button');
+    homeBtn.className = 'shop-item';
+    homeBtn.innerHTML = `
+      <div class="shop-item__icon">🏠</div>
+      <div>
+        <div class="shop-item__name">Home / Shop</div>
+        <div class="shop-item__sub">Return to the surface</div>
+      </div>
+    `;
+    homeBtn.addEventListener('click', () => {
+      world.player.row = WORLD.surfaceRow;
+      world.player.col = WORLD.shopCol;
+      NG.modal.close();
+      render();  // full re-render to sync sprite position cleanly
+      NG.audio.play('coin');
+      flushSave();
+    });
+    body.appendChild(homeBtn);
+
     const discovered = state.discoveredElevators[state.countryId] || [];
 
     BANDS.forEach((b, idx) => {
@@ -510,12 +562,12 @@
 
       if (isDiscovered && !isCurrentLayer) {
         btn.addEventListener('click', () => {
+          // Place player at the destination elevator's actual column
+          const destCol = (world.elevatorCols && world.elevatorCols[b.minRow]) || 4;
           world.player.row = b.elevatorRow;
-          world.player.col = 4;
-          placePlayer($('#player-sprite'), b.elevatorRow, 4);
-          updateAdjacency();
-          updateViewport();
+          world.player.col = destCol;
           NG.modal.close();
+          render();  // full re-render to sync sprite cleanly, no offset accumulation
           NG.audio.play('coin');
           flushSave();
         });
@@ -578,38 +630,68 @@
      -------------------------------------------------------- */
   function attachSwipeInput() {
     const viewport = $('.viewport');
-    let swipeState = null;
+    let dragState = null;
+    let dragWalkInterval = null;
+    const TILE_PX = 52;  // matches --tile default; good enough for direction detection
+
+    function stopDragWalk() {
+      if (dragWalkInterval) { clearInterval(dragWalkInterval); dragWalkInterval = null; }
+    }
 
     viewport.addEventListener('pointerdown', (e) => {
-      swipeState = { startX: e.clientX, startY: e.clientY, moved: false };
+      dragState = { startX: e.clientX, startY: e.clientY, lastX: e.clientX, lastY: e.clientY, moved: false };
     });
 
     viewport.addEventListener('pointermove', (e) => {
-      if (!swipeState) return;
-      const dx = e.clientX - swipeState.startX;
-      const dy = e.clientY - swipeState.startY;
-      if (!swipeState.moved && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
-        swipeState.moved = true;
+      if (!dragState) return;
+      const dx = e.clientX - dragState.startX;
+      const dy = e.clientY - dragState.startY;
+      dragState.lastX = e.clientX;
+      dragState.lastY = e.clientY;
+
+      if (!dragState.moved && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+        dragState.moved = true;
+        // Start continuous walk while dragging through dug tiles
+        stopDragWalk();
+        dragWalkInterval = setInterval(() => {
+          if (!dragState) { stopDragWalk(); return; }
+          const ddx = dragState.lastX - dragState.startX;
+          const ddy = dragState.lastY - dragState.startY;
+          let dr = 0, dc = 0;
+          if (Math.abs(ddx) > Math.abs(ddy)) dc = ddx > 0 ? 1 : -1;
+          else dr = ddy > 0 ? 1 : -1;
+          const { player } = getWorld();
+          const nr = player.row + dr, nc = player.col + dc;
+          if (nr < 0 || nr >= WORLD.rows || nc < 0 || nc >= WORLD.cols) return;
+          const t = getWorld().tiles[nr][nc];
+          // Only auto-walk into already-dug tiles (don't auto-dig)
+          if (t.dug) interact(nr, nc);
+        }, 180);
       }
     });
 
     viewport.addEventListener('pointerup', (e) => {
-      if (!swipeState || !swipeState.moved) { swipeState = null; return; }
-      const dx = e.clientX - swipeState.startX;
-      const dy = e.clientY - swipeState.startY;
-      let dr = 0, dc = 0;
-      // Determine direction based on the larger component
-      if (Math.abs(dx) > Math.abs(dy)) {
-        dc = dx > 0 ? 1 : -1;
-      } else {
-        dr = dy > 0 ? 1 : -1;
+      stopDragWalk();
+      if (!dragState) return;
+      if (!dragState.moved) {
+        // Short tap without drag — handled by click handler
+        dragState = null;
+        return;
       }
+      // Swipe gesture: single move in direction
+      const dx = e.clientX - dragState.startX;
+      const dy = e.clientY - dragState.startY;
+      let dr = 0, dc = 0;
+      if (Math.abs(dx) > Math.abs(dy)) dc = dx > 0 ? 1 : -1;
+      else dr = dy > 0 ? 1 : -1;
       if (dr !== 0 || dc !== 0) {
         const { player } = getWorld();
         interact(player.row + dr, player.col + dc);
       }
-      swipeState = null;
+      dragState = null;
     });
+
+    viewport.addEventListener('pointercancel', () => { stopDragWalk(); dragState = null; });
   }
 
   function init() {

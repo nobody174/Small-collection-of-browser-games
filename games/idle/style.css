@@ -16,6 +16,13 @@ body.idle-board {
   background:
     radial-gradient(900px 500px at 50% -10%, rgba(255, 196, 107, 0.30), transparent 60%),
     linear-gradient(180deg, #fff7e8 0%, #ffe7d4 100%);
+  /* Prevent double-tap zoom on the whole game page */
+  touch-action: manipulation;
+}
+
+/* Prevent double-tap zoom on coin card area */
+.coin-card {
+  touch-action: manipulation;
 }
 
 .idle-topbar {
@@ -123,6 +130,20 @@ body.idle-board {
 }
 .donut-btn:hover  { transform: translateY(-2px); }
 .donut-btn:active { transform: scale(0.92); }
+
+/* Ripple ring on click */
+.donut-ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 196, 107, 0.8);
+  animation: donut-ripple-out 0.55s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes donut-ripple-out {
+  0%   { transform: scale(0.7); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
 .donut-btn:focus-visible {
   outline: none;
   box-shadow:

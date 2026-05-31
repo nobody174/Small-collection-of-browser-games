@@ -121,6 +121,7 @@ body.cards-board {
   user-select: none;
   -webkit-user-select: none;
   cursor: grab;
+  touch-action: none;  /* prevent scroll interference during drag on mobile */
   transition: transform 240ms cubic-bezier(.22,1,.36,1),
               box-shadow 200ms ease;
   box-shadow: 0 2px 4px rgba(20, 15, 60, 0.12);

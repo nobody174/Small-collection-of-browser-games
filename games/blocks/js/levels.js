@@ -12,6 +12,7 @@ NG.blocks.COLORS = {
   green:  '#4ad295',
   blue:   '#57c7ff',
   purple: '#b070ff',
+  blocker: '#888899',  // neutral gray — no exit door, just in the way
 };
 
 const COLORS_ARRAY = Object.keys(NG.blocks.COLORS);
@@ -148,58 +149,66 @@ const TUTORIAL = [
 function generateLevel(idx) {
   const level = idx + 1;
 
-  // Progressive difficulty curve - much more challenging
-  let cols, rows, numBlocks, blockSizeVariety;
+  // Progressive difficulty curve
+  let cols, rows, numGoalBlocks, numBlockers, blockSizeVariety, useNonSquare;
 
   if (level < 15) {
-    // Easy: small boards, few blocks, simple 1x1
-    cols = 4;
-    rows = 4;
-    numBlocks = 2 + Math.floor(level / 5);
-    blockSizeVariety = 0;  // only 1x1
+    cols = 4; rows = 4;
+    numGoalBlocks = 2 + Math.floor(level / 5);
+    numBlockers = 0;
+    blockSizeVariety = 0;
+    useNonSquare = false;
   } else if (level < 35) {
-    // Medium: medium boards, more blocks, mostly 1x1 with some 2x2
     cols = 5 + Math.floor((level - 15) / 10);
     rows = 5 + Math.floor((level - 15) / 10);
-    numBlocks = 4 + Math.floor((level - 15) / 5);
-    blockSizeVariety = 1;  // introduce 2x2
+    numGoalBlocks = 3 + Math.floor((level - 15) / 7);
+    numBlockers = Math.floor((level - 15) / 8);  // 0-2 blocker blocks
+    blockSizeVariety = 1;
+    useNonSquare = level > 25;
   } else {
-    // Hard: crowded boards with complex shapes and large blocks
     cols = 6 + Math.floor((level - 35) / 15);
     rows = 6 + Math.floor((level - 35) / 15);
-    numBlocks = 6 + Math.floor((level - 35) / 8);
-    blockSizeVariety = 2;  // 2x2 and L-shapes heavily
+    numGoalBlocks = 4 + Math.floor((level - 35) / 10);
+    numBlockers = 2 + Math.floor((level - 35) / 10);  // 2-4 blockers
+    blockSizeVariety = 2;
+    useNonSquare = true;
   }
 
-  // Clamp board size
   cols = Math.min(8, cols);
   rows = Math.min(8, rows);
-  numBlocks = Math.min(10, numBlocks);
+  numGoalBlocks = Math.min(6, numGoalBlocks);
+  numBlockers = Math.min(4, numBlockers);
+
+  // Build list of valid cells (for non-square shapes, remove corners)
+  const blockedCells = new Set();
+  if (useNonSquare && cols >= 5 && rows >= 5) {
+    // Cut 1-2 cells from random corners to create L/T shaped boards
+    const cornerCuts = level > 45 ? 2 : 1;
+    const corners = [
+      { x: 0, y: 0 }, { x: cols - 1, y: 0 },
+      { x: 0, y: rows - 1 }, { x: cols - 1, y: rows - 1 }
+    ];
+    const shuffledCorners = corners.sort(() => Math.random() - 0.5).slice(0, cornerCuts);
+    shuffledCorners.forEach(({ x, y }) => blockedCells.add(`${x},${y}`));
+  }
 
   const blocks = [];
-  const usedPos = new Set();
+  const usedPos = new Set([...blockedCells]);
 
-  // Generate blocks with variety in sizes
-  for (let i = 0; i < numBlocks; i++) {
+  function placeBlock(color, isBlocker) {
     let placed = false;
     let attempts = 0;
-
-    while (!placed && attempts < 20) {
+    while (!placed && attempts < 40) {
       const x = Math.floor(Math.random() * cols);
       const y = Math.floor(Math.random() * rows);
-
-      // Determine block size (1x1, 2x2, or L-shape)
       let size = '1x1';
-      if (blockSizeVariety === 1 && Math.random() < 0.4) {
-        size = '2x2';  // Medium difficulty: 40% 2x2 blocks
-      } else if (blockSizeVariety === 2 && Math.random() < 0.6) {
-        size = Math.random() < 0.7 ? '2x2' : 'L';  // Hard: 60% larger blocks
+      if (!isBlocker) {
+        if (blockSizeVariety === 1 && Math.random() < 0.35) size = '2x2';
+        else if (blockSizeVariety === 2 && Math.random() < 0.55) size = Math.random() < 0.7 ? '2x2' : 'L';
       }
-
       const positions = getBlockPositions(x, y, size, cols, rows);
       if (positions && !positions.some(p => usedPos.has(`${p.x},${p.y}`))) {
-        const color = COLORS_ARRAY[i % COLORS_ARRAY.length];
-        blocks.push({ x, y, color, size: size || '1x1' });
+        blocks.push({ x, y, color, size, blocker: isBlocker || false });
         positions.forEach(p => usedPos.add(`${p.x},${p.y}`));
         placed = true;
       }
@@ -207,20 +216,27 @@ function generateLevel(idx) {
     }
   }
 
-  // Generate exit doors (one per block color)
+  // Place goal blocks (colored, each gets a matching door)
+  for (let i = 0; i < numGoalBlocks; i++) {
+    placeBlock(COLORS_ARRAY[i % COLORS_ARRAY.length], false);
+  }
+
+  // Place blocker blocks (gray, no door - must be moved out of the way)
+  for (let i = 0; i < numBlockers; i++) {
+    placeBlock('blocker', true);
+  }
+
+  // Generate exit doors (one per goal block only)
   const doors = [];
   const usedDoors = new Set();
-  blocks.forEach((b, i) => {
-    const sides = ['top', 'bottom', 'left', 'right'];
-    const shuffled = sides.sort(() => Math.random() - 0.5);
-
-    for (const side of shuffled) {
-      const pos = side === 'left' || side === 'right'
+  blocks.filter(b => !b.blocker).forEach((b) => {
+    const sides = ['top', 'bottom', 'left', 'right'].sort(() => Math.random() - 0.5);
+    for (const side of sides) {
+      const pos = (side === 'left' || side === 'right')
         ? Math.floor(Math.random() * rows)
         : Math.floor(Math.random() * cols);
-
       const key = `${side}-${pos}`;
-      if (!usedDoors.has(key)) {
+      if (!usedDoors.has(key) && !blockedCells.has(side === 'top' || side === 'bottom' ? `${pos},${side === 'top' ? 0 : rows-1}` : `${side === 'left' ? 0 : cols-1},${pos}`)) {
         doors.push({ side, pos, color: b.color });
         usedDoors.add(key);
         break;
@@ -232,6 +248,7 @@ function generateLevel(idx) {
     id: `l${level}`,
     name: `Level ${level}`,
     cols, rows,
+    blockedCells: [...blockedCells],  // cells that are walled off (non-square shape)
     blocks,
     doors,
   };
