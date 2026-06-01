@@ -297,18 +297,15 @@ body.digger-board {
   z-index: 1;
 }
 
-/* Custom image character — hides emoji when an img is present */
+/* Custom image character — fits exactly within the player tile */
 .player img {
   position: absolute;
-  width:  calc(var(--tile) * 1.8);
-  height: calc(var(--tile) * 1.8);
-  /* Center horizontally and vertically over the tile */
-  /* Shift slightly right because the viking PNG has extra space on the left */
-  top:  50%;
-  left: 50%;
-  margin-top:  calc(var(--tile) * -0.9);
-  margin-left: calc(var(--tile) * -0.5);
+  width:  var(--tile);
+  height: var(--tile);
+  top:  0;
+  left: 0;
   object-fit: contain;
+  object-position: center center;
   image-rendering: auto;
   z-index: 2;
   pointer-events: none;
