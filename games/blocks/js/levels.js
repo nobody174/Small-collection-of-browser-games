@@ -153,25 +153,25 @@ function generateLevel(idx) {
   let cols, rows, numGoalBlocks, numBlockers, blockSizeVariety, useNonSquare;
 
   if (level < 15) {
-    // Easy: small board, 2-3 colored blocks, no obstacles
+    // Easy: small board, 3-4 colored blocks
     cols = 4; rows = 4;
-    numGoalBlocks = 2 + Math.floor(level / 6);
+    numGoalBlocks = 3 + Math.floor(level / 7);
     numBlockers = 0;
     blockSizeVariety = 0;
     useNonSquare = false;
   } else if (level < 35) {
-    // Medium: larger board, 3-5 goal blocks, no blockers
+    // Medium: larger board, 4-6 goal blocks, mixed sizes
     cols = 5 + Math.floor((level - 15) / 10);
     rows = 5 + Math.floor((level - 15) / 10);
-    numGoalBlocks = 3 + Math.floor((level - 15) / 7);
+    numGoalBlocks = 4 + Math.floor((level - 15) / 5);
     numBlockers = 0;
     blockSizeVariety = 1;
     useNonSquare = level > 28;
   } else {
-    // Hard: bigger board, 4-6 goal blocks of mixed sizes, no blockers
+    // Hard: bigger board, 5-8 goal blocks of mixed sizes
     cols = 6 + Math.floor((level - 35) / 15);
     rows = 6 + Math.floor((level - 35) / 15);
-    numGoalBlocks = 4 + Math.floor((level - 35) / 12);
+    numGoalBlocks = 5 + Math.floor((level - 35) / 8);
     numBlockers = 0;
     blockSizeVariety = 2;
     useNonSquare = true;
@@ -179,7 +179,7 @@ function generateLevel(idx) {
 
   cols = Math.min(8, cols);
   rows = Math.min(8, rows);
-  numGoalBlocks = Math.min(6, numGoalBlocks);
+  numGoalBlocks = Math.min(8, numGoalBlocks);
   numBlockers = 0;  // blockers removed
 
   // Build list of valid cells (for non-square shapes, remove corners)
