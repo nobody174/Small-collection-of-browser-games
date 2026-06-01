@@ -195,117 +195,91 @@ function generateLevel(idx) {
     shuffledCorners.forEach(({ x, y }) => blockedCells.add(`${x},${y}`));
   }
 
-  // Step 1: Pre-reserve door positions BEFORE placing any blocks
-  // This ensures no block (goal or blocker) ever sits in front of a door
   const doors = [];
   const usedDoors = new Set();
   const doorEdgeCells = new Set();
-
-  // Reserve one door per goal block color, placed on a random wall position
-  const allSides = ['top', 'bottom', 'left', 'right'];
-  for (let i = 0; i < numGoalBlocks; i++) {
-    const shuffledSides = [...allSides].sort(() => Math.random() - 0.5);
-    for (const side of shuffledSides) {
-      const range = (side === 'left' || side === 'right') ? rows : cols;
-      const positions = Array.from({ length: range }, (_, j) => j).sort(() => Math.random() - 0.5);
-      let reserved = false;
-      for (const pos of positions) {
-        const key = `${side}-${pos}`;
-        const adjCell = side === 'top'    ? `${pos},0`
-          : side === 'bottom' ? `${pos},${rows - 1}`
-          : side === 'left'   ? `0,${pos}`
-          : `${cols - 1},${pos}`;
-        if (!usedDoors.has(key) && !doorEdgeCells.has(adjCell) && !blockedCells.has(adjCell)) {
-          doors.push({ side, pos, color: COLORS_ARRAY[i % COLORS_ARRAY.length], _reserved: true });
-          usedDoors.add(key);
-          doorEdgeCells.add(adjCell);
-          reserved = true;
-          break;
-        }
-      }
-      if (reserved) break;
-    }
-  }
-
-  // Step 2: Place blocks — exclude door-adjacent edge cells
-  const usedPos = new Set([...blockedCells, ...doorEdgeCells]);
+  const usedPos = new Set([...blockedCells]);
   const blocks = [];
 
   // Weighted block size picker per difficulty
-  function pickSize(isBlocker) {
-    if (isBlocker) return '1x1';
+  function pickSize() {
     if (blockSizeVariety === 0) return '1x1';
     if (blockSizeVariety === 1) {
       const r = Math.random();
-      if (r < 0.45) return '1x1';
-      if (r < 0.65) return '1x2';
-      if (r < 0.80) return '2x1';
-      return '2x2';
+      if (r < 0.5) return '1x1';
+      if (r < 0.75) return '1x2';
+      return '2x1';
     }
     const r = Math.random();
-    if (r < 0.20) return '1x1';
-    if (r < 0.35) return '1x2';
-    if (r < 0.50) return '2x1';
-    if (r < 0.60) return '1x3';
-    if (r < 0.70) return '3x1';
-    if (r < 0.82) return '2x2';
-    if (r < 0.92) return 'L';
-    return '2x3';
+    if (r < 0.25) return '1x1';
+    if (r < 0.45) return '1x2';
+    if (r < 0.60) return '2x1';
+    if (r < 0.70) return '1x3';
+    if (r < 0.80) return '3x1';
+    if (r < 0.90) return '2x2';
+    return 'L';
   }
 
-  function placeBlock(color, isBlocker) {
-    let placed = false;
-    let attempts = 0;
-    while (!placed && attempts < 50) {
-      const x = Math.floor(Math.random() * cols);
-      const y = Math.floor(Math.random() * rows);
-      const size = pickSize(isBlocker);
-      const positions = getBlockPositions(x, y, size, cols, rows);
-      if (positions && !positions.some(p => usedPos.has(`${p.x},${p.y}`))) {
-        blocks.push({ x, y, color, size, blocker: isBlocker || false });
-        positions.forEach(p => usedPos.add(`${p.x},${p.y}`));
-        placed = true;
-      }
-      attempts++;
-    }
-  }
+  // Place each goal block, then immediately create a door aligned with where it landed
+  for (let i = 0; i < numGoalBlocks; i++) {
+    const color = COLORS_ARRAY[i % COLORS_ARRAY.length];
+    const size = pickSize();
 
-  // Step 3: Place goal blocks on the OPPOSITE side from their door
-  doors.forEach((d) => {
-    const color = d.color;
-    // Exclude the entire edge row/col of the door side so block can never be adjacent to door wall
-    // e.g. door on right wall → block must be in cols 0 to cols-2 (not in rightmost col)
-    const xMin = d.side === 'left'  ? 1 : 0;
-    const xMax = d.side === 'right' ? cols - 2 : cols - 1;
-    const yMin = d.side === 'top'   ? 1 : 0;
-    const yMax = d.side === 'bottom'? rows - 2 : rows - 1;
+    // Pick exit side randomly, then place block in the opposite half
+    const sides = ['top', 'bottom', 'left', 'right'].sort(() => Math.random() - 0.5);
+    let blockPlaced = false;
 
-    // Prefer placing in the opposite half
-    const xHalfMin = d.side === 'right' ? xMin : d.side === 'left' ? Math.ceil(cols / 2) : xMin;
-    const xHalfMax = d.side === 'right' ? Math.floor(cols / 2) : xMax;
-    const yHalfMin = d.side === 'bottom'? yMin : d.side === 'top' ? Math.ceil(rows / 2) : yMin;
-    const yHalfMax = d.side === 'bottom'? Math.floor(rows / 2) : yMax;
+    for (const exitSide of sides) {
+      if (blockPlaced) break;
 
-    let placed = false;
-    let attempts = 0;
-    while (!placed && attempts < 60) {
-      // First 30 attempts: try opposite half. Next 30: full allowed area
-      const ax = attempts < 30 ? xHalfMin + Math.floor(Math.random() * (xHalfMax - xHalfMin + 1))
-                               : xMin    + Math.floor(Math.random() * (xMax - xMin + 1));
-      const ay = attempts < 30 ? yHalfMin + Math.floor(Math.random() * (yHalfMax - yHalfMin + 1))
-                               : yMin    + Math.floor(Math.random() * (yMax - yMin + 1));
-      const size = pickSize(false);
-      const positions = getBlockPositions(ax, ay, size, cols, rows);
-      if (positions &&
-          positions.every(p => p.x >= xMin && p.x <= xMax && p.y >= yMin && p.y <= yMax) &&
-          !positions.some(p => usedPos.has(`${p.x},${p.y}`))) {
+      // Block must stay away from the exit wall (leave room to slide to exit)
+      const xMin = exitSide === 'left'  ? 1 : 0;
+      const xMax = exitSide === 'right' ? cols - 2 : cols - 1;
+      const yMin = exitSide === 'top'   ? 1 : 0;
+      const yMax = exitSide === 'bottom'? rows - 2 : rows - 1;
+
+      for (let attempt = 0; attempt < 40 && !blockPlaced; attempt++) {
+        const ax = xMin + Math.floor(Math.random() * (xMax - xMin + 1));
+        const ay = yMin + Math.floor(Math.random() * (yMax - yMin + 1));
+        const positions = getBlockPositions(ax, ay, size, cols, rows);
+        if (!positions) continue;
+        if (!positions.every(p => p.x >= xMin && p.x <= xMax && p.y >= yMin && p.y <= yMax)) continue;
+        if (positions.some(p => usedPos.has(`${p.x},${p.y}`))) continue;
+        if (positions.some(p => doorEdgeCells.has(`${p.x},${p.y}`))) continue;
+
+        // Block fits — now find a door aligned with this block on the exit wall
+        // The door pos must align with a row/col the block occupies
+        const blockCols = [...new Set(positions.map(p => p.x))];
+        const blockRows = [...new Set(positions.map(p => p.y))];
+        const posOptions = (exitSide === 'left' || exitSide === 'right') ? blockRows : blockCols;
+
+        let doorPlaced = false;
+        for (const pos of posOptions.sort(() => Math.random() - 0.5)) {
+          const key = `${exitSide}-${pos}`;
+          const adjCell = exitSide === 'top'    ? `${pos},0`
+            : exitSide === 'bottom' ? `${pos},${rows - 1}`
+            : exitSide === 'left'   ? `0,${pos}`
+            : `${cols - 1},${pos}`;
+          if (!usedDoors.has(key) && !blockedCells.has(adjCell)) {
+            doors.push({ side: exitSide, pos, color });
+            usedDoors.add(key);
+            doorEdgeCells.add(adjCell);
+            doorPlaced = true;
+            break;
+          }
+        }
+        if (!doorPlaced) continue;
+
+        // Commit block
         blocks.push({ x: ax, y: ay, color, size, blocker: false });
         positions.forEach(p => usedPos.add(`${p.x},${p.y}`));
-        placed = true;
+        blockPlaced = true;
       }
-      attempts++;
     }
-  });
+  }
+
+  // Mark door edge cells as off-limits for blockers
+  doorEdgeCells.forEach(c => usedPos.add(c));
 
   // Place blocker blocks — usedPos already excludes door-adjacent edge cells
   function placeBlocker() {
