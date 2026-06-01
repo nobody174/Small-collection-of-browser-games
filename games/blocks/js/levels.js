@@ -215,7 +215,7 @@ function generateLevel(idx) {
           : side === 'bottom' ? `${pos},${rows - 1}`
           : side === 'left'   ? `0,${pos}`
           : `${cols - 1},${pos}`;
-        if (!usedDoors.has(key) && !doorEdgeCells.has(adjCell)) {
+        if (!usedDoors.has(key) && !doorEdgeCells.has(adjCell) && !blockedCells.has(adjCell)) {
           doors.push({ side, pos, color: COLORS_ARRAY[i % COLORS_ARRAY.length], _reserved: true });
           usedDoors.add(key);
           doorEdgeCells.add(adjCell);

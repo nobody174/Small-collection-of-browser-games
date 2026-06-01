@@ -158,7 +158,7 @@
     worldEl.appendChild(p);
 
     updateAdjacency();
-    updateViewport();
+    updateViewport(true);  // instant on full render (teleport/country switch)
     updateUI();
 
     // Apply country body class
@@ -193,15 +193,37 @@
     return $('#world').querySelector(`.tile[data-row="${r}"][data-col="${c}"]`);
   }
 
-  function updateViewport() {
-    // Center the player vertically in the viewport
+  let _viewportTopRow = 0;  // track current scroll position
+
+  function updateViewport(instant = false) {
     const { player } = getWorld();
     const TILES_VISIBLE = 11;
-    // For 11 visible tiles, center should be at position 5 (0-indexed: 0-10, middle is 5)
-    // So we want player.row - 5 to be the top of the visible area
+    const DEAD_ZONE = 3;  // only scroll when player is within 3 tiles of viewport edge
+
+    // Current player position relative to viewport top
+    const playerInView = player.row - _viewportTopRow;
+
+    // Only scroll if player is near the top or bottom edge of the visible area
+    if (playerInView >= DEAD_ZONE && playerInView <= TILES_VISIBLE - DEAD_ZONE - 1 && !instant) {
+      return;  // player is comfortably in the dead zone — no scroll needed
+    }
+
+    // Recenter
     const targetRow = Math.max(0,
       Math.min(WORLD.rows - TILES_VISIBLE, player.row - Math.floor(TILES_VISIBLE / 2)));
-    $('#world').style.transform = `translateY(calc(-${targetRow} * var(--tile)))`;
+
+    if (targetRow === _viewportTopRow && !instant) return;  // already at right position
+    _viewportTopRow = targetRow;
+
+    const worldEl = $('#world');
+    if (instant) {
+      worldEl.classList.add('no-transition');
+      worldEl.style.transform = `translateY(calc(-${targetRow} * var(--tile)))`;
+      // Re-enable transition after frame
+      requestAnimationFrame(() => worldEl.classList.remove('no-transition'));
+    } else {
+      worldEl.style.transform = `translateY(calc(-${targetRow} * var(--tile)))`;
+    }
   }
 
   /* --------------------------------------------------------
