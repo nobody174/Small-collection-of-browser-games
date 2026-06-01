@@ -298,12 +298,13 @@ body.digger-board {
 /* Custom image character — hides emoji when an img is present */
 .player img {
   position: absolute;
-  /* 1.8x tile so the character looks substantial but feet align with tile bottom */
   width:  calc(var(--tile) * 1.8);
   height: calc(var(--tile) * 1.8);
-  bottom: 0;
+  /* Center horizontally and vertically over the tile */
+  top:  50%;
   left: 50%;
-  transform: translateX(-50%);
+  margin-top:  calc(var(--tile) * -0.9);
+  margin-left: calc(var(--tile) * -0.9);
   object-fit: contain;
   image-rendering: auto;
   z-index: 2;

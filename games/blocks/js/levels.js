@@ -195,8 +195,41 @@ function generateLevel(idx) {
     shuffledCorners.forEach(({ x, y }) => blockedCells.add(`${x},${y}`));
   }
 
+  // Step 1: Pre-reserve door positions BEFORE placing any blocks
+  // This ensures no block (goal or blocker) ever sits in front of a door
+  const doors = [];
+  const usedDoors = new Set();
+  const doorEdgeCells = new Set();
+
+  // Reserve one door per goal block color, placed on a random wall position
+  const allSides = ['top', 'bottom', 'left', 'right'];
+  for (let i = 0; i < numGoalBlocks; i++) {
+    const shuffledSides = [...allSides].sort(() => Math.random() - 0.5);
+    for (const side of shuffledSides) {
+      const range = (side === 'left' || side === 'right') ? rows : cols;
+      const positions = Array.from({ length: range }, (_, j) => j).sort(() => Math.random() - 0.5);
+      let reserved = false;
+      for (const pos of positions) {
+        const key = `${side}-${pos}`;
+        const adjCell = side === 'top'    ? `${pos},0`
+          : side === 'bottom' ? `${pos},${rows - 1}`
+          : side === 'left'   ? `0,${pos}`
+          : `${cols - 1},${pos}`;
+        if (!usedDoors.has(key) && !doorEdgeCells.has(adjCell)) {
+          doors.push({ side, pos, color: COLORS_ARRAY[i % COLORS_ARRAY.length], _reserved: true });
+          usedDoors.add(key);
+          doorEdgeCells.add(adjCell);
+          reserved = true;
+          break;
+        }
+      }
+      if (reserved) break;
+    }
+  }
+
+  // Step 2: Place blocks — exclude door-adjacent edge cells
+  const usedPos = new Set([...blockedCells, ...doorEdgeCells]);
   const blocks = [];
-  const usedPos = new Set([...blockedCells]);
 
   // Weighted block size picker per difficulty
   function pickSize(isBlocker) {
@@ -209,7 +242,6 @@ function generateLevel(idx) {
       if (r < 0.80) return '2x1';
       return '2x2';
     }
-    // blockSizeVariety === 2 (hard)
     const r = Math.random();
     if (r < 0.20) return '1x1';
     if (r < 0.35) return '1x2';
@@ -238,53 +270,40 @@ function generateLevel(idx) {
     }
   }
 
-  // Place goal blocks (colored, each gets a matching door)
-  for (let i = 0; i < numGoalBlocks; i++) {
-    placeBlock(COLORS_ARRAY[i % COLORS_ARRAY.length], false);
-  }
+  // Step 3: Place goal blocks — now assign them to the pre-reserved doors
+  // by placing each goal block on the OPPOSITE side of its door
+  doors.forEach((d, i) => {
+    const color = d.color;
+    // Determine which half of the board is opposite the door
+    let startX, startY;
+    if (d.side === 'right')  startX = Math.floor(Math.random() * Math.floor(cols / 2));
+    else if (d.side === 'left') startX = Math.ceil(cols / 2) + Math.floor(Math.random() * Math.floor(cols / 2));
+    else startX = undefined;
 
-  // Generate exit doors FIRST (one per goal block)
-  const doors = [];
-  const usedDoors = new Set();
-  const doorEdgeCells = new Set(); // cells adjacent to doors (blockers must avoid these)
+    if (d.side === 'bottom') startY = Math.floor(Math.random() * Math.floor(rows / 2));
+    else if (d.side === 'top') startY = Math.ceil(rows / 2) + Math.floor(Math.random() * Math.floor(rows / 2));
+    else startY = undefined;
 
-  // Build a set of all occupied cells for door placement check
-  const occupiedCells = new Set([...usedPos]);
-
-  blocks.filter(b => !b.blocker).forEach((b) => {
-    // Prefer the side OPPOSITE to the block's position so the block must travel across the board
-    const bCenterX = b.x / cols;
-    const bCenterY = b.y / rows;
-    // Pick opposite side: if block is left half → right door, top half → bottom door, etc.
-    const preferredSides = bCenterX < 0.5
-      ? ['right', 'bottom', 'top', 'left']
-      : bCenterY < 0.5
-        ? ['bottom', 'right', 'left', 'top']
-        : ['left', 'top', 'right', 'bottom'];
-
+    // Try to place block in the opposite half, fall back to random
     let placed = false;
-    for (const side of preferredSides) {
-      if (placed) break;
-      const range = (side === 'left' || side === 'right') ? rows : cols;
-      const positions = Array.from({ length: range }, (_, i) => i).sort(() => Math.random() - 0.5);
-      for (const pos of positions) {
-        const key = `${side}-${pos}`;
-        if (usedDoors.has(key)) continue;
-        const adjCell = side === 'top' ? `${pos},0`
-          : side === 'bottom' ? `${pos},${rows - 1}`
-          : side === 'left'   ? `0,${pos}`
-          : `${cols - 1},${pos}`;
-        if (occupiedCells.has(adjCell)) continue;
-        doors.push({ side, pos, color: b.color });
-        usedDoors.add(key);
-        doorEdgeCells.add(adjCell);
+    let attempts = 0;
+    while (!placed && attempts < 60) {
+      const x = startX !== undefined ? startX : Math.floor(Math.random() * cols);
+      const y = startY !== undefined ? startY : Math.floor(Math.random() * rows);
+      const size = pickSize(false);
+      const positions = getBlockPositions(x, y, size, cols, rows);
+      if (positions && !positions.some(p => usedPos.has(`${p.x},${p.y}`))) {
+        blocks.push({ x, y, color, size, blocker: false });
+        positions.forEach(p => usedPos.add(`${p.x},${p.y}`));
         placed = true;
-        break;
       }
+      // Widen search after several attempts
+      if (attempts > 20) { startX = undefined; startY = undefined; }
+      attempts++;
     }
   });
 
-  // Place blocker blocks AFTER doors — avoid door-adjacent cells
+  // Place blocker blocks — usedPos already excludes door-adjacent edge cells
   function placeBlocker() {
     let placed = false;
     let attempts = 0;
@@ -292,9 +311,7 @@ function generateLevel(idx) {
       const x = Math.floor(Math.random() * cols);
       const y = Math.floor(Math.random() * rows);
       const positions = getBlockPositions(x, y, '1x1', cols, rows);
-      if (positions &&
-          !positions.some(p => usedPos.has(`${p.x},${p.y}`)) &&
-          !positions.some(p => doorEdgeCells.has(`${p.x},${p.y}`))) {
+      if (positions && !positions.some(p => usedPos.has(`${p.x},${p.y}`))) {
         blocks.push({ x, y, color: 'blocker', size: '1x1', blocker: true });
         positions.forEach(p => usedPos.add(`${p.x},${p.y}`));
         placed = true;
