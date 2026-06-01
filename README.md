@@ -246,3 +246,7 @@ Built with vanilla JavaScript. No external game frameworks — just pure browser
 **Ready to play?** Start with the hub page at `http://localhost:8000` and pick your game!
 
 Have fun! 🎉
+
+---
+
+*Built with assistance from [Claude Code](https://claude.ai/code) by Anthropic.*
