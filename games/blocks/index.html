@@ -32,7 +32,13 @@
 
       <div class="stats">
         <button class="btn btn--ghost btn--sm" id="btn-undo">↶ Undo</button>
-        <button class="btn btn--ghost btn--sm" id="btn-reset">Reset</button>
+        <div class="dropdown">
+          <button class="btn btn--ghost btn--sm" id="btn-reset">Reset ▼</button>
+          <div class="dropdown-menu" id="reset-menu" style="display:none;position:absolute;background:var(--ng-bg-secondary);border:1px solid var(--ng-border);border-radius:4px;z-index:100;min-width:150px;box-shadow:0 2px 8px rgba(0,0,0,0.2);">
+            <button class="btn btn--ghost" id="btn-reset-level" style="width:100%;text-align:left;padding:8px 12px;border:none;border-radius:0;">Reset Level</button>
+            <button class="btn btn--ghost" id="btn-reset-all" style="width:100%;text-align:left;padding:8px 12px;border:none;border-radius:0;border-top:1px solid var(--ng-border);">Reset All Levels</button>
+          </div>
+        </div>
         <button class="btn btn--ghost btn--sm" id="btn-hint">💡 Hint</button>
         <button class="btn btn--ghost btn--sm" id="btn-levels">Levels</button>
         <div class="volume-control"><button class="btn btn--ghost btn--sm btn--icon" id="btn-mute" title="Mute">🔊</button><input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="35" title="Volume"></div>

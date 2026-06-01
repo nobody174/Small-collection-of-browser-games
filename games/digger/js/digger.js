@@ -131,6 +131,13 @@
           m.dataset.mineral = t.mineral;
           el.appendChild(m);
         }
+        // Show elevator icon when dug
+        if (t.dug && t.type === 'elevator') {
+          const e = document.createElement('div');
+          e.className = 'tile__elevator';
+          e.textContent = '🛗';
+          el.appendChild(e);
+        }
         worldEl.appendChild(el);
       }
     }

@@ -243,6 +243,23 @@ body.digger-board {
   pointer-events: none;
 }
 
+/* Elevator icon displayed on dug elevator tile */
+.tile__elevator {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  pointer-events: none;
+  animation: elevator-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes elevator-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
 /* Surface decorations (trees, cacti, lanterns…) appear ABOVE the surface tile */
 .tile--surface::before {
   content: var(--surface-decor);

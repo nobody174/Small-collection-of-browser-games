@@ -536,7 +536,28 @@
     attachInput();
 
     NG.on($('#btn-undo'),  'click', undo);
-    NG.on($('#btn-reset'), 'click', () => loadLevel(currentIdx));
+
+    // Reset menu
+    NG.on($('#btn-reset'), 'click', (e) => {
+      e.stopPropagation();
+      const menu = $('#reset-menu');
+      menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    });
+    NG.on($('#btn-reset-level'), 'click', () => {
+      loadLevel(currentIdx);
+      $('#reset-menu').style.display = 'none';
+    });
+    NG.on($('#btn-reset-all'), 'click', () => {
+      if (confirm('Reset all levels? This will clear your progress.')) {
+        save.clear();
+        loadLevel(0);
+        $('#reset-menu').style.display = 'none';
+      }
+    });
+    document.addEventListener('click', () => {
+      $('#reset-menu').style.display = 'none';
+    });
+
     NG.on($('#btn-hint'),  'click', showHint);
     NG.on($('#btn-levels'), 'click', openLevelPicker);
 
