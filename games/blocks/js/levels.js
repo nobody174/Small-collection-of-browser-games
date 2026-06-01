@@ -270,35 +270,39 @@ function generateLevel(idx) {
     }
   }
 
-  // Step 3: Place goal blocks — now assign them to the pre-reserved doors
-  // by placing each goal block on the OPPOSITE side of its door
-  doors.forEach((d, i) => {
+  // Step 3: Place goal blocks on the OPPOSITE side from their door
+  doors.forEach((d) => {
     const color = d.color;
-    // Determine which half of the board is opposite the door
-    let startX, startY;
-    if (d.side === 'right')  startX = Math.floor(Math.random() * Math.floor(cols / 2));
-    else if (d.side === 'left') startX = Math.ceil(cols / 2) + Math.floor(Math.random() * Math.floor(cols / 2));
-    else startX = undefined;
+    // Exclude the entire edge row/col of the door side so block can never be adjacent to door wall
+    // e.g. door on right wall → block must be in cols 0 to cols-2 (not in rightmost col)
+    const xMin = d.side === 'left'  ? 1 : 0;
+    const xMax = d.side === 'right' ? cols - 2 : cols - 1;
+    const yMin = d.side === 'top'   ? 1 : 0;
+    const yMax = d.side === 'bottom'? rows - 2 : rows - 1;
 
-    if (d.side === 'bottom') startY = Math.floor(Math.random() * Math.floor(rows / 2));
-    else if (d.side === 'top') startY = Math.ceil(rows / 2) + Math.floor(Math.random() * Math.floor(rows / 2));
-    else startY = undefined;
+    // Prefer placing in the opposite half
+    const xHalfMin = d.side === 'right' ? xMin : d.side === 'left' ? Math.ceil(cols / 2) : xMin;
+    const xHalfMax = d.side === 'right' ? Math.floor(cols / 2) : xMax;
+    const yHalfMin = d.side === 'bottom'? yMin : d.side === 'top' ? Math.ceil(rows / 2) : yMin;
+    const yHalfMax = d.side === 'bottom'? Math.floor(rows / 2) : yMax;
 
-    // Try to place block in the opposite half, fall back to random
     let placed = false;
     let attempts = 0;
     while (!placed && attempts < 60) {
-      const x = startX !== undefined ? startX : Math.floor(Math.random() * cols);
-      const y = startY !== undefined ? startY : Math.floor(Math.random() * rows);
+      // First 30 attempts: try opposite half. Next 30: full allowed area
+      const ax = attempts < 30 ? xHalfMin + Math.floor(Math.random() * (xHalfMax - xHalfMin + 1))
+                               : xMin    + Math.floor(Math.random() * (xMax - xMin + 1));
+      const ay = attempts < 30 ? yHalfMin + Math.floor(Math.random() * (yHalfMax - yHalfMin + 1))
+                               : yMin    + Math.floor(Math.random() * (yMax - yMin + 1));
       const size = pickSize(false);
-      const positions = getBlockPositions(x, y, size, cols, rows);
-      if (positions && !positions.some(p => usedPos.has(`${p.x},${p.y}`))) {
-        blocks.push({ x, y, color, size, blocker: false });
+      const positions = getBlockPositions(ax, ay, size, cols, rows);
+      if (positions &&
+          positions.every(p => p.x >= xMin && p.x <= xMax && p.y >= yMin && p.y <= yMax) &&
+          !positions.some(p => usedPos.has(`${p.x},${p.y}`))) {
+        blocks.push({ x: ax, y: ay, color, size, blocker: false });
         positions.forEach(p => usedPos.add(`${p.x},${p.y}`));
         placed = true;
       }
-      // Widen search after several attempts
-      if (attempts > 20) { startX = undefined; startY = undefined; }
       attempts++;
     }
   });
