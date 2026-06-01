@@ -268,13 +268,18 @@ function generateLevel(idx) {
             break;
           }
         }
-        if (!doorPlaced) continue;
+        if (!doorPlaced) continue;  // couldn't place door on this side, try next side
 
-        // Commit block
+        // Commit block and door
         blocks.push({ x: ax, y: ay, color, size, blocker: false });
         positions.forEach(p => usedPos.add(`${p.x},${p.y}`));
         blockPlaced = true;
       }
+    }
+
+    // If block failed all side attempts, log it (shouldn't happen with enough space)
+    if (!blockPlaced) {
+      console.warn(`Level ${level}: couldn't place goal block ${i}`);
     }
   }
 

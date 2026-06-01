@@ -52,28 +52,21 @@
      WORLD GENERATION
      -------------------------------------------------------- */
   function generateWorld() {
-    // Assign a random column for each band's elevator (avoid col 0,1 and WORLD.cols-1 so it's not at the edge)
-    const elevatorCols = {};
-    BANDS.forEach(b => {
-      elevatorCols[b.minRow] = 1 + Math.floor(Math.random() * (WORLD.cols - 2));
-    });
-
     const tiles = [];
     for (let r = 0; r < WORLD.rows; r++) {
       tiles.push(new Array(WORLD.cols));
       for (let c = 0; c < WORLD.cols; c++) {
-        tiles[r][c] = makeTile(r, c, elevatorCols);
+        tiles[r][c] = makeTile(r, c);
       }
     }
     // Player starts on the shop tile (so first action is walking off it)
     return {
       tiles,
-      elevatorCols,  // store so we know where elevators are
       player: { row: WORLD.surfaceRow, col: WORLD.shopCol },
     };
   }
 
-  function makeTile(r, c, elevatorCols = {}) {
+  function makeTile(r, c) {
     if (r < WORLD.surfaceRow) return { type: 'sky',     dug: true,  hp: 0, hardness: 0, mineral: null };
     if (r === WORLD.surfaceRow) {
       if (c === WORLD.shopCol) return { type: 'shop',    dug: true,  hp: 0, hardness: 0, mineral: null };
@@ -82,11 +75,11 @@
     // Below surface: pick the band
     const band = BANDS.find(b => r >= b.minRow && r <= b.maxRow) || BANDS[BANDS.length - 1];
 
-    // Elevator: exactly 1 tile, at the band's random column and its designated row
-    const elevCol = elevatorCols[band.minRow];
-    if (r === band.elevatorRow && c === elevCol) {
+    // Elevator: random chance in the band's designated row
+    // Only ONE tile per band will have isElevator (by random chance)
+    if (r === band.elevatorRow && Math.random() < 1 / WORLD.cols) {
       return {
-        type: band.tileType,  // Hidden as normal rock until dug
+        type: band.tileType,
         dug: false,
         hardness: band.hardness,
         hp: band.hardness,
@@ -585,12 +578,18 @@
 
       if (isDiscovered && !isCurrentLayer) {
         btn.addEventListener('click', () => {
-          // Place player at the destination elevator's actual column
-          const destCol = (world.elevatorCols && world.elevatorCols[b.minRow]) || 4;
+          // Find the elevator tile in the destination row
+          let elevCol = 0;
+          for (let c = 0; c < WORLD.cols; c++) {
+            if (world.tiles[b.elevatorRow][c]?.isElevator) {
+              elevCol = c;
+              break;
+            }
+          }
           world.player.row = b.elevatorRow;
-          world.player.col = destCol;
+          world.player.col = elevCol;
           NG.modal.close();
-          render();  // full re-render to sync sprite cleanly, no offset accumulation
+          render();
           NG.audio.play('coin');
           flushSave();
         });
@@ -644,16 +643,6 @@
     if (!state.worlds) state.worlds = {};
     if (!state.discoveredElevators) state.discoveredElevators = {};
 
-    // Heal worlds: if a world is missing elevatorCols (old save format),
-    // regenerate it fresh so old broken elevator tiles are cleared
-    Object.keys(state.worlds).forEach(countryId => {
-      const w = state.worlds[countryId];
-      if (!w.elevatorCols) {
-        // Old save - regenerate this world to avoid broken tile state
-        delete state.worlds[countryId];
-        if (state.discoveredElevators) delete state.discoveredElevators[countryId];
-      }
-    });
 
     return true;
   }
