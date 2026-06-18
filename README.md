@@ -1,6 +1,8 @@
-# 🎮 New Games — A Collection of Browser Games
+# 🎮 Small Collection of Browser Games
 
 A cozy collection of **4 mini games** built with vanilla JavaScript. Play them in your browser, save your progress, and challenge yourself across multiple difficulty levels.
+
+**⚠️ Important:** All games in this collection are under development and uncompleted. They are shared for educational purposes and community feedback.
 
 ## 🎯 Games
 
