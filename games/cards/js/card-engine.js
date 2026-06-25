@@ -220,6 +220,8 @@ NG.cards.makeDraggable = function (rootEl, options) {
   const onTap      = options.onTap      || (() => {});
 
   let dragState = null;
+  let lastTap = { card: null, pile: null, time: 0 };
+  const doubleTapDelay = 300; // milliseconds
 
   rootEl.addEventListener('pointerdown', onDown);
 
@@ -250,11 +252,45 @@ NG.cards.makeDraggable = function (rootEl, options) {
 
   function startTap(e, card, pile) {
     const startX = e.clientX, startY = e.clientY;
+    const now = Date.now();
+
+    // Check for double-tap
+    const isDoubleTap = lastTap.card === card &&
+                        lastTap.pile === pile &&
+                        (now - lastTap.time) < doubleTapDelay;
+
+    if (isDoubleTap) {
+      // Double-tap: try to auto-send to foundation
+      lastTap = { card: null, pile: null, time: 0 };
+      if (card.faceUp && (pile.type === 'waste' || pile.type === 'tableau')) {
+        // Check if this card can go to any foundation
+        for (const f of piles) {
+          if (f.type === 'foundation' && f.canAccept(card, f, pile)) {
+            // Move to foundation
+            f.push(card);
+            pile.relayout();
+            NG.audio.play('coin');
+            // Trigger after-move callback if it exists
+            if (beforeMove) beforeMove(card, pile, f, [card]);
+            if (onMove) onMove(card, pile, f, [card]);
+            return;
+          }
+        }
+      }
+      // If we couldn't move to foundation, treat as single tap
+      onTap(card, pile);
+      return;
+    }
+
+    // Record this tap for double-tap detection
+    lastTap = { card, pile, time: now };
+
     const move = (ev) => {
       if (Math.abs(ev.clientX - startX) > 6 || Math.abs(ev.clientY - startY) > 6) cleanup();
     };
     const up = () => {
       cleanup();
+      // Always trigger onTap immediately (don't wait for double-tap timer)
       onTap(card, pile);
     };
     const cleanup = () => {
@@ -285,11 +321,13 @@ NG.cards.makeDraggable = function (rootEl, options) {
       c.el.style.top  = r.top  + 'px';
       c.el.style.transform = 'translate(0, 0)';
       c.el.style.willChange = 'left, top';
+      c.el.style.pointerEvents = 'none';
     });
 
     let moved = false;
     let pendingDx = 0, pendingDy = 0;
     let rafId = null;
+    let hoveredPile = null;
     dragState = { group, fromPile, base, startX, startY };
 
     document.addEventListener('pointermove', onMoveDrag);
@@ -307,6 +345,44 @@ NG.cards.makeDraggable = function (rootEl, options) {
             c.el.style.left = (r.left + pendingDx) + 'px';
             c.el.style.top  = (r.top  + pendingDy) + 'px';
           });
+
+          // Visual feedback: highlight valid/invalid drop zones
+          if (moved) {
+            const target = findDropPile(ev.clientX, ev.clientY, group[0], fromPile);
+            // Clear previous hover
+            if (hoveredPile && hoveredPile !== target) {
+              hoveredPile.el.classList.remove('drop-valid', 'drop-invalid');
+            }
+            // Apply new hover
+            if (target) {
+              target.el.classList.add('drop-valid');
+              target.el.classList.remove('drop-invalid');
+              hoveredPile = target;
+            } else {
+              // Find which pile we're hovering over (if any) for invalid feedback
+              const els = document.elementsFromPoint(ev.clientX, ev.clientY);
+              let pileEl = null;
+              for (const el of els) {
+                if (el.classList && el.classList.contains('pile') &&
+                    !el.classList.contains('drop-valid')) {
+                  pileEl = el;
+                  break;
+                }
+              }
+              if (pileEl && pileEl !== fromPile.el) {
+                const p = piles.find(pp => pp.el === pileEl);
+                if (p) {
+                  p.el.classList.add('drop-invalid');
+                  p.el.classList.remove('drop-valid');
+                  hoveredPile = p;
+                }
+              } else if (hoveredPile) {
+                hoveredPile.el.classList.remove('drop-valid', 'drop-invalid');
+                hoveredPile = null;
+              }
+            }
+          }
+
           rafId = null;
         });
       }
@@ -318,6 +394,13 @@ NG.cards.makeDraggable = function (rootEl, options) {
 
       // Cancel any pending animation frame so it doesn't run after we restore positions
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+
+      // Clear visual feedback
+      if (hoveredPile) {
+        hoveredPile.el.classList.remove('drop-valid', 'drop-invalid');
+        hoveredPile = null;
+      }
+      piles.forEach(p => p.el.classList.remove('drop-valid', 'drop-invalid'));
 
       if (!moved) {
         snapBack(group, fromPile);
@@ -351,6 +434,7 @@ NG.cards.makeDraggable = function (rootEl, options) {
       c.el.style.transform = '';
       c.el.style.zIndex = '';
       c.el.style.willChange = '';
+      c.el.style.pointerEvents = '';
     });
     // Force a reflow to ensure DOM catches up before recalculating pile positions
     void pile.el.offsetHeight;
@@ -366,6 +450,7 @@ NG.cards.makeDraggable = function (rootEl, options) {
       c.el.style.transform = '';
       c.el.style.zIndex = '';
       c.el.style.willChange = '';
+      c.el.style.pointerEvents = '';
     });
     toPile.pushMany(group);
     // Force a reflow on source pile to ensure correct positioning
