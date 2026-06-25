@@ -177,12 +177,19 @@ body.blocks-board {
 /* 2×3 block */
 .bb-block--2x3 { width: calc(var(--cell) * 2 + var(--gap)); height: calc(var(--cell) * 3 + var(--gap) * 2); }
 
-/* L-shape block */
+/* L-shape block — 4 rotations, selected via data-l-rot (0-3) */
 .bb-block--L {
   width: calc(var(--cell) * 2 + var(--gap));
   height: calc(var(--cell) * 2 + var(--gap));
-  clip-path: polygon(0 0, 100% 0, 100% 50%, 50% 50%, 50% 100%, 0 100%);
 }
+/* rot 0: {0,0},{1,0},{0,1} — top row + left column */
+.bb-block--L[data-l-rot="0"] { clip-path: polygon(0 0, 100% 0, 100% 50%, 50% 50%, 50% 100%, 0 100%); }
+/* rot 1: {0,0},{1,0},{1,1} — top row + right column */
+.bb-block--L[data-l-rot="1"] { clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 100%, 50% 50%, 0 50%); }
+/* rot 2: {0,0},{0,1},{1,1} — left column + bottom row */
+.bb-block--L[data-l-rot="2"] { clip-path: polygon(0 0, 50% 0, 50% 50%, 100% 50%, 100% 100%, 0 100%); }
+/* rot 3: {1,0},{0,1},{1,1} — right column + bottom row */
+.bb-block--L[data-l-rot="3"] { clip-path: polygon(50% 0, 100% 0, 100% 100%, 0 100%, 0 50%, 50% 50%); }
 
 /* Block being dragged — slight lift, no transition while finger moves */
 .bb-block.is-dragging {

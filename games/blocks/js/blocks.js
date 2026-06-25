@@ -72,7 +72,7 @@
     level.blocks.forEach(b => {
       const id = 'b' + (nextId++);
       const size = b.size || '1x1';
-      blocks[id] = { id, x: b.x, y: b.y, color: b.color, size, blocker: b.blocker || false, exited: false, el: null };
+      blocks[id] = { id, x: b.x, y: b.y, color: b.color, size, shape: b.shape || null, rotIndex: b.rotIndex, blocker: b.blocker || false, exited: false, el: null };
       // Mark all cells using getBlockCells (after blocks[id] is set)
       getBlockCells(id, b.x, b.y).forEach(([cx, cy]) => {
         if (cy >= 0 && cy < level.rows && cx >= 0 && cx < level.cols) board[cy][cx] = id;
@@ -115,6 +115,7 @@
       el.style.transform = cellTransform(b.x, b.y);
       el.dataset.id = b.id;
       el.dataset.size = b.size;
+      if (b.size === 'L') el.dataset.lRot = b.rotIndex != null ? b.rotIndex : 0;
       if (b.blocker) el.title = 'Blocker — move it out of the way!';
       boardEl.appendChild(el);
       b.el = el;
@@ -129,6 +130,16 @@
       Object.assign(el.style, doorPosition(d));
       boardEl.appendChild(el);
     });
+  }
+
+  /* Reads the live --cell + --gap px values so swipe-distance math
+     stays correct across responsive breakpoints. */
+  function getCellSizePx() {
+    const boardEl = $('#bb-board');
+    const cs = getComputedStyle(boardEl);
+    const cell = parseFloat(cs.getPropertyValue('--cell')) || 70;
+    const gap = parseFloat(cs.getPropertyValue('--gap')) || 6;
+    return cell + gap;
   }
 
   /* CSS helper: translate(x, y) inside the .bb-board grid */
@@ -162,7 +173,7 @@
       case '3x1': return [[cx, cy], [cx, cy+1], [cx, cy+2]];
       case '2x2': return [[cx, cy], [cx+1, cy], [cx, cy+1], [cx+1, cy+1]];
       case '2x3': return [[cx, cy], [cx+1, cy], [cx, cy+1], [cx+1, cy+1], [cx, cy+2], [cx+1, cy+2]];
-      case 'L':   return [[cx, cy], [cx+1, cy], [cx, cy+1]];
+      case 'L':   return (b.shape || [{x:0,y:0},{x:1,y:0},{x:0,y:1}]).map(r => [cx + r.x, cy + r.y]);
       default:    return [[cx, cy]];
     }
   }
@@ -391,18 +402,8 @@
       if (!blockEl) { selectBlock(null); return; }
       const id = blockEl.dataset.id;
       selectBlock(id);
-      dragState = {
-        id, startX: e.clientX, startY: e.clientY,
-        moved: false,
-      };
+      dragState = { id, startX: e.clientX, startY: e.clientY };
       blockEl.classList.add('is-dragging');
-    });
-
-    window.addEventListener('pointermove', (e) => {
-      if (!dragState) return;
-      const dx = e.clientX - dragState.startX;
-      const dy = e.clientY - dragState.startY;
-      if (!dragState.moved && Math.abs(dx) + Math.abs(dy) > 5) dragState.moved = true;
     });
 
     window.addEventListener('pointerup', (e) => {
@@ -422,10 +423,10 @@
         if (absX > absY) mx = dx > 0 ? 1 : -1;
         else             my = dy > 0 ? 1 : -1;
 
-        // Estimate cell size (~76px = cell + gap). One swipe = cell-based distance
+        // Read the actual cell+gap size from CSS (varies by breakpoint).
         // short swipe = 1 cell, medium = 2 cells, long = all the way
-        const CELL_SIZE = 76;
-        const cellsDist = Math.round(maxDist / CELL_SIZE);
+        const cellSize = getCellSizePx();
+        const cellsDist = Math.round(maxDist / cellSize);
         const cellsToMove = Math.max(1, Math.min(cellsDist, 2));  // clamp to 1-2
         const moveAll = cellsDist >= 3;  // 3+ cells = slide to wall
 
@@ -462,22 +463,22 @@
   function showHint() {
     // Only highlight doors for blocks still on the board
     const remainingColors = new Set(
-      Object.values(blocks).filter(b => !b.exited).map(b => b.color)
+      Object.values(blocks).filter(b => !b.blocker && !b.exited).map(b => b.color)
     );
-    const doors = NG.$$('.bb-door');
-    if (!doors.length) { NG.toast('No doors visible!', { type: 'warning' }); return; }
+    const doorEls = NG.$$('.bb-door');
+    if (!doorEls.length) { NG.toast('No doors visible!', { type: 'warning' }); return; }
 
-    doors.forEach(el => {
-      // Find if this door's color is still needed
-      const doorColor = level.doors.find(d => {
-        const pos = doorPosition(d);
-        return el.dataset.side === d.side;
-      });
+    let anyHinted = false;
+    doorEls.forEach((el, i) => {
+      const d = level.doors[i];
       el.classList.remove('is-hinting');
+      if (!d || !remainingColors.has(d.color)) return;
       // Force reflow so animation restarts if already hinting
       void el.offsetWidth;
       el.classList.add('is-hinting');
+      anyHinted = true;
     });
+    if (!anyHinted) { NG.toast('Nothing left to find!', { type: 'info' }); return; }
 
     NG.audio.play('flip');
     NG.toast('💡 Find the matching door!', { type: 'info', duration: 1500 });

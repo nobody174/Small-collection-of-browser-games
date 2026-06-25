@@ -25,7 +25,8 @@
     <header class="digger-topbar">
       <h1 class="ng-topbar__title">⛏️ Around the World Digger</h1>
       <div class="digger-stats">
-        <button class="btn btn--primary btn--sm" id="btn-shop">🏠 Shop</button>
+        <button class="btn btn--primary btn--sm" id="btn-shop" title="Upgrades &amp; travel — walk onto the 🏠 tile in the mine to sell your cart">⛏️ Upgrades</button>
+        <button class="btn btn--ghost btn--sm" id="btn-elevator" title="Jump to any layer you've already discovered an elevator in">🛗 Elevator</button>
         <button class="btn btn--ghost btn--sm" id="btn-reset">Reset</button>
         <div class="volume-control"><button class="btn btn--ghost btn--sm btn--icon" id="btn-mute" title="Mute">🔊</button><input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="35" title="Volume"></div>
         <a class="btn btn--ghost btn--sm" href="../../index.html">← Hub</a>
@@ -41,9 +42,28 @@
       <span class="badge badge--primary" id="stat-pickaxe">⛏️ Wooden Pickaxe (str 1)</span>
     </div>
 
-    <!-- The mine -->
-    <div class="viewport">
-      <div id="world" class="world"></div>
+    <!-- Game layout: mine on left, avatar + hand on right -->
+    <div class="digger-main-layout">
+      <!-- The mine -->
+      <div class="digger-main-layout__game">
+        <div class="viewport">
+          <div id="world" class="world"></div>
+        </div>
+      </div>
+
+      <!-- Cosmetics avatar display (shows equipped hats/accessories) -->
+      <div class="digger-main-layout__avatar">
+        <div class="cosmetics-avatar">
+          <div class="cosmetics-avatar__frame">
+            <img src="img/head.png" alt="Your character" class="cosmetics-avatar__head">
+            <div id="cosmetics-hat" class="cosmetics-avatar__slot cosmetics-avatar__hat"></div>
+            <div id="cosmetics-glasses" class="cosmetics-avatar__slot cosmetics-avatar__glasses"></div>
+            <div id="cosmetics-facial" class="cosmetics-avatar__slot cosmetics-avatar__facial"></div>
+          </div>
+          <div class="cosmetics-avatar__hand" id="cosmetics-hand">⛏️</div>
+          <div class="cosmetics-avatar__label" id="cosmetics-title">Ready to dig!</div>
+        </div>
+      </div>
     </div>
 
     <!-- Cart contents -->
@@ -54,7 +74,8 @@
 
     <p style="margin-top: var(--ng-space-3); color: var(--ng-text-muted); max-width: 980px;">
       Click a highlighted tile next to your character to dig or walk. Arrow keys also work.
-      Return to the 🏠 to sell your cart and buy upgrades.
+      Selling only happens by walking onto the 🏠 shop tile (the elevator's Home button can take you there).
+      Use the Upgrades button anytime to buy gear or travel between countries.
     </p>
 
   </main>

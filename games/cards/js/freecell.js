@@ -33,6 +33,8 @@
   let startTs = Date.now();
   let timerId = null;
   let pendingSave = false;
+  let hintsUsed = 0;
+  const maxHints = 3;
 
   const save = NG.save.create('cards.freecell', { version: 1 });
 
@@ -46,7 +48,13 @@
     return piles.tableau.filter(p => p !== excludePile && p.isEmpty()).length;
   }
   function maxMoveSize(destPile) {
-    return (emptyFreeCellCount() + 1) * Math.pow(2, emptyTableauCount(destPile));
+    const empty = emptyFreeCellCount();
+    const emptyTab = emptyTableauCount(destPile);
+    // SuperMove formula: groups can be at most (1 + emptyFreeCells) * 2^emptyTableauCols
+    // If destination is empty, it doesn't count as a "storage slot" for this calculation
+    // since we're moving INTO it, not through it. Formula: (n + 1) * 2^k where n=free cells,
+    // k=empty tableau columns (excluding destination if it's empty).
+    return (empty + 1) * Math.pow(2, emptyTab);
   }
 
   /* --------------------------------------------------------
@@ -212,6 +220,7 @@
     checkWin();
     flushSave();
   }
+
   function scoreMove(card, fromPile, toPile) {
     if (toPile.type === 'foundation') score += 10;
     else if (fromPile.type === 'foundation') score -= 15;
@@ -221,7 +230,25 @@
     const total = piles.foundations.reduce((s, p) => s + p.size(), 0);
     if (total === 52) {
       stopTimer();
-      const elapsed = Math.floor((Date.now() - startTs) / 1000);
+      const elapsedMs = Date.now() - startTs;
+      const elapsed = Math.floor(elapsedMs / 1000);
+
+      // Record this win in statistics
+      NG.stats.recordGame('freecell', true, score, elapsedMs);
+
+      // Check achievements
+      const newAchs = NG.achievements.checkWinAchievements('freecell', elapsedMs, score, hintsUsed);
+      NG.achievements.checkAchievements('freecell');
+      NG.achievements.checkCrossGameAchievements();
+
+      if (newAchs.length > 0) {
+        const achText = newAchs.map(a => `${a.emoji} ${a.name}`).join(' · ');
+        setTimeout(() => {
+          NG.toast(`🏆 Achievements unlocked: ${achText}`, { type: 'success', duration: 5000 });
+          NG.particles.confetti({ count: 40 });
+        }, 1500);
+      }
+
       $('#win-stats').textContent = `${moves} moves · ${elapsed}s · score ${score}`;
       $('#win-banner').classList.add('is-open');
       NG.audio.play('success');
@@ -303,12 +330,201 @@
   }
 
   /* --------------------------------------------------------
+     Statistics Modal
+     -------------------------------------------------------- */
+  function showHint() {
+    if (hintsUsed >= maxHints) {
+      NG.toast(`No more hints! (${maxHints}/${maxHints} used)`, { type: 'warning' });
+      return;
+    }
+
+    const hint = NG.hints.getBestMove(allPiles(), 'freecell');
+    if (!hint) {
+      NG.toast('No hints available', { type: 'info' });
+      return;
+    }
+
+    NG.hints.highlightMove(hint.card, hint.toPile);
+    score = Math.max(0, score - 20);
+    hintsUsed++;
+    updateStats();
+
+    NG.toast(`Hint: Move to ${hint.toPile.type} (${hintsUsed}/${maxHints} hints used)`, { type: 'info' });
+  }
+
+  function showStats() {
+    const stats = NG.stats.getStats('freecell');
+    const winRate = NG.stats.getWinRate('freecell');
+    const avgTime = stats.gamesPlayed > 0 ? NG.stats.formatTime(stats.totalTime / stats.gamesPlayed) : '--:--';
+    const unlockedAchs = NG.achievements.getUnlocked('freecell');
+
+    NG.modal.open({
+      title: '📊 Your Statistics',
+      body: document.createElement('div'),
+      actions: [
+        { label: 'Reset Stats', variant: 'ghost', onclick: () => {
+          NG.stats.reset('freecell');
+          NG.toast('Statistics reset', { type: 'success' });
+          NG.modal.close();
+        }},
+        { label: 'Close', variant: 'primary' }
+      ],
+    });
+    const body = NG.modal.lastBody || document.querySelector('.modal__body');
+    if (body) {
+      body.innerHTML = `
+        <div style="text-align: left; font-size: 14px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">GAMES PLAYED</div>
+              <div style="font-size: 32px; font-weight: bold; color: #7c5cff;">${stats.gamesPlayed}</div>
+            </div>
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">WIN RATE</div>
+              <div style="font-size: 32px; font-weight: bold; color: #22c55e;">${winRate}%</div>
+            </div>
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">CURRENT STREAK</div>
+              <div style="font-size: 32px; font-weight: bold; color: #f59e0b;">${stats.currentStreak}</div>
+            </div>
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">BEST STREAK</div>
+              <div style="font-size: 32px; font-weight: bold; color: #f59e0b;">${stats.bestStreak}</div>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px;">
+            <h4 style="margin: 10px 0; color: #7c5cff;">Performance</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; color: #666;">Best Score</td>
+                <td style="padding: 8px 0; text-align: right; font-weight: bold;">${stats.bestScore}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; color: #666;">Best Time</td>
+                <td style="padding: 8px 0; text-align: right; font-weight: bold;">${stats.bestTime ? NG.stats.formatTime(stats.bestTime) : '--:--'}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #666;">Average Time</td>
+                <td style="padding: 8px 0; text-align: right; font-weight: bold;">${avgTime}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px;">
+            <h4 style="margin: 10px 0; color: #7c5cff;">Achievements (${unlockedAchs.length})</h4>
+            ${unlockedAchs.length > 0 ? `
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 12px 0;">
+                ${unlockedAchs.map(a => `
+                  <div style="text-align: center; padding: 12px; background: #f0f0f0; border-radius: 8px; cursor: help;" title="${a.description}">
+                    <div style="font-size: 24px; margin-bottom: 4px;">${a.emoji}</div>
+                    <div style="font-size: 11px; font-weight: bold; color: #333;">${a.name}</div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : '<div style="color: #999; padding: 12px 0;">No achievements yet. Keep playing!</div>'}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  /* --------------------------------------------------------
+     Keyboard Shortcuts
+     -------------------------------------------------------- */
+  function onKeyDown(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+    const key = e.key.toLowerCase();
+    switch(key) {
+      case 'z': undo(); break;
+      case 'n':
+        NG.modal.confirm({
+          title: 'Start a new game?',
+          body: 'Current progress will be discarded.',
+          confirmLabel: 'New game'
+        }).then(ok => {
+          if (ok) {
+            $('#win-banner').classList.remove('is-open');
+            deal();
+            startTs = Date.now();
+            startTimer();
+          }
+        });
+        break;
+      case '?': showHelp(); break;
+      case 'm':
+        const muted = NG.audio.toggleMuted();
+        NG.toast(muted ? 'Sound muted' : 'Sound unmuted');
+        break;
+    }
+  }
+
+  function showHelp() {
+    NG.modal.open({
+      title: '♣ FreeCell Rules',
+      body: document.createElement('div'),
+      actions: [{ label: 'Close', variant: 'primary' }],
+    });
+    const body = NG.modal.lastBody || document.querySelector('.modal__body');
+    if (body) {
+      body.innerHTML = `
+        <div style="text-align: left; font-size: 14px; line-height: 1.6;">
+          <h3>Objective</h3>
+          <p>Build all four suits from Ace to King on the foundations.</p>
+
+          <h3>Rules</h3>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li><strong>Tableau:</strong> Descending alternating colors</li>
+            <li><strong>Free Cells:</strong> Store 1 card temporarily</li>
+            <li><strong>SuperMove:</strong> Move groups using free cells as temporary storage</li>
+            <li><strong>Foundation:</strong> Ascending by suit (A→K)</li>
+          </ul>
+
+          <h3>SuperMove Formula</h3>
+          <p style="margin: 10px 0; font-size: 13px;">
+            Max cards = (empty free cells + 1) × 2<sup>empty tableau columns</sup>
+          </p>
+
+          <h3>Keyboard Shortcuts</h3>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li><strong>[Z]</strong> - Undo last move</li>
+            <li><strong>[N]</strong> - New game</li>
+            <li><strong>[M]</strong> - Mute/unmute sound</li>
+            <li><strong>[?]</strong> - Show this help</li>
+          </ul>
+        </div>
+      `;
+    }
+  }
+
+  /* --------------------------------------------------------
+     Splash screen
+     -------------------------------------------------------- */
+  function setupSplashScreen() {
+    const splash = document.getElementById('card-splash');
+    if (!splash) return;
+
+    // Always show splash - user dismisses by clicking Start
+    const startBtn = document.getElementById('splash-start');
+    if (startBtn) {
+      startBtn.addEventListener('click', () => {
+        splash.classList.add('hidden');
+      });
+    }
+  }
+
+  /* --------------------------------------------------------
      Init
      -------------------------------------------------------- */
   function init() {
+    setupSplashScreen();
     buildPiles();
     if (!tryRestore()) deal();
     startTimer();
+
+    // Setup keyboard shortcuts
+    document.addEventListener('keydown', onKeyDown);
 
     NG.cards.makeDraggable(document.body, {
       piles: allPiles(),
@@ -350,6 +566,8 @@
     });
 
     NG.on($('#btn-undo'), 'click', undo);
+    NG.on($('#btn-hint'), 'click', showHint);
+    NG.on($('#btn-stats'), 'click', showStats);
     NG.on($('#btn-new'),  'click', async () => {
       const ok = await NG.modal.confirm({
         title: 'Start a new game?',

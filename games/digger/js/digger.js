@@ -19,7 +19,7 @@
   const $$ = NG.$$;
   const fmt = NG.formatNumber;
 
-  const { COUNTRIES, MINERALS, PICKAXES, CARTS, BANDS, WORLD } = NG.digger;
+  const { COUNTRIES, MINERALS, PICKAXES, CARTS, BANDS, WORLD, COSMETICS } = NG.digger;
 
   /* --------------------------------------------------------
      STATE
@@ -36,7 +36,14 @@
       cartIdx: 0,            // index into CARTS
       cart: {},              // mineralId → count
       worlds: {},            // countryId → { tiles, player }
-      discoveredElevators: {},  // countryId → Set of discovered elevator rows
+      discoveredElevators: {},  // countryId → { bandIdx → { row, col } } of found elevators
+      ownedCosmetics: {},    // cosmetic id → true if owned
+      equippedCosmetics: {   // currently active cosmetics: hat/pickaxeSkin/cartSkin/title
+        hat: null,
+        pickaxeSkin: null,
+        cartSkin: null,
+        title: null,
+      },
       lastSaveTime: Date.now(),
     };
   }
@@ -59,6 +66,22 @@
         tiles[r][c] = makeTile(r, c);
       }
     }
+    // Hide exactly one elevator tile somewhere within each band's depth
+    // range — a random (row, col), not a fixed row. It looks like any other
+    // solid tile until dug, so finding it feels like uncovering a gem rather
+    // than noticing a special "elevator line" running across the layer.
+    BANDS.forEach(band => {
+      const elevRow = band.minRow + Math.floor(Math.random() * (band.maxRow - band.minRow + 1));
+      const elevCol = Math.floor(Math.random() * WORLD.cols);
+      tiles[elevRow][elevCol] = {
+        type: band.tileType,
+        dug: false,
+        hardness: band.hardness,
+        hp: band.hardness,
+        mineral: null,
+        isElevator: true,
+      };
+    });
     // Player starts on the shop tile (so first action is walking off it)
     return {
       tiles,
@@ -74,21 +97,6 @@
     }
     // Below surface: pick the band
     const band = BANDS.find(b => r >= b.minRow && r <= b.maxRow) || BANDS[BANDS.length - 1];
-
-    // Elevator: random chance in the band's designated row
-    // Only ONE tile per band will have isElevator (by random chance)
-    if (r === band.elevatorRow && Math.random() < 1 / WORLD.cols) {
-      return {
-        type: band.tileType,
-        dug: false,
-        hardness: band.hardness,
-        hp: band.hardness,
-        mineral: null,
-        isElevator: true,
-        elevatorRow: band.elevatorRow,
-        elevatorBandMin: band.minRow,
-      };
-    }
 
     const mineral = pickWeighted(band.minerals);
     return {
@@ -124,13 +132,6 @@
         el.dataset.row = r;
         el.dataset.col = c;
         el.style.transform = `translate(calc(${c} * var(--tile)), calc(${r} * var(--tile)))`;
-        // Show mineral for dug tiles that had one
-        if (t.dug && t.mineral && t._collected) {
-          const m = document.createElement('div');
-          m.className = 'tile__mineral';
-          m.dataset.mineral = t.mineral;
-          el.appendChild(m);
-        }
         // Show elevator icon when dug
         if (t.dug && t.type === 'elevator') {
           const e = document.createElement('div');
@@ -140,6 +141,22 @@
         }
         worldEl.appendChild(el);
       }
+    }
+
+    // Flagpole beside the shop — flies the current country's flag
+    const country = COUNTRIES.find(c => c.id === state.countryId);
+    if (country) {
+      const pole = document.createElement('div');
+      pole.className = 'flagpole';
+      pole.style.transform = `translate(calc(${WORLD.shopCol - 1} * var(--tile)), calc(${WORLD.surfaceRow} * var(--tile)))`;
+      const flag = document.createElement('div');
+      flag.className = 'flagpole__flag';
+      // Drawn with CSS, not the flag emoji — flag emoji render as plain
+      // two-letter codes on platforms without flag-glyph font support
+      // (notably Windows), so a CSS flag looks correct everywhere.
+      flag.innerHTML = `<span class="flag-icon flag-icon--${country.id}"></span>`;
+      pole.appendChild(flag);
+      worldEl.appendChild(pole);
     }
 
     // Player sprite
@@ -209,6 +226,77 @@
   }
 
   /* --------------------------------------------------------
+     Update cosmetics avatar display with equipped items
+     -------------------------------------------------------- */
+  function updateCosmeticsAvatar() {
+    // Map cosmetic IDs to their overlay image paths
+    const cosmeticImages = {
+      'hat-viking': 'img/cosmetics/hat-viking.png',
+      'hat-sombrero': 'img/cosmetics/hat-sombrero.png',
+      'hat-crown': 'img/cosmetics/hat-crown.png',
+      'hat-tophat': 'img/cosmetics/hat-tophat.png',
+      'hat-hardhat': 'img/cosmetics/hat-hardhat.png',
+      'hat-cap': 'img/cosmetics/hat-cap.png',
+      'hat-bunny': 'img/cosmetics/hat-bunny.png',
+      'hat-wizard': 'img/cosmetics/hat-wizard.png',
+      'hat-santa': 'img/cosmetics/hat-santa.png',
+      'hat-baseball': 'img/cosmetics/hat-baseball.png',
+      'hat-pirate': 'img/cosmetics/hat-pirate.png',
+      'glasses-round': 'img/cosmetics/glasses-round.png',
+      'glasses-aviator': 'img/cosmetics/glasses-aviator.png',
+      'glasses-nerdy': 'img/cosmetics/glasses-nerdy.png',
+      'glasses-dark': 'img/cosmetics/glasses-dark.png',
+      'glasses-heart': 'img/cosmetics/glasses-heart.png',
+      'glasses-fancy': 'img/cosmetics/glasses-fancy.png',
+      'facial-mustache1': 'img/cosmetics/facial-mustache1.png',
+      'facial-mustache2': 'img/cosmetics/facial-mustache2.png',
+      'facial-beard1': 'img/cosmetics/facial-beard1.png',
+      'facial-beard2': 'img/cosmetics/facial-beard2.png',
+      'facial-beard3': 'img/cosmetics/facial-beard3.png',
+      'facial-beard4': 'img/cosmetics/facial-beard4.png',
+      'hair-rainbow': 'img/cosmetics/hair-rainbow.png',
+      'hair-blue': 'img/cosmetics/hair-blue.png',
+      'hair-brown': 'img/cosmetics/hair-brown.png',
+      'hair-blonde': 'img/cosmetics/hair-blonde.png',
+      'hair-spiky': 'img/cosmetics/hair-spiky.png',
+      'hair-halo': 'img/cosmetics/hair-halo.png',
+      'headphones': 'img/cosmetics/headphones.png',
+    };
+
+    const hatId = state.equippedCosmetics.hat;
+    const titleEl = $('#cosmetics-title');
+
+    // Display hat/facial hair overlays on the avatar
+    const hatSlot = $('#cosmetics-hat');
+    const facialSlot = $('#cosmetics-facial');
+    const hairSlot = $('#cosmetics-glasses');  // Reusing for hair since we have 3 slots
+
+    // Clear previous overlays
+    hatSlot.style.backgroundImage = '';
+    facialSlot.style.backgroundImage = '';
+    hairSlot.style.backgroundImage = '';
+
+    // Build display text and show overlays
+    const equipped = [];
+
+    // Hat overlay (top of head)
+    if (hatId && cosmeticImages[hatId]) {
+      const hat = COSMETICS.hats.find(h => h.id === hatId);
+      if (hat) {
+        equipped.push(hat.emoji + ' ' + hat.name);
+        hatSlot.style.backgroundImage = `url('${cosmeticImages[hatId]}')`;
+      }
+    }
+
+    // Update title with equipped items
+    if (equipped.length > 0) {
+      titleEl.textContent = equipped.join(' + ');
+    } else {
+      titleEl.textContent = 'Ready to dig!';
+    }
+  }
+
+  /* --------------------------------------------------------
      UI updates (cart, gold, depth, gear)
      -------------------------------------------------------- */
   function updateUI() {
@@ -216,7 +304,7 @@
     const cart = CARTS[state.cartIdx];
     const country = COUNTRIES.find(c => c.id === state.countryId);
 
-    $('#stat-country').textContent = `${country.flag} ${country.name}`;
+    $('#stat-country').innerHTML = `<span class="flag-icon flag-icon--${country.id}"></span> ${country.name}`;
     $('#stat-gold').textContent    = '💰 ' + fmt(state.gold);
     $('#stat-depth').textContent   = '⛏️ Depth ' + (getWorld().player.row - WORLD.surfaceRow);
     $('#stat-pickaxe').textContent = `${pickaxe.emoji} ${pickaxe.name} (str ${pickaxe.strength})`;
@@ -244,6 +332,9 @@
       chip.textContent = 'Cart is empty — start digging!';
       cartEl.appendChild(chip);
     }
+
+    // Update cosmetics avatar display
+    updateCosmeticsAvatar();
   }
 
   /* --------------------------------------------------------
@@ -332,10 +423,14 @@
         // Reveal the elevator!
         t.type = 'elevator';
         if (!state.discoveredElevators[state.countryId]) {
-          state.discoveredElevators[state.countryId] = [];
+          state.discoveredElevators[state.countryId] = {};
         }
-        if (!state.discoveredElevators[state.countryId].includes(t.elevatorRow)) {
-          state.discoveredElevators[state.countryId].push(t.elevatorRow);
+        // Keyed by band index so travel can jump straight to this exact
+        // tile — elevators are hidden at a random (row, col) within their
+        // band, not a fixed row, so we can't re-derive the position later.
+        const bandIdx = BANDS.findIndex(b => r >= b.minRow && r <= b.maxRow);
+        if (bandIdx !== -1) {
+          state.discoveredElevators[state.countryId][bandIdx] = { row: r, col: c };
         }
         NG.toast('🛗 Elevator discovered!', { type: 'info' });
         NG.audio.play('upgrade');
@@ -343,8 +438,10 @@
 
       tEl.className = tileClass(t);
 
-      // Mineral drop?
-      if (t.mineral) {
+      // Mineral drop? (only if there's still room — cart was checked at dig start,
+      // but don't let this final unit push the count past capacity)
+      const cartUsed = Object.values(state.cart).reduce((s, n) => s + n, 0);
+      if (t.mineral && cartUsed < CARTS[state.cartIdx].size) {
         const m = MINERALS[t.mineral];
         state.cart[t.mineral] = (state.cart[t.mineral] || 0) + 1;
         const mEl = document.createElement('div');
@@ -356,7 +453,6 @@
         // Remove mineral from board after fly animation
         setTimeout(() => mEl.remove(), 720);
         t.mineral = null;  // clear so it doesn't re-appear on render
-        t._collected = false;
       }
 
       // Move player into the just-dug tile
@@ -445,19 +541,31 @@
   }
 
   function openShopUI() {
-    const sellTotal = 0;  // cart already sold before this is called
-
-    // Build the shop content
+    // Comic-style shop with scrollable list
     const body = document.createElement('div');
+    body.className = 'comic-panel';
+    body.style.padding = 'var(--ng-space-4)';
+    body.style.maxWidth = '520px';
     body.style.display = 'flex';
     body.style.flexDirection = 'column';
-    body.style.gap = 'var(--ng-space-3)';
+    body.style.gap = '0';
+
+    // Scrollable list container
+    const listContainer = document.createElement('div');
+    listContainer.className = 'comic-list';
+
+    // Gear upgrades section
+    const gearSection = document.createElement('div');
+    gearSection.className = 'comic-section-title';
+    gearSection.textContent = '⛏️ GEAR';
+    listContainer.appendChild(gearSection);
 
     // Pickaxe upgrade
     if (state.pickaxeIdx + 1 < PICKAXES.length) {
       const next = PICKAXES[state.pickaxeIdx + 1];
-      body.appendChild(shopRow(
-        `${next.emoji}  ${next.name}`,
+      listContainer.appendChild(comicListItem(
+        next.emoji,
+        next.name,
         `Strength ${next.strength}`,
         next.cost,
         state.gold >= next.cost,
@@ -466,7 +574,7 @@
           state.pickaxeIdx++;
           NG.audio.play('upgrade');
           NG.modal.close();
-          openShop();
+          openShopUI();
         }
       ));
     }
@@ -474,8 +582,9 @@
     // Cart upgrade
     if (state.cartIdx + 1 < CARTS.length) {
       const next = CARTS[state.cartIdx + 1];
-      body.appendChild(shopRow(
-        `🛒  ${next.name}`,
+      listContainer.appendChild(comicListItem(
+        '🛒',
+        next.name,
         `Capacity ${next.size}`,
         next.cost,
         state.gold >= next.cost,
@@ -484,24 +593,78 @@
           state.cartIdx++;
           NG.audio.play('upgrade');
           NG.modal.close();
-          openShop();
+          openShopUI();
         }
       ));
     }
 
-    // Country travel
-    const travelTitle = document.createElement('div');
-    travelTitle.className = 'shop__title';
-    travelTitle.textContent = 'Travel to a country';
-    travelTitle.style.marginTop = 'var(--ng-space-3)';
-    body.appendChild(travelTitle);
+    // Cosmetics sections
+    const cosmeticsSections = [
+      { label: '🎩 HATS', items: COSMETICS.hats, type: 'hat' },
+      { label: '⛏️ PICKAXE SKINS', items: COSMETICS.pickaxeSkins, type: 'pickaxeSkin' },
+      { label: '🛒 CART SKINS', items: COSMETICS.cartSkins, type: 'cartSkin' },
+      { label: '⭐ TITLES', items: COSMETICS.titles, type: 'title' },
+    ];
+
+    cosmeticsSections.forEach(section => {
+      const title = document.createElement('div');
+      title.className = 'comic-section-title';
+      title.textContent = section.label;
+      listContainer.appendChild(title);
+
+      section.items.forEach(cosmetic => {
+        const owned = state.ownedCosmetics[cosmetic.id];
+        const equipped = state.equippedCosmetics[section.type] === cosmetic.id;
+        let costText, enabled, onClick;
+
+        if (owned) {
+          costText = equipped ? 'EQUIPPED' : 'EQUIP';
+          enabled = true;
+          onClick = () => {
+            if (!equipped) {
+              state.equippedCosmetics[section.type] = cosmetic.id;
+              NG.audio.play('upgrade');
+              NG.modal.close();
+              openShopUI();
+            }
+          };
+        } else {
+          costText = `💰 ${fmt(cosmetic.cost)}`;
+          enabled = state.gold >= cosmetic.cost;
+          onClick = () => {
+            state.gold -= cosmetic.cost;
+            state.ownedCosmetics[cosmetic.id] = true;
+            state.equippedCosmetics[section.type] = cosmetic.id;
+            NG.audio.play('upgrade');
+            NG.modal.close();
+            openShopUI();
+          };
+        }
+
+        listContainer.appendChild(comicListItem(
+          cosmetic.emoji,
+          cosmetic.name,
+          cosmetic.desc,
+          owned ? null : cosmetic.cost,
+          enabled,
+          onClick
+        ));
+      });
+    });
+
+    // Country travel section
+    const travelSection = document.createElement('div');
+    travelSection.className = 'comic-section-title';
+    travelSection.textContent = '🌍 TRAVEL';
+    listContainer.appendChild(travelSection);
 
     COUNTRIES.forEach(c => {
       if (c.id === state.countryId) return;
       const unlocked = state.countriesUnlocked[c.id] ||
-        state.gold + sellTotal >= c.unlockGold;
-      body.appendChild(shopRow(
-        `${c.flag}  ${c.name}`,
+        state.gold >= c.unlockGold;
+      listContainer.appendChild(comicListItem(
+        c.flag,
+        c.name,
         unlocked ? 'Travel here' : `Unlocks at 💰 ${fmt(c.unlockGold)}`,
         unlocked ? 0 : null,
         unlocked,
@@ -515,10 +678,12 @@
       ));
     });
 
+    body.appendChild(listContainer);
+
     NG.modal.open({
-      title: 'Shop',
+      title: '⛏️ UPGRADES',
       body,
-      actions: [{ label: 'Back to the mine', variant: 'primary' }],
+      actions: [{ label: '← BACK TO THE MINE', variant: 'primary' }],
     });
     updateUI();
     flushSave();
@@ -550,15 +715,18 @@
       world.player.col = WORLD.shopCol;
       NG.modal.close();
       render();  // full re-render to sync sprite position cleanly
-      NG.audio.play('coin');
+      // Arriving on the shop tile via the elevator counts as reaching it —
+      // trigger the same location-based sell as walking there directly.
+      openShop();
       flushSave();
     });
     body.appendChild(homeBtn);
 
-    const discovered = state.discoveredElevators[state.countryId] || [];
+    const discovered = state.discoveredElevators[state.countryId] || {};
 
     BANDS.forEach((b, idx) => {
-      const isDiscovered = discovered.includes(b.elevatorRow);
+      const spot = discovered[idx];
+      const isDiscovered = !!spot;
       const isCurrentLayer = idx === currLayer;
 
       const btn = document.createElement('button');
@@ -585,16 +753,8 @@
 
       if (isDiscovered && !isCurrentLayer) {
         btn.addEventListener('click', () => {
-          // Find the elevator tile in the destination row
-          let elevCol = 0;
-          for (let c = 0; c < WORLD.cols; c++) {
-            if (world.tiles[b.elevatorRow][c]?.isElevator) {
-              elevCol = c;
-              break;
-            }
-          }
-          world.player.row = b.elevatorRow;
-          world.player.col = elevCol;
+          world.player.row = spot.row;
+          world.player.col = spot.col;
           NG.modal.close();
           render();
           NG.audio.play('coin');
@@ -611,12 +771,28 @@
     });
   }
 
-  function shopRow(title, sub, cost, enabled, onClick) {
+  function comicListItem(icon, name, desc, cost, enabled, onClick) {
+    const item = document.createElement('button');
+    item.className = 'comic-list-item' + (enabled ? '' : ' disabled');
+    item.style.width = '100%';
+    item.innerHTML = `
+      <div class="comic-list-item__icon">${icon}</div>
+      <div class="comic-list-item__content">
+        <p class="comic-list-item__name">${name}</p>
+        <p class="comic-list-item__desc">${desc}</p>
+      </div>
+      <div class="comic-list-item__cost">${cost == null ? '' : (cost === 0 ? 'FREE' : '💰 ' + fmt(cost))}</div>
+    `;
+    if (enabled) item.addEventListener('click', onClick);
+    return item;
+  }
+
+  function shopRow(title, sub, cost, enabled, onClick, iconHtml) {
     const row = document.createElement('button');
     row.className = 'shop-item' + (enabled ? '' : ' is-unaffordable');
     row.style.width = '100%';
     row.innerHTML = `
-      <div class="shop-item__icon">${title.slice(0, 2).trim() || '•'}</div>
+      <div class="shop-item__icon">${iconHtml != null ? iconHtml : (title.slice(0, 2).trim() || '•')}</div>
       <div>
         <div class="shop-item__name">${title}</div>
         <div class="shop-item__sub">${sub}</div>
@@ -649,7 +825,35 @@
     if (!state.countriesUnlocked) state.countriesUnlocked = { norway: true };
     if (!state.worlds) state.worlds = {};
     if (!state.discoveredElevators) state.discoveredElevators = {};
-
+    if (!state.ownedCosmetics) state.ownedCosmetics = {};
+    if (!state.equippedCosmetics) {
+      state.equippedCosmetics = {
+        hat: null,
+        pickaxeSkin: null,
+        cartSkin: null,
+        title: null,
+      };
+    }
+    // Migrate old saves: discoveredElevators[countryId] used to be an array
+    // of row numbers, from when every band's elevator was pinned to one
+    // fixed row (elevatorRow). Elevators are now hidden at a fully random
+    // (row, col) within the band instead. A save with the old array shape
+    // means its cached worlds were generated under the old fixed-row rule,
+    // so those worlds must be discarded and regenerated too — otherwise the
+    // player keeps digging through an old-shape world forever, since
+    // getWorld() only generates a country's world once and caches it.
+    // Gold/pickaxe/cart progress is untouched; only the dug tunnels reset.
+    let hadOldElevatorShape = false;
+    Object.keys(state.discoveredElevators).forEach(cid => {
+      if (Array.isArray(state.discoveredElevators[cid])) {
+        hadOldElevatorShape = true;
+        state.discoveredElevators[cid] = {};
+      }
+    });
+    if (hadOldElevatorShape) {
+      state.worlds = {};
+      NG.toast('Mine layouts updated — elevators are now hidden at random spots!', { type: 'info', duration: 4000 });
+    }
 
     return true;
   }
@@ -744,7 +948,25 @@
     attachSwipeInput();
     window.addEventListener('keydown', onKey);
 
-    NG.on($('#btn-shop'), 'click', openShop);
+    // The topbar button only opens upgrades/travel — selling the cart is
+    // location-based and only triggers by walking onto the shop tile (interact()).
+    NG.on($('#btn-shop'), 'click', () => {
+      const { player } = getWorld();
+      const onShopTile = getWorld().tiles[player.row][player.col].type === 'shop';
+      if (onShopTile) { openShop(); return; }
+      const used = Object.values(state.cart).reduce((s, n) => s + n, 0);
+      if (used > 0) {
+        NG.toast('Walk to the 🏠 shop tile to sell your cart!', { type: 'info' });
+      }
+      openShopUI();
+    });
+    // Topbar shortcut to the same layer-select menu a physical elevator
+    // tile opens — lets the player travel between discovered layers without
+    // needing to find an elevator tile again at the surface.
+    NG.on($('#btn-elevator'), 'click', () => {
+      const { player } = getWorld();
+      openElevator(player.row, player.col);
+    });
     NG.on($('#btn-reset'), 'click', async () => {
       const ok = await NG.modal.confirm({
         title: 'Wipe save?',

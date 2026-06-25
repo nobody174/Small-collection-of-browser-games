@@ -251,6 +251,10 @@ NG.cards.makeDraggable = function (rootEl, options) {
   }
 
   function startTap(e, card, pile) {
+    // Capture pointer so move/up events keep arriving even if the finger
+    // drifts off the card during a tap (matches startDrag's behavior and
+    // avoids dropped taps on iOS during momentum scroll).
+    if (e.target.setPointerCapture) e.target.setPointerCapture(e.pointerId);
     const startX = e.clientX, startY = e.clientY;
     const now = Date.now();
 
@@ -315,12 +319,14 @@ NG.cards.makeDraggable = function (rootEl, options) {
       const r = rects[i];
       c.el.classList.add('is-dragging');
       c.el.style.zIndex = 9999 + i;
-      // Pin to fixed position so it tracks pointer regardless of scroll
+      // Pin to fixed position so it tracks pointer regardless of scroll.
+      // Position is set once via left/top; subsequent movement uses only
+      // `transform` (GPU-composited, no layout/reflow per frame).
       c.el.style.position = 'fixed';
       c.el.style.left = r.left + 'px';
       c.el.style.top  = r.top  + 'px';
       c.el.style.transform = 'translate(0, 0)';
-      c.el.style.willChange = 'left, top';
+      c.el.style.willChange = 'transform';
       c.el.style.pointerEvents = 'none';
     });
 
@@ -340,10 +346,8 @@ NG.cards.makeDraggable = function (rootEl, options) {
 
       if (!rafId) {
         rafId = requestAnimationFrame(() => {
-          group.forEach((c, i) => {
-            const r = rects[i];
-            c.el.style.left = (r.left + pendingDx) + 'px';
-            c.el.style.top  = (r.top  + pendingDy) + 'px';
+          group.forEach((c) => {
+            c.el.style.transform = `translate(${pendingDx}px, ${pendingDy}px)`;
           });
 
           // Visual feedback: highlight valid/invalid drop zones

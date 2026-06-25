@@ -41,6 +41,24 @@ NG.digger.COUNTRIES = [
     unlockGold: 25000,
     intro: 'Sakura skies, hidden rubies. Dig with grace.',
   },
+  {
+    id: 'egypt',
+    name: 'Egypt',
+    flag: '🇪🇬',
+    char: '🧑‍🏭',
+    decor: '🗿',
+    unlockGold: 100000,
+    intro: 'Sun-baked sand hides ancient sapphires. Dig deep, pharaoh.',
+  },
+  {
+    id: 'sweden',
+    name: 'Sweden',
+    flag: '🇸🇪',
+    char: '🧔‍♂️',
+    decor: '❄️',
+    unlockGold: 400000,
+    intro: 'Frozen tundra, the richest diamonds in the world. Bundle up.',
+  },
 ];
 
 
@@ -118,3 +136,36 @@ NG.digger.BANDS = [
 ];
 
 NG.digger.WORLD = { cols: 8, rows: 112, surfaceRow: 3, shopCol: 4 };
+
+
+/* --------------------------------------------------------
+   COSMETICS — purely visual, no gameplay effect
+   Player can buy hats, pickaxe skins, cart skins, & titles.
+   All earned cosmetics persist in state.ownedCosmetics.
+   -------------------------------------------------------- */
+NG.digger.COSMETICS = {
+  hats: [
+    { id: 'hat-viking',    name: 'Viking Helm',      emoji: '⚔️', cost: 500,   desc: 'Classic Norse headgear' },
+    { id: 'hat-sombrero',  name: 'Sombrero',         emoji: '🎩', cost: 800,   desc: 'Desert style' },
+    { id: 'hat-crown',     name: 'Golden Crown',     emoji: '👑', cost: 5000,  desc: 'Reign supreme' },
+    { id: 'hat-tophat',    name: 'Top Hat',          emoji: '🎩', cost: 2000,  desc: 'Classic elegance' },
+    { id: 'hat-hardhat',   name: 'Safety Helmet',    emoji: '🪖', cost: 300,   desc: 'Professional digger' },
+  ],
+  pickaxeSkins: [
+    { id: 'skin-golden',   name: 'Golden Pick',      emoji: '🟡', cost: 1000,  desc: 'Luxury mining tool' },
+    { id: 'skin-diamond',  name: 'Diamond Tipped',   emoji: '💎', cost: 3000,  desc: 'Most valuable' },
+    { id: 'skin-fire',     name: 'Flame Pick',       emoji: '🔥', cost: 2000,  desc: 'Burn through rock' },
+    { id: 'skin-ice',      name: 'Frost Pick',       emoji: '❄️', cost: 2000,  desc: 'Shatter stone' },
+  ],
+  cartSkins: [
+    { id: 'cart-gold',     name: 'Golden Cart',      emoji: '🟨', cost: 1500,  desc: 'Glittering hauler' },
+    { id: 'cart-crystal',  name: 'Crystal Wagon',    emoji: '✨', cost: 2500,  desc: 'Sparkling transport' },
+    { id: 'cart-steam',    name: 'Steam Engine',     emoji: '🚂', cost: 3000,  desc: 'Industrial power' },
+  ],
+  titles: [
+    { id: 'title-expert',  name: 'Expert Miner',     emoji: '⛏️', cost: 1000,  desc: 'You know your stuff' },
+    { id: 'title-dragon',  name: 'Dragon Slayer',    emoji: '🐉', cost: 5000,  desc: 'Legendary digger' },
+    { id: 'title-pharaoh', name: 'Pharaoh',          emoji: '👑', cost: 8000,  desc: 'Master of the sands' },
+    { id: 'title-legend',  name: 'Living Legend',    emoji: '⭐', cost: 10000, desc: 'Immortal fame' },
+  ],
+};

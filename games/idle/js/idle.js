@@ -97,9 +97,24 @@
     $('#click-power').innerHTML   = 'Click power: <b>' + fmt(clickPower()) + '</b>';
   }
 
-  // Render shop items (generators first, then upgrades).
-  // Re-render is fast enough at human click rates; we rebuild the DOM each tick.
+  // Tracks which generator/upgrade ids are currently rendered, so we know
+  // when the visible set changes (unlock, upgrade bought) and a structural
+  // rebuild is needed, vs. just refreshing cost/owned/affordability text.
+  let renderedGenIds = null;
+  let renderedUpgradeIds = null;
+
+  function visibleGenerators() {
+    return GENERATORS.filter(g => state.totalEarned >= g.unlockAt);
+  }
+  function visibleUpgrades() {
+    return UPGRADES.filter(u => !state.upgrades[u.id] && state.totalEarned >= u.cost * 0.25);
+  }
+
+  // Full DOM rebuild — only needed when the set of visible items changes.
   function renderShop() {
+    const visGens = visibleGenerators();
+    const visUps = visibleUpgrades();
+
     const shop = $('#shop-items');
     shop.innerHTML = '';
 
@@ -109,14 +124,11 @@
     genTitle.textContent = 'Generators';
     shop.appendChild(genTitle);
 
-    GENERATORS.forEach(g => {
-      if (state.totalEarned < g.unlockAt) return;
+    visGens.forEach(g => {
       const owned = state.generators[g.id] || 0;
-      const cost  = costOf(g);
-      const canBuy = state.coins >= cost;
-
       const item = document.createElement('button');
-      item.className = 'shop-item' + (canBuy ? '' : ' is-unaffordable');
+      item.className = 'shop-item';
+      item.dataset.genId = g.id;
       item.innerHTML = `
         <div class="shop-item__icon">${g.emoji}</div>
         <div>
@@ -124,8 +136,8 @@
           <div class="shop-item__sub">+${fmt(g.baseRate)}/s each · total ${fmt(g.baseRate * owned)}/s</div>
         </div>
         <div class="shop-item__right">
-          <div class="shop-item__cost">${fmt(cost)}</div>
-          <div class="shop-item__owned">×${owned}</div>
+          <div class="shop-item__cost"></div>
+          <div class="shop-item__owned"></div>
         </div>
       `;
       item.addEventListener('click', () => buyGenerator(g));
@@ -133,17 +145,16 @@
     });
 
     // Upgrades section
-    const visibleUpgrades = UPGRADES.filter(u => !state.upgrades[u.id] && state.totalEarned >= u.cost * 0.25);
-    if (visibleUpgrades.length) {
+    if (visUps.length) {
       const upTitle = document.createElement('div');
       upTitle.className = 'shop__title';
       upTitle.textContent = 'Click Upgrades';
       shop.appendChild(upTitle);
 
-      visibleUpgrades.forEach(u => {
-        const canBuy = state.coins >= u.cost;
+      visUps.forEach(u => {
         const item = document.createElement('button');
-        item.className = 'shop-item' + (canBuy ? '' : ' is-unaffordable');
+        item.className = 'shop-item';
+        item.dataset.upgradeId = u.id;
         item.innerHTML = `
           <div class="shop-item__icon">${u.emoji}</div>
           <div>
@@ -151,18 +162,83 @@
             <div class="shop-item__sub">× ${u.multiplier} click power</div>
           </div>
           <div class="shop-item__right">
-            <div class="shop-item__cost">${fmt(u.cost)}</div>
+            <div class="shop-item__cost"></div>
           </div>
         `;
         item.addEventListener('click', () => buyUpgrade(u));
         shop.appendChild(item);
       });
     }
+
+    renderedGenIds = visGens.map(g => g.id).join(',');
+    renderedUpgradeIds = visUps.map(u => u.id).join(',');
+    refreshShopValues();
+  }
+
+  // Lightweight update — refreshes cost/owned text and affordability class
+  // without touching the DOM structure or re-attaching listeners. Safe to
+  // call on every click and every tick.
+  function refreshShopValues() {
+    const visGens = visibleGenerators();
+    const visUps = visibleUpgrades();
+
+    // If the visible set changed (unlock crossed, upgrade purchased), rebuild structure.
+    if (visGens.map(g => g.id).join(',') !== renderedGenIds ||
+        visUps.map(u => u.id).join(',') !== renderedUpgradeIds) {
+      renderShop();
+      return;
+    }
+
+    visGens.forEach(g => {
+      const item = $(`.shop-item[data-gen-id="${g.id}"]`);
+      if (!item) return;
+      const owned = state.generators[g.id] || 0;
+      const cost = costOf(g);
+      item.classList.toggle('is-unaffordable', state.coins < cost);
+      item.querySelector('.shop-item__cost').textContent = fmt(cost);
+      item.querySelector('.shop-item__owned').textContent = '×' + owned;
+      item.querySelector('.shop-item__sub').textContent =
+        `+${fmt(g.baseRate)}/s each · total ${fmt(g.baseRate * owned)}/s`;
+    });
+
+    visUps.forEach(u => {
+      const item = $(`.shop-item[data-upgrade-id="${u.id}"]`);
+      if (!item) return;
+      item.classList.toggle('is-unaffordable', state.coins < u.cost);
+      item.querySelector('.shop-item__cost').textContent = fmt(u.cost);
+    });
   }
 
   /* --------------------------------------------------------
      ACTIONS
      -------------------------------------------------------- */
+
+  function spawnSprinkle(startX, startY) {
+    const sprinkleNum = Math.floor(Math.random() * 5) + 1;
+    const s = document.createElement('img');
+    s.src = `img/sprinkles/sprinkle${sprinkleNum}.png`;
+    s.className = 'sprinkle-particle';
+    s.style.left = startX + 'px';
+    s.style.top = startY + 'px';
+    document.body.appendChild(s);
+
+    // Random horizontal offset and rotation
+    const offsetX = Math.random() * 120 - 60;
+    const offsetY = 300 + Math.random() * 200;
+    const rotation = Math.random() * 360;
+    const duration = 800 + Math.random() * 400;
+
+    s.animate([
+      { transform: 'translate(-50%, -50%) rotate(0deg)', opacity: 1 },
+      { transform: `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px)) rotate(${rotation}deg)`, opacity: 0 }
+    ], {
+      duration,
+      easing: 'ease-out',
+      fill: 'forwards'
+    });
+
+    setTimeout(() => s.remove(), duration);
+  }
 
   function onDonutClick(e) {
     const power = clickPower();
@@ -182,6 +258,11 @@
     card.appendChild(float);
     setTimeout(() => float.remove(), 950);
 
+    // Sprinkle particle burst (20-30 sprinkles)
+    for (let i = 0; i < 25; i++) {
+      setTimeout(() => spawnSprinkle(e.clientX, e.clientY), i * 30);
+    }
+
     // Particle burst
     NG.particles.burst(e.clientX, e.clientY, {
       count: 6, spread: 36, size: 6,
@@ -198,7 +279,7 @@
     setTimeout(() => ripple.remove(), 600);
 
     renderTotals();
-    renderShop();
+    refreshShopValues();
   }
 
   function buyGenerator(g) {
@@ -238,6 +319,7 @@
     const earned = totalRate() * dt;
     if (earned > 0) earn(earned, 'tick');
     renderTotals();
+    refreshShopValues();
     requestAnimationFrame(tick);
   }
 
@@ -248,19 +330,33 @@
     state.lastSaveTime = Date.now();
     save.write(state);
   }
+  function isFiniteNonNegative(n) { return typeof n === 'number' && Number.isFinite(n) && n >= 0; }
+
   function tryRestore() {
     const data = save.read();
     if (!data) return false;
+
+    // Validate top-level numeric fields — a tampered/corrupted save with
+    // non-numeric values must not silently propagate NaN through earn()/costOf().
+    if (!isFiniteNonNegative(data.coins) || !isFiniteNonNegative(data.totalEarned) ||
+        !isFiniteNonNegative(data.clicks) || !isFiniteNonNegative(data.lastSaveTime)) {
+      return false;
+    }
+    if (typeof data.generators !== 'object' || data.generators === null) return false;
+    for (const g of GENERATORS) {
+      const owned = data.generators[g.id];
+      if (owned !== undefined && !isFiniteNonNegative(owned)) return false;
+    }
+
     Object.assign(state, data);
     // Ensure generator/upgrade objects exist for any newly-added IDs
     GENERATORS.forEach(g => { if (!(g.id in state.generators)) state.generators[g.id] = 0; });
-    if (!state.upgrades) state.upgrades = {};
+    if (!state.upgrades || typeof state.upgrades !== 'object') state.upgrades = {};
     return true;
   }
 
-  function applyOfflineEarnings() {
-    if (!state.lastSaveTime) return;
-    const awayMs = Date.now() - state.lastSaveTime;
+  function applyOfflineEarnings(sinceMs) {
+    const awayMs = sinceMs != null ? sinceMs : (state.lastSaveTime ? Date.now() - state.lastSaveTime : 0);
     if (awayMs < 30000) return;   // ignore < 30s away
     const capMs = 8 * 60 * 60 * 1000;   // cap 8 hours
     const effective = Math.min(awayMs, capMs);
@@ -294,6 +390,22 @@
     requestAnimationFrame(tick);
 
     NG.on($('#donut-btn'), 'click', onDonutClick);
+
+    // rAF ticks pause while the tab is backgrounded — catch up on the
+    // elapsed time when the user returns instead of losing that income.
+    let hiddenSince = null;
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        hiddenSince = Date.now();
+      } else if (hiddenSince != null) {
+        const awayMs = Date.now() - hiddenSince;
+        hiddenSince = null;
+        applyOfflineEarnings(awayMs);
+        renderTotals();
+        refreshShopValues();
+        lastTick = performance.now();
+      }
+    });
 
 
     NG.on($('#btn-reset'), 'click', async () => {

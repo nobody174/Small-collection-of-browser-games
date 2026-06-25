@@ -21,9 +21,24 @@
 
   <main class="ng-app">
 
+    <!-- Splash screen for first visit -->
+    <div class="card-splash" id="card-splash">
+      <div class="card-splash__content">
+        <img src="img/card-hero.png" alt="Klondike Solitaire" class="card-splash__image">
+        <div class="card-splash__footer">
+          <h2>🂮 Welcome to Klondike</h2>
+          <p>The classic Windows Solitaire. Build foundation piles in suit order from Ace to King.</p>
+          <button class="btn btn--primary" id="splash-start">Start Playing</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Top bar: title, stats, controls -->
     <header class="cards-topbar" style="width:100%; max-width: 1000px;">
-      <h1 class="ng-topbar__title">🂮 Klondike</h1>
+      <div style="display: flex; align-items: center; gap: var(--ng-space-2);">
+        <h1 class="ng-topbar__title">🂮 Klondike</h1>
+        <span class="badge badge--warning" id="daily-badge" style="display:none;">📅 DAILY</span>
+      </div>
 
       <div class="stats">
         <span class="badge" id="stat-moves">Moves: 0</span>
@@ -33,6 +48,9 @@
 
       <div class="stats">
         <button class="btn btn--ghost btn--sm" id="btn-undo">↶ Undo</button>
+        <button class="btn btn--ghost btn--sm" id="btn-hint">💡 Hint</button>
+        <button class="btn btn--ghost btn--sm" id="btn-daily" title="Daily Challenge">📅 Daily</button>
+        <button class="btn btn--ghost btn--sm" id="btn-stats">📊 Stats</button>
         <button class="btn btn--ghost btn--sm" id="btn-new">New game</button>
         <button class="btn btn--ghost btn--sm" id="btn-deck" title="Deck theme">🂮</button>
         <div class="volume-control"><button class="btn btn--ghost btn--sm btn--icon" id="btn-mute" title="Mute">🔊</button><input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="35" title="Volume"></div>
@@ -88,6 +106,10 @@
   <script src="../../shared/js/audio.js"></script>
   <script src="../../shared/js/particles.js"></script>
   <script src="../../shared/js/ui.js"></script>
+  <script src="../../shared/js/stats.js"></script>
+  <script src="../../shared/js/hints.js"></script>
+  <script src="../../shared/js/achievements.js"></script>
+  <script src="../../shared/js/seeded-random.js"></script>
 
   <!-- Card engine + Klondike rules + Deck themes -->
   <script src="js/card-engine.js"></script>

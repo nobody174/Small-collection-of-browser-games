@@ -41,7 +41,7 @@ test.describe('Donut Empire (Idle)', () => {
 
     const donutBtn = await page.locator('#donut-btn');
     await expect(donutBtn).toBeVisible();
-    await expect(donutBtn).toContainText('🍩');
+    await expect(donutBtn.locator('.donut-gfx')).toBeVisible();
   });
 
   test('clicking donut increases coins', async ({ page }) => {

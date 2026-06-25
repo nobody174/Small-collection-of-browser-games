@@ -34,6 +34,9 @@
   let startTs = Date.now();
   let timerId = null;
   let pendingSave = false;
+  let hintsUsed = 0;
+  const maxHints = 3;
+  let isDailyMode = false;
 
   const $ = NG.$;
   const save = NG.save.create('cards.klondike', { version: 1 });
@@ -67,7 +70,8 @@
     if (group && group.length > 1) return false;
     const top = pile.top();
     if (!top) return card.rank === 'A';
-    return top.suit === card.suit && top.value === card.value - 1;
+    // Card value must be exactly 1 more than the top card
+    return top.suit === card.suit && card.value === top.value + 1;
   }
 
   // Waste: only top card pickable
@@ -126,10 +130,19 @@
     history.length = 0;
     moves = 0;
     score = 0;
+    hintsUsed = 0;
     startTs = Date.now();
     updateStats();
 
-    const deck = NG.shuffle(NG.cards.createDeck());
+    // Use seeded shuffle for daily mode, random otherwise
+    let deck;
+    if (isDailyMode) {
+      const seed = NG.seededRandom.getTodaySeed();
+      const rng = new NG.SeededRandom(seed);
+      deck = NG.seededRandom.shuffle(NG.cards.createDeck(), rng);
+    } else {
+      deck = NG.shuffle(NG.cards.createDeck());
+    }
 
     // Place: column i gets (i+1) cards; only the top is face-up
     let idx = 0;
@@ -229,10 +242,12 @@
 
   /* --------------------------------------------------------
      After every move: flip newly-exposed tableau top,
-     update stats, check win, save.
+     auto-send eligible cards, update stats, check win, save.
      -------------------------------------------------------- */
   function afterMove() {
-    // Auto-flip face-down tableau tops
+    // Auto-flip face-down tableau tops — must run AFTER any card has been
+    // removed from a column (e.g. sent to a foundation via tap) so a newly
+    // exposed face-down card is never left stuck unturned.
     piles.tableau.forEach(p => {
       const t = p.top();
       if (t && !t.faceUp) {
@@ -263,9 +278,28 @@
     const total = piles.foundations.reduce((s, p) => s + p.size(), 0);
     if (total === 52) {
       stopTimer();
-      const elapsed = Math.floor((Date.now() - startTs) / 1000);
+      const elapsedMs = Date.now() - startTs;
+      const elapsedSecs = Math.floor(elapsedMs / 1000);
+
+      // Record this win in statistics
+      NG.stats.recordGame('klondike', true, score, elapsedMs);
+
+      // Check achievements
+      const newAchs = NG.achievements.checkWinAchievements('klondike', elapsedMs, score, hintsUsed);
+      NG.achievements.checkAchievements('klondike');
+      NG.achievements.checkCrossGameAchievements();
+
+      // Show achievements if unlocked
+      if (newAchs.length > 0) {
+        const achText = newAchs.map(a => `${a.emoji} ${a.name}`).join(' · ');
+        setTimeout(() => {
+          NG.toast(`🏆 Achievements unlocked: ${achText}`, { type: 'success', duration: 5000 });
+          NG.particles.confetti({ count: 40 });
+        }, 1500);
+      }
+
       $('#win-stats').textContent =
-        `${moves} moves · ${elapsed}s · score ${score}`;
+        `${moves} moves · ${elapsedSecs}s · score ${score}`;
       $('#win-banner').classList.add('is-open');
       NG.audio.play('success');
       // Big celebration
@@ -355,14 +389,218 @@
   }
 
   /* --------------------------------------------------------
+     Keyboard Shortcuts
+     -------------------------------------------------------- */
+  function onKeyDown(e) {
+    // Don't interfere with input fields
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+    const key = e.key.toLowerCase();
+    switch(key) {
+      case 'z': undo(); break;
+      case 'n':
+        NG.modal.confirm({
+          title: 'Start a new game?',
+          body: 'Your current progress will be discarded.',
+          confirmLabel: 'New game',
+        }).then(ok => {
+          if (ok) {
+            $('#win-banner').classList.remove('is-open');
+            deal();
+            startTs = Date.now();
+            startTimer();
+          }
+        });
+        break;
+      case '?': showHelp(); break;
+      case 'm':
+        const muted = NG.audio.toggleMuted();
+        NG.toast(muted ? 'Sound muted' : 'Sound unmuted');
+        break;
+    }
+  }
+
+  function showHelp() {
+    NG.modal.open({
+      title: '♠ Klondike Solitaire Rules',
+      body: document.createElement('div'),
+      actions: [{ label: 'Close', variant: 'primary' }],
+    });
+    const body = NG.modal.lastBody || document.querySelector('.modal__body');
+    if (body) {
+      body.innerHTML = `
+        <div style="text-align: left; font-size: 14px; line-height: 1.6;">
+          <h3>Objective</h3>
+          <p>Build all four suits from Ace to King on the foundations.</p>
+
+          <h3>Rules</h3>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li><strong>Tableau:</strong> Descending alternating colors (Red on Black)</li>
+            <li><strong>Foundation:</strong> Ascending by suit (A→K)</li>
+            <li><strong>Empty column:</strong> Only Kings allowed</li>
+            <li><strong>Stock/Waste:</strong> Click to cycle cards (recycled face-down)</li>
+          </ul>
+
+          <h3>Keyboard Shortcuts</h3>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li><strong>[Z]</strong> - Undo last move</li>
+            <li><strong>[N]</strong> - New game</li>
+            <li><strong>[M]</strong> - Mute/unmute sound</li>
+            <li><strong>[?]</strong> - Show this help</li>
+          </ul>
+        </div>
+      `;
+    }
+  }
+
+  function toggleDailyMode() {
+    isDailyMode = !isDailyMode;
+    const btn = $('#btn-daily');
+    const badge = $('#daily-badge');
+
+    if (isDailyMode) {
+      btn.classList.add('is-active');
+      if (badge) badge.style.display = 'inline-block';
+      NG.toast('Daily Challenge mode ON - Same puzzle for everyone today!', { type: 'success' });
+    } else {
+      btn.classList.remove('is-active');
+      if (badge) badge.style.display = 'none';
+      NG.toast('Daily Challenge mode OFF', { type: 'info' });
+    }
+
+    $('#win-banner').classList.remove('is-open');
+    deal();
+    startTs = Date.now();
+    startTimer();
+  }
+
+  function showHint() {
+    if (hintsUsed >= maxHints) {
+      NG.toast(`No more hints! (${maxHints}/${maxHints} used)`, { type: 'warning' });
+      return;
+    }
+
+    const hint = NG.hints.getBestMove(allPiles(), 'klondike');
+    if (!hint) {
+      NG.toast('No hints available (no legal moves found)', { type: 'info' });
+      return;
+    }
+
+    NG.hints.highlightMove(hint.card, hint.toPile);
+    score = Math.max(0, score - 20); // Penalty for using hint
+    hintsUsed++;
+    updateStats();
+
+    NG.toast(`Hint: Move to ${hint.toPile.type} (${hintsUsed}/${maxHints} hints used)`, { type: 'info' });
+  }
+
+  function showStats() {
+    const stats = NG.stats.getStats('klondike');
+    const winRate = NG.stats.getWinRate('klondike');
+    const avgTime = stats.gamesPlayed > 0 ? NG.stats.formatTime(stats.totalTime / stats.gamesPlayed) : '--:--';
+    const unlockedAchs = NG.achievements.getUnlocked('klondike');
+    const lockedAchs = NG.achievements.getLocked('klondike');
+
+    NG.modal.open({
+      title: '📊 Your Statistics',
+      body: document.createElement('div'),
+      actions: [
+        { label: 'Reset Stats', variant: 'ghost', onclick: () => {
+          NG.stats.reset('klondike');
+          NG.toast('Statistics reset', { type: 'success' });
+          NG.modal.close();
+        }},
+        { label: 'Close', variant: 'primary' }
+      ],
+    });
+    const body = NG.modal.lastBody || document.querySelector('.modal__body');
+    if (body) {
+      body.innerHTML = `
+        <div style="text-align: left; font-size: 14px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">GAMES PLAYED</div>
+              <div style="font-size: 32px; font-weight: bold; color: #7c5cff;">${stats.gamesPlayed}</div>
+            </div>
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">WIN RATE</div>
+              <div style="font-size: 32px; font-weight: bold; color: #22c55e;">${winRate}%</div>
+            </div>
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">CURRENT STREAK</div>
+              <div style="font-size: 32px; font-weight: bold; color: #f59e0b;">${stats.currentStreak}</div>
+            </div>
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">BEST STREAK</div>
+              <div style="font-size: 32px; font-weight: bold; color: #f59e0b;">${stats.bestStreak}</div>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px;">
+            <h4 style="margin: 10px 0; color: #7c5cff;">Performance</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; color: #666;">Best Score</td>
+                <td style="padding: 8px 0; text-align: right; font-weight: bold;">${stats.bestScore}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; color: #666;">Best Time</td>
+                <td style="padding: 8px 0; text-align: right; font-weight: bold;">${stats.bestTime ? NG.stats.formatTime(stats.bestTime) : '--:--'}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #666;">Average Time</td>
+                <td style="padding: 8px 0; text-align: right; font-weight: bold;">${avgTime}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px;">
+            <h4 style="margin: 10px 0; color: #7c5cff;">Achievements (${unlockedAchs.length})</h4>
+            ${unlockedAchs.length > 0 ? `
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 12px 0;">
+                ${unlockedAchs.map(a => `
+                  <div style="text-align: center; padding: 12px; background: #f0f0f0; border-radius: 8px; cursor: help;" title="${a.description}">
+                    <div style="font-size: 24px; margin-bottom: 4px;">${a.emoji}</div>
+                    <div style="font-size: 11px; font-weight: bold; color: #333;">${a.name}</div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : '<div style="color: #999; padding: 12px 0;">No achievements yet. Keep playing!</div>'}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  /* --------------------------------------------------------
+     Splash screen - always show until user clicks Start
+     -------------------------------------------------------- */
+  function setupSplashScreen() {
+    const splash = document.getElementById('card-splash');
+    if (!splash) return;
+
+    // Always show splash - user dismisses by clicking Start
+    const startBtn = document.getElementById('splash-start');
+    if (startBtn) {
+      startBtn.addEventListener('click', () => {
+        splash.classList.add('hidden');
+      });
+    }
+  }
+
+  /* --------------------------------------------------------
      Init
      -------------------------------------------------------- */
   function init() {
+    setupSplashScreen();
     buildPiles();
 
     // Try to restore a save; otherwise deal fresh
     if (!tryRestore()) deal();
     startTimer();
+
+    // Setup keyboard shortcuts
+    document.addEventListener('keydown', onKeyDown);
 
     // Wire drag/drop on the whole board
     NG.cards.makeDraggable(document.body, {
@@ -403,6 +641,9 @@
 
     // Buttons
     NG.on($('#btn-undo'), 'click', undo);
+    NG.on($('#btn-hint'), 'click', showHint);
+    NG.on($('#btn-daily'), 'click', toggleDailyMode);
+    NG.on($('#btn-stats'), 'click', showStats);
     NG.on($('#btn-new'),  'click', async () => {
       const ok = await NG.modal.confirm({
         title: 'Start a new game?',

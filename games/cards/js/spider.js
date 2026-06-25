@@ -34,6 +34,8 @@
   let score = 500;           // Spider starts with bonus that decreases per move
   let startTs = Date.now();
   let timerId = null;
+  let hintsUsed = 0;
+  const maxHints = 3;
 
   const save = NG.save.create('cards.spider', { version: 1 });
 
@@ -54,7 +56,9 @@
     return true;
   }
 
-  // Accept: empty pile → anything; non-empty → top is value+1 (any suit)
+  // Accept: empty pile → anything; non-empty → top is value+1, any suit.
+  // (canPickup already guarantees the dragged group is a valid same-suit
+  // descending run, so the destination only needs to match rank.)
   function spiderCanAccept(card, pile, fromPile) {
     const top = pile.top();
     if (!top) return true;
@@ -210,14 +214,17 @@
      check for completed K→A same-suit sequences, update stats, save.
      -------------------------------------------------------- */
   function afterMove() {
-    // Auto-flip the new top of each column
-    piles.tableau.forEach(p => {
-      const t = p.top();
-      if (t && !t.faceUp) {
-        t.setFaceUp(true, true);
-      }
-    });
-    checkCompletedSequences();
+    // Auto-flip the new top of each column and cascade sequence completion checks
+    let checkAgain = true;
+    while (checkAgain) {
+      piles.tableau.forEach(p => {
+        const t = p.top();
+        if (t && !t.faceUp) {
+          t.setFaceUp(true, true);
+        }
+      });
+      checkAgain = checkCompletedSequences();
+    }
     moves++;
     score = Math.max(0, score - 1);  // tiny per-move penalty (encourages thought)
     updateStats();
@@ -225,7 +232,7 @@
     flushSave();
   }
 
-  /* When a column ends with K-Q-J-...-A all same suit, remove those 13 */
+  /* When a column ends with K-Q-J-...-A all same suit, remove those 13. Returns true if any were removed. */
   function checkCompletedSequences() {
     let any = false;
     for (const p of piles.tableau) {
@@ -240,19 +247,18 @@
         }
       }
       if (valid) {
-        // Animate out then remove (simple: just remove for now)
         tail.forEach(c => c.el.remove());
         p.cards.splice(p.cards.length - 13, 13);
         p.relayout();
         completed++;
         score += 100;
         any = true;
+        NG.audio.play('success');
+        NG.particles.confetti({ count: 60 });
+        break;  // Only remove one sequence per check to allow proper cascading
       }
     }
-    if (any) {
-      NG.audio.play('success');
-      NG.particles.confetti({ count: 60 });
-    }
+    return any;
   }
 
   /* --------------------------------------------------------
@@ -261,7 +267,25 @@
   function checkWin() {
     if (completed >= 8) {
       stopTimer();
-      const elapsed = Math.floor((Date.now() - startTs) / 1000);
+      const elapsedMs = Date.now() - startTs;
+      const elapsed = Math.floor(elapsedMs / 1000);
+
+      // Record this win in statistics
+      NG.stats.recordGame('spider', true, score, elapsedMs);
+
+      // Check achievements
+      const newAchs = NG.achievements.checkWinAchievements('spider', elapsedMs, score, hintsUsed);
+      NG.achievements.checkAchievements('spider');
+      NG.achievements.checkCrossGameAchievements();
+
+      if (newAchs.length > 0) {
+        const achText = newAchs.map(a => `${a.emoji} ${a.name}`).join(' · ');
+        setTimeout(() => {
+          NG.toast(`🏆 Achievements unlocked: ${achText}`, { type: 'success', duration: 5000 });
+          NG.particles.confetti({ count: 40 });
+        }, 1500);
+      }
+
       $('#win-stats').textContent =
         `${moves} moves · ${elapsed}s · score ${score} · ${suits}-suit`;
       $('#win-banner').classList.add('is-open');
@@ -351,6 +375,169 @@
   }
 
   /* --------------------------------------------------------
+     Keyboard Shortcuts
+     -------------------------------------------------------- */
+  function onKeyDown(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+    const key = e.key.toLowerCase();
+    switch(key) {
+      case 'z': undo(); break;
+      case 'n':
+        NG.modal.confirm({
+          title: 'Start a new game?',
+          body: 'Current progress will be discarded.',
+          confirmLabel: 'New game'
+        }).then(ok => {
+          if (ok) setDifficulty(suits, true);
+        });
+        break;
+      case '?': showHelp(); break;
+      case 'm':
+        const muted = NG.audio.toggleMuted();
+        NG.toast(muted ? 'Sound muted' : 'Sound unmuted');
+        break;
+    }
+  }
+
+  function showHelp() {
+    NG.modal.open({
+      title: '🕷️ Spider Solitaire Rules',
+      body: document.createElement('div'),
+      actions: [{ label: 'Close', variant: 'primary' }],
+    });
+    const body = NG.modal.lastBody || document.querySelector('.modal__body');
+    if (body) {
+      body.innerHTML = `
+        <div style="text-align: left; font-size: 14px; line-height: 1.6;">
+          <h3>Objective</h3>
+          <p>Complete 8 sequences (K through A) of the same suit.</p>
+
+          <h3>Rules</h3>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li><strong>Tableau:</strong> Descending by rank (any suit)</li>
+            <li><strong>Groups:</strong> Only same-suit descending groups move together</li>
+            <li><strong>Stock:</strong> Deals 1 card to each column (all must be full)</li>
+            <li><strong>Removal:</strong> Completed K→A same-suit sequences auto-remove</li>
+          </ul>
+
+          <h3>Difficulty</h3>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li><strong>Easy:</strong> 1 suit (all spades)</li>
+            <li><strong>Medium:</strong> 2 suits (spades + hearts)</li>
+            <li><strong>Hard:</strong> 4 suits (full deck)</li>
+          </ul>
+
+          <h3>Keyboard Shortcuts</h3>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li><strong>[Z]</strong> - Undo last move</li>
+            <li><strong>[N]</strong> - New game</li>
+            <li><strong>[M]</strong> - Mute/unmute sound</li>
+            <li><strong>[?]</strong> - Show this help</li>
+          </ul>
+        </div>
+      `;
+    }
+  }
+
+  function showHint() {
+    if (hintsUsed >= maxHints) {
+      NG.toast(`No more hints! (${maxHints}/${maxHints} used)`, { type: 'warning' });
+      return;
+    }
+
+    const hint = NG.hints.getBestMove([piles.stock, ...piles.tableau], 'spider');
+    if (!hint) {
+      NG.toast('No hints available', { type: 'info' });
+      return;
+    }
+
+    NG.hints.highlightMove(hint.card, hint.toPile);
+    score = Math.max(0, score - 20);
+    hintsUsed++;
+    updateStats();
+
+    NG.toast(`Hint: Move to column (${hintsUsed}/${maxHints} hints used)`, { type: 'info' });
+  }
+
+  function showStats() {
+    const stats = NG.stats.getStats('spider');
+    const winRate = NG.stats.getWinRate('spider');
+    const avgTime = stats.gamesPlayed > 0 ? NG.stats.formatTime(stats.totalTime / stats.gamesPlayed) : '--:--';
+    const unlockedAchs = NG.achievements.getUnlocked('spider');
+
+    NG.modal.open({
+      title: '📊 Your Statistics',
+      body: document.createElement('div'),
+      actions: [
+        { label: 'Reset Stats', variant: 'ghost', onclick: () => {
+          NG.stats.reset('spider');
+          NG.toast('Statistics reset', { type: 'success' });
+          NG.modal.close();
+        }},
+        { label: 'Close', variant: 'primary' }
+      ],
+    });
+    const body = NG.modal.lastBody || document.querySelector('.modal__body');
+    if (body) {
+      body.innerHTML = `
+        <div style="text-align: left; font-size: 14px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">GAMES PLAYED</div>
+              <div style="font-size: 32px; font-weight: bold; color: #7c5cff;">${stats.gamesPlayed}</div>
+            </div>
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">WIN RATE</div>
+              <div style="font-size: 32px; font-weight: bold; color: #22c55e;">${winRate}%</div>
+            </div>
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">CURRENT STREAK</div>
+              <div style="font-size: 32px; font-weight: bold; color: #f59e0b;">${stats.currentStreak}</div>
+            </div>
+            <div>
+              <div style="font-weight: bold; color: #888; font-size: 12px;">BEST STREAK</div>
+              <div style="font-size: 32px; font-weight: bold; color: #f59e0b;">${stats.bestStreak}</div>
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px;">
+            <h4 style="margin: 10px 0; color: #7c5cff;">Performance</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; color: #666;">Best Score</td>
+                <td style="padding: 8px 0; text-align: right; font-weight: bold;">${stats.bestScore}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 8px 0; color: #666;">Best Time</td>
+                <td style="padding: 8px 0; text-align: right; font-weight: bold;">${stats.bestTime ? NG.stats.formatTime(stats.bestTime) : '--:--'}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #666;">Average Time</td>
+                <td style="padding: 8px 0; text-align: right; font-weight: bold;">${avgTime}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px;">
+            <h4 style="margin: 10px 0; color: #7c5cff;">Achievements (${unlockedAchs.length})</h4>
+            ${unlockedAchs.length > 0 ? `
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 12px 0;">
+                ${unlockedAchs.map(a => `
+                  <div style="text-align: center; padding: 12px; background: #f0f0f0; border-radius: 8px; cursor: help;" title="${a.description}">
+                    <div style="font-size: 24px; margin-bottom: 4px;">${a.emoji}</div>
+                    <div style="font-size: 11px; font-weight: bold; color: #333;">${a.name}</div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : '<div style="color: #999; padding: 12px 0;">No achievements yet. Keep playing!</div>'}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  /* --------------------------------------------------------
      Init
      -------------------------------------------------------- */
   function setDifficulty(s, forceNew = false) {
@@ -366,7 +553,21 @@
     }
   }
 
+  function setupSplashScreen() {
+    const splash = document.getElementById('card-splash');
+    if (!splash) return;
+
+    // Always show splash - user dismisses by clicking Start
+    const startBtn = document.getElementById('splash-start');
+    if (startBtn) {
+      startBtn.addEventListener('click', () => {
+        splash.classList.add('hidden');
+      });
+    }
+  }
+
   function init() {
+    setupSplashScreen();
     buildPiles();
 
     // Try to restore a saved game; otherwise deal a fresh 1-suit game
@@ -377,6 +578,9 @@
       setDifficulty(suits);
     }
     startTimer();
+
+    // Setup keyboard shortcuts
+    document.addEventListener('keydown', onKeyDown);
 
     NG.cards.makeDraggable(document.body, {
       piles: allPiles(),
@@ -393,6 +597,8 @@
 
     // Buttons
     NG.on($('#btn-undo'), 'click', undo);
+    NG.on($('#btn-hint'), 'click', showHint);
+    NG.on($('#btn-stats'), 'click', showStats);
     NG.on($('#btn-new'),  'click', async () => {
       const ok = await NG.modal.confirm({
         title: 'Start a new game?',

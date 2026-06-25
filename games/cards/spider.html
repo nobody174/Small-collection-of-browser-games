@@ -24,6 +24,14 @@
       overflow-x: auto;
       padding-bottom: var(--ng-space-3);
     }
+    /* Cards normally disable all touch gestures so dragging doesn't fight the
+       browser's scroll handling — but Spider's tableau row scrolls
+       horizontally, so allow a horizontal pan over cards too. The drag
+       handler still calls preventDefault() on pointerdown before a real
+       drag starts, so this doesn't break picking up cards. */
+    .spider-board .card {
+      touch-action: pan-x;
+    }
     /* Slightly smaller cards for Spider so the 10 columns breathe */
     body.spider-board {
       --card-w: 76px;
@@ -67,6 +75,18 @@
 
   <main class="ng-app">
 
+    <!-- Splash screen for first visit -->
+    <div class="card-splash" id="card-splash">
+      <div class="card-splash__content">
+        <img src="img/card-hero.png" alt="Spider Solitaire" class="card-splash__image">
+        <div class="card-splash__footer">
+          <h2>🕷️ Welcome to Spider</h2>
+          <p>Two decks, 10 columns. Remove all cards by building sequences down by rank.</p>
+          <button class="btn btn--primary" id="splash-start">Start Playing</button>
+        </div>
+      </div>
+    </div>
+
     <header class="cards-topbar" style="width:100%; max-width: 1100px;">
       <h1 class="ng-topbar__title">🕷️ Spider</h1>
 
@@ -79,6 +99,8 @@
 
       <div class="stats">
         <button class="btn btn--ghost btn--sm" id="btn-undo">↶ Undo</button>
+        <button class="btn btn--ghost btn--sm" id="btn-hint">💡 Hint</button>
+        <button class="btn btn--ghost btn--sm" id="btn-stats">📊 Stats</button>
         <button class="btn btn--ghost btn--sm" id="btn-new">New game</button>
         <button class="btn btn--ghost btn--sm" id="btn-deck" title="Deck theme">🂮</button>
         <div class="volume-control"><button class="btn btn--ghost btn--sm btn--icon" id="btn-mute" title="Mute">🔊</button><input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="35" title="Volume"></div>
@@ -140,6 +162,10 @@
   <script src="../../shared/js/audio.js"></script>
   <script src="../../shared/js/particles.js"></script>
   <script src="../../shared/js/ui.js"></script>
+  <script src="../../shared/js/stats.js"></script>
+  <script src="../../shared/js/hints.js"></script>
+  <script src="../../shared/js/achievements.js"></script>
+  <script src="../../shared/js/seeded-random.js"></script>
   <script src="js/card-engine.js"></script>
   <script src="js/deck-themes.js"></script>
   <script src="js/spider.js"></script>

@@ -25,12 +25,13 @@ const TUTORIAL = [
     id: 'l1', name: 'Blocked Path',
     cols: 5, rows: 4,
     blocks: [
-      { x: 2, y: 1, color: 'red'  },
-      { x: 2, y: 2, color: 'blue' },
+      { x: 1, y: 1, color: 'red'  },
+      { x: 3, y: 1, color: 'blue' },
+      { x: 2, y: 1, color: 'blocker', size: '1x1', blocker: true },
     ],
     doors: [
-      { side: 'top',  pos: 2, color: 'red'  },
-      { side: 'right', pos: 2, color: 'blue' },
+      { side: 'top',    pos: 1, color: 'red'  },
+      { side: 'bottom', pos: 3, color: 'blue' },
     ],
   },
   {
@@ -153,26 +154,26 @@ function generateLevel(idx) {
   let cols, rows, numGoalBlocks, numBlockers, blockSizeVariety, useNonSquare;
 
   if (level < 15) {
-    // Easy: small board, 3-4 colored blocks
+    // Easy: small board, 3-4 colored blocks, blockers appear early to keep it interesting
     cols = 4; rows = 4;
-    numGoalBlocks = 3 + Math.floor(level / 7);
-    numBlockers = 0;
+    numGoalBlocks = 3 + Math.floor(level / 6);
+    numBlockers = level < 9 ? 0 : 1;
     blockSizeVariety = 0;
     useNonSquare = false;
   } else if (level < 35) {
-    // Medium: larger board, 4-6 goal blocks, mixed sizes
+    // Medium: larger board, 4-6 goal blocks, mixed sizes, more blockers
     cols = 5 + Math.floor((level - 15) / 10);
     rows = 5 + Math.floor((level - 15) / 10);
     numGoalBlocks = 4 + Math.floor((level - 15) / 5);
-    numBlockers = 0;
+    numBlockers = 1 + Math.floor((level - 15) / 10);
     blockSizeVariety = 1;
     useNonSquare = level > 28;
   } else {
-    // Hard: bigger board, 5-8 goal blocks of mixed sizes
+    // Hard: bigger board, 5-8 goal blocks of mixed sizes, most blockers
     cols = 6 + Math.floor((level - 35) / 15);
     rows = 6 + Math.floor((level - 35) / 15);
     numGoalBlocks = 5 + Math.floor((level - 35) / 8);
-    numBlockers = 0;
+    numBlockers = 3 + Math.floor((level - 35) / 12);
     blockSizeVariety = 2;
     useNonSquare = true;
   }
@@ -180,7 +181,7 @@ function generateLevel(idx) {
   cols = Math.min(8, cols);
   rows = Math.min(8, rows);
   numGoalBlocks = Math.min(8, numGoalBlocks);
-  numBlockers = 0;  // blockers removed
+  numBlockers = Math.min(4, numBlockers);
 
   // Build list of valid cells (for non-square shapes, remove corners)
   const blockedCells = new Set();
@@ -200,6 +201,7 @@ function generateLevel(idx) {
   const doorEdgeCells = new Set();
   const usedPos = new Set([...blockedCells]);
   const blocks = [];
+  const laneCells = new Set();  // cells any goal block must cross to reach its door — off-limits for blockers
 
   // Weighted block size picker per difficulty
   function pickSize() {
@@ -271,8 +273,28 @@ function generateLevel(idx) {
         if (!doorPlaced) continue;  // couldn't place door on this side, try next side
 
         // Commit block and door
-        blocks.push({ x: ax, y: ay, color, size, blocker: false });
+        const blockDef = { x: ax, y: ay, color, size, blocker: false };
+        if (size === 'L') { blockDef.shape = positions.shape; blockDef.rotIndex = positions.rotIndex; }
+        blocks.push(blockDef);
         positions.forEach(p => usedPos.add(`${p.x},${p.y}`));
+
+        // Record the straight lane from the block's leading edge to the wall —
+        // a blocker placed here would make this block permanently unreachable.
+        if (exitSide === 'left' || exitSide === 'right') {
+          const minX = Math.min(...positions.map(p => p.x));
+          const maxX = Math.max(...positions.map(p => p.x));
+          posOptions.forEach(rowY => {
+            if (exitSide === 'left')  for (let lx = 0; lx < minX; lx++) laneCells.add(`${lx},${rowY}`);
+            if (exitSide === 'right') for (let lx = maxX + 1; lx < cols; lx++) laneCells.add(`${lx},${rowY}`);
+          });
+        } else {
+          const minY = Math.min(...positions.map(p => p.y));
+          const maxY = Math.max(...positions.map(p => p.y));
+          posOptions.forEach(colX => {
+            if (exitSide === 'top')    for (let ly = 0; ly < minY; ly++) laneCells.add(`${colX},${ly}`);
+            if (exitSide === 'bottom') for (let ly = maxY + 1; ly < rows; ly++) laneCells.add(`${colX},${ly}`);
+          });
+        }
         blockPlaced = true;
       }
     }
@@ -286,15 +308,18 @@ function generateLevel(idx) {
   // Mark door edge cells as off-limits for blockers
   doorEdgeCells.forEach(c => usedPos.add(c));
 
-  // Place blocker blocks — usedPos already excludes door-adjacent edge cells
+  // Place blocker blocks — must avoid occupied cells, door edges, AND any goal
+  // block's straight lane to its door (blockers are immovable, so sitting in
+  // a lane would make that block permanently unreachable).
   function placeBlocker() {
     let placed = false;
     let attempts = 0;
     while (!placed && attempts < 40) {
       const x = Math.floor(Math.random() * cols);
       const y = Math.floor(Math.random() * rows);
+      const key = `${x},${y}`;
       const positions = getBlockPositions(x, y, '1x1', cols, rows);
-      if (positions && !positions.some(p => usedPos.has(`${p.x},${p.y}`))) {
+      if (positions && !positions.some(p => usedPos.has(`${p.x},${p.y}`)) && !laneCells.has(key)) {
         blocks.push({ x, y, color: 'blocker', size: '1x1', blocker: true });
         positions.forEach(p => usedPos.add(`${p.x},${p.y}`));
         placed = true;
@@ -315,6 +340,19 @@ function generateLevel(idx) {
     blocks,
     doors,
   };
+}
+
+const L_ROTATIONS = [
+  [{x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}],
+  [{x: 0, y: 0}, {x: 1, y: 0}, {x: 1, y: 1}],
+  [{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}],
+  [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}],
+];
+function pickL() {
+  const idx = Math.floor(Math.random() * L_ROTATIONS.length);
+  const rot = L_ROTATIONS[idx];
+  rot.rotIndex = idx;
+  return rot;
 }
 
 function getBlockPositions(x, y, size, cols, rows) {
@@ -347,15 +385,14 @@ function getBlockPositions(x, y, size, cols, rows) {
       positions.push({ x, y }, { x: x+1, y }, { x, y: y+1 }, { x: x+1, y: y+1 }, { x, y: y+2 }, { x: x+1, y: y+2 });
     } else return null;
   } else if (size === 'L') {
-    const rotations = [
-      [{x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}],
-      [{x: 0, y: 0}, {x: 1, y: 0}, {x: 1, y: 1}],
-      [{x: 0, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}],
-      [{x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}],
-    ];
-    const rot = rotations[Math.floor(Math.random() * rotations.length)];
+    const rot = pickL();
     const valid = rot.every(r => x + r.x < cols && y + r.y < rows);
-    if (valid) return rot.map(r => ({ x: x + r.x, y: y + r.y }));
+    if (valid) {
+      const result = rot.map(r => ({ x: x + r.x, y: y + r.y }));
+      result.shape = rot;            // remember the chosen rotation for the caller
+      result.rotIndex = rot.rotIndex;
+      return result;
+    }
     return null;
   }
 

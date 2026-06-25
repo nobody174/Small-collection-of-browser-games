@@ -124,8 +124,8 @@ NG.audio = (function () {
     },
 
     error: () => tone({
-      freq: 220, glide: 110, duration: 0.18,
-      type: 'sawtooth', volume: 0.4, release: 0.15
+      freq: 220, glide: 110, duration: 0.10,
+      type: 'sine', volume: 0.15, release: 0.08
     }),
 
     swoosh: () => tone({
@@ -143,6 +143,11 @@ NG.audio = (function () {
     flip: () => tone({
       freq: 700, glide: 900, duration: 0.05,
       type: 'square', volume: 0.3, release: 0.05
+    }),
+
+    hover: () => tone({
+      freq: 800, duration: 0.03,
+      type: 'sine', volume: 0.1, release: 0.02
     }),
   };
 

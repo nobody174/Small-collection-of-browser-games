@@ -1,0 +1,38 @@
+<testsuites id="" name="" tests="17" failures="0" skipped="0" errors="0" time="12.913882">
+<testsuite name="idle.spec.ts" timestamp="2026-06-25T11:15:11.862Z" hostname="chromium" tests="17" failures="0" skipped="0" time="28.56" errors="0">
+<testcase name="Donut Empire (Idle) › idle game page loads" classname="idle.spec.ts" time="0.709">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin counter at 0" classname="idle.spec.ts" time="0.777">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin rate" classname="idle.spec.ts" time="0.701">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays click power" classname="idle.spec.ts" time="0.863">
+</testcase>
+<testcase name="Donut Empire (Idle) › donut button is clickable" classname="idle.spec.ts" time="0.813">
+</testcase>
+<testcase name="Donut Empire (Idle) › clicking donut increases coins" classname="idle.spec.ts" time="1.09">
+</testcase>
+<testcase name="Donut Empire (Idle) › shop displays generators" classname="idle.spec.ts" time="0.819">
+</testcase>
+<testcase name="Donut Empire (Idle) › reset button is visible" classname="idle.spec.ts" time="0.871">
+</testcase>
+<testcase name="Donut Empire (Idle) › mute button toggles state" classname="idle.spec.ts" time="0.818">
+</testcase>
+<testcase name="Donut Empire (Idle) › can navigate back to hub" classname="idle.spec.ts" time="0.688">
+</testcase>
+<testcase name="Idle - Persistence › game state saves to localStorage" classname="idle.spec.ts" time="6.287">
+</testcase>
+<testcase name="Idle - Persistence › game state restores after reload" classname="idle.spec.ts" time="10.579">
+</testcase>
+<testcase name="Idle - Persistence › corrupted save does not crash game" classname="idle.spec.ts" time="0.659">
+</testcase>
+<testcase name="Idle - Persistence › offline earnings message appears" classname="idle.spec.ts" time="1.136">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to mobile" classname="idle.spec.ts" time="0.579">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to tablet" classname="idle.spec.ts" time="0.593">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to desktop" classname="idle.spec.ts" time="0.578">
+</testcase>
+</testsuite>
+</testsuites>
