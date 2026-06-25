@@ -1,0 +1,27 @@
+name: Sync to Pi on Push
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PI_SSH_KEY }}" > ~/.ssh/pi_deploy_key
+          chmod 600 ~/.ssh/pi_deploy_key
+          ssh-keyscan -H pi-menu.local >> ~/.ssh/known_hosts 2>/dev/null || echo "Could not scan host key"
+
+      - name: Pull Latest on Pi
+        run: |
+          ssh -i ~/.ssh/pi_deploy_key vartdalffs@pi-menu.local << 'ENDSSH'
+          cd ~/browser-games
+          git fetch origin
+          git reset --hard origin/main || git reset --hard origin/master
+          echo "✅ Games synced to Pi at $(date)"
+          ENDSSH
