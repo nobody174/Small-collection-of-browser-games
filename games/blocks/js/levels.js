@@ -22,7 +22,65 @@ const COLORS_ARRAY = Object.keys(NG.blocks.COLORS);
    ============================================================ */
 const TUTORIAL = [
   {
-    id: 'l1', name: 'Blocked Path',
+    id: 'l1', name: 'Get Red Out',
+    cols: 4, rows: 3,
+    blocks: [
+      { x: 1, y: 1, color: 'red'  },
+    ],
+    doors: [
+      { side: 'top',    pos: 1, color: 'red'  },
+    ],
+  },
+  {
+    id: 'l2', name: 'Get Blue Out',
+    cols: 4, rows: 3,
+    blocks: [
+      { x: 2, y: 1, color: 'blue' },
+    ],
+    doors: [
+      { side: 'right', pos: 1, color: 'blue' },
+    ],
+  },
+  {
+    id: 'l3', name: 'Two Blocks',
+    cols: 5, rows: 3,
+    blocks: [
+      { x: 1, y: 1, color: 'red'  },
+      { x: 3, y: 1, color: 'blue' },
+    ],
+    doors: [
+      { side: 'top',  pos: 1, color: 'red'  },
+      { side: 'top',  pos: 3, color: 'blue' },
+    ],
+  },
+  {
+    id: 'l5', name: 'Push & Pull',
+    cols: 5, rows: 5,
+    blocks: [
+      { x: 1, y: 1, color: 'red'  },
+      { x: 3, y: 1, color: 'blue' },
+    ],
+    doors: [
+      { side: 'top',  pos: 1, color: 'red'  },
+      { side: 'top',  pos: 3, color: 'blue' },
+    ],
+  },
+  {
+    id: 'l6', name: 'Three Blocks',
+    cols: 5, rows: 4,
+    blocks: [
+      { x: 1, y: 1, color: 'red'  },
+      { x: 2, y: 2, color: 'blue' },
+      { x: 3, y: 1, color: 'green' },
+    ],
+    doors: [
+      { side: 'top',    pos: 1, color: 'red'  },
+      { side: 'right',  pos: 2, color: 'blue' },
+      { side: 'top',    pos: 3, color: 'green' },
+    ],
+  },
+  {
+    id: 'l7', name: 'Blocked Path',
     cols: 5, rows: 4,
     blocks: [
       { x: 1, y: 1, color: 'red'  },
@@ -35,31 +93,7 @@ const TUTORIAL = [
     ],
   },
   {
-    id: 'l2', name: 'Push & Pull',
-    cols: 5, rows: 5,
-    blocks: [
-      { x: 1, y: 1, color: 'red'  },
-      { x: 3, y: 1, color: 'blue' },
-    ],
-    doors: [
-      { side: 'top',  pos: 1, color: 'red'  },
-      { side: 'top',  pos: 3, color: 'blue' },
-    ],
-  },
-  {
-    id: 'l3', name: 'Sidestep',
-    cols: 5, rows: 2,
-    blocks: [
-      { x: 0, y: 0, color: 'red'  },
-      { x: 4, y: 0, color: 'blue' },
-    ],
-    doors: [
-      { side: 'right', pos: 0, color: 'red'  },
-      { side: 'left',  pos: 0, color: 'blue' },
-    ],
-  },
-  {
-    id: 'l4', name: 'Compass',
+    id: 'l8', name: 'Compass',
     cols: 5, rows: 5,
     blocks: [
       { x: 2, y: 1, color: 'red'    },
@@ -72,74 +106,6 @@ const TUTORIAL = [
       { side: 'right',  pos: 2, color: 'blue'   },
       { side: 'bottom', pos: 2, color: 'green'  },
       { side: 'left',   pos: 2, color: 'yellow' },
-    ],
-  },
-  {
-    id: 'l5', name: 'Shuffle',
-    cols: 3, rows: 3,
-    blocks: [
-      { x: 0, y: 0, color: 'red'   },
-      { x: 1, y: 0, color: 'blue'  },
-      { x: 2, y: 0, color: 'green' },
-    ],
-    doors: [
-      { side: 'top', pos: 2, color: 'red'   },
-      { side: 'top', pos: 1, color: 'blue'  },
-      { side: 'top', pos: 0, color: 'green' },
-    ],
-  },
-  {
-    id: 'l6', name: 'Crossroads',
-    cols: 5, rows: 5,
-    blocks: [
-      { x: 0, y: 2, color: 'red'    },
-      { x: 4, y: 2, color: 'blue'   },
-      { x: 2, y: 0, color: 'green'  },
-      { x: 2, y: 4, color: 'yellow' },
-    ],
-    doors: [
-      { side: 'right',  pos: 2, color: 'red'    },
-      { side: 'left',   pos: 2, color: 'blue'   },
-      { side: 'bottom', pos: 2, color: 'green'  },
-      { side: 'top',    pos: 2, color: 'yellow' },
-    ],
-  },
-  {
-    id: 'l7', name: 'Six pack',
-    cols: 5, rows: 5,
-    blocks: [
-      { x: 0, y: 0, color: 'red'    },
-      { x: 4, y: 0, color: 'orange' },
-      { x: 0, y: 4, color: 'green'  },
-      { x: 4, y: 4, color: 'blue'   },
-      { x: 2, y: 2, color: 'purple' },
-      { x: 1, y: 2, color: 'yellow' },
-    ],
-    doors: [
-      { side: 'top',    pos: 0, color: 'red'    },
-      { side: 'top',    pos: 4, color: 'orange' },
-      { side: 'bottom', pos: 0, color: 'green'  },
-      { side: 'bottom', pos: 4, color: 'blue'   },
-      { side: 'right',  pos: 2, color: 'purple' },
-      { side: 'left',   pos: 2, color: 'yellow' },
-    ],
-  },
-  {
-    id: 'l8', name: 'Logjam',
-    cols: 5, rows: 5,
-    blocks: [
-      { x: 1, y: 2, color: 'red'    },
-      { x: 2, y: 2, color: 'orange' },
-      { x: 3, y: 2, color: 'yellow' },
-      { x: 2, y: 1, color: 'green'  },
-      { x: 2, y: 3, color: 'blue'   },
-    ],
-    doors: [
-      { side: 'left',   pos: 2, color: 'red'    },
-      { side: 'top',    pos: 2, color: 'green'  },
-      { side: 'right',  pos: 2, color: 'yellow' },
-      { side: 'bottom', pos: 2, color: 'blue'   },
-      { side: 'right',  pos: 0, color: 'orange' },
     ],
   },
 ];
