@@ -71,19 +71,63 @@ body.digger-board {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ng-space-3);
+  gap: var(--ng-space-4);
   flex-wrap: wrap;
   width: 100%;
   max-width: 980px;
-  margin-bottom: var(--ng-space-3);
+  margin-bottom: var(--ng-space-4);
+  padding: var(--ng-space-3);
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.08), rgba(34, 197, 94, 0.08));
+  border-radius: var(--ng-radius-lg);
+  border: 1px solid rgba(124, 92, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.digger-topbar .ng-topbar__title {
+  font-size: 28px;
+  line-height: 1.2;
+  margin: 0;
 }
 
 .digger-stats {
   display: flex;
   gap: var(--ng-space-2);
   flex-wrap: wrap;
+  align-items: center;
 }
 
+
+/* Badge styling for stats */
+.digger-topbar + .digger-stats {
+  width: 100%;
+  max-width: 980px;
+  padding: var(--ng-space-3);
+  background: linear-gradient(135deg, rgba(255, 196, 107, 0.05), rgba(239, 68, 68, 0.05));
+  border-radius: var(--ng-radius-lg);
+  border: 1px solid rgba(255, 196, 107, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.digger-stats .badge {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(124, 92, 255, 0.25);
+  border-radius: var(--ng-radius-md);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.digger-stats .badge--warning {
+  border-color: rgba(255, 196, 107, 0.4);
+}
+
+.digger-stats .badge--success {
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.digger-stats .badge--primary {
+  border-color: rgba(124, 92, 255, 0.4);
+}
 
 /* ============================================================
    VIEWPORT — scrolls to follow the player as they dig deeper
@@ -96,12 +140,13 @@ body.digger-board {
   height: calc(var(--tile) * 11);
   overflow: hidden;
   border-radius: var(--ng-radius-lg);
-  box-shadow: var(--ng-shadow-md);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   background: var(--bedrock);
   margin: 0 auto;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .world {
@@ -472,30 +517,35 @@ body.digger-board {
 
 .cart {
   display: flex;
-  gap: var(--ng-space-2);
+  gap: var(--ng-space-3);
   flex-wrap: wrap;
   align-items: center;
-  margin-top: var(--ng-space-3);
-  padding: var(--ng-space-3);
-  background: var(--ng-bg-surface);
+  margin-top: var(--ng-space-4);
+  padding: var(--ng-space-4);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(59, 130, 246, 0.08));
   border-radius: var(--ng-radius-lg);
-  box-shadow: var(--ng-shadow-soft);
+  border: 1.5px solid rgba(34, 197, 94, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   width: 100%;
   max-width: 980px;
 }
 .cart__label {
-  font-weight: var(--ng-weight-bold);
+  font-weight: 700;
   color: var(--ng-text-strong);
+  font-size: var(--ng-text-md);
+  letter-spacing: 0.3px;
 }
 .cart__chip {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  background: var(--ng-bg-surface-2);
+  gap: 6px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+  border: 1.5px solid rgba(124, 92, 255, 0.3);
   border-radius: var(--ng-radius-pill);
   font-size: var(--ng-text-sm);
-  font-weight: var(--ng-weight-bold);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 

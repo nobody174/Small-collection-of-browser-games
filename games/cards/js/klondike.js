@@ -37,6 +37,7 @@
   let hintsUsed = 0;
   const maxHints = 3;
   let isDailyMode = false;
+  let drawMode = 1;  // 1 or 3 cards per tap
 
   const $ = NG.$;
   const save = NG.save.create('cards.klondike', { version: 1 });
@@ -164,22 +165,26 @@
   }
 
   /* --------------------------------------------------------
-     Stock tap — cycle a card to waste (or recycle waste back)
+     Stock tap — cycle cards to waste (draw 1 or 3, or recycle waste back)
      -------------------------------------------------------- */
   function onStockTap() {
     pushHistory();
     if (piles.stock.isEmpty()) {
-      // Move all waste cards back to stock (reversed, face-down)
+      // Recycle: move all waste cards back to stock (reversed, face-down)
+      // Infinite cycling with NO score penalty
       const wasteCards = piles.waste.cards.slice().reverse();
       wasteCards.forEach(c => {
         c.setFaceUp(false);
         piles.stock.push(c, { silent: true });
       });
-      score = Math.max(0, score - 100);   // small penalty for recycle
     } else {
-      const c = piles.stock.top();
-      c.setFaceUp(true);
-      piles.waste.push(c, { silent: true });
+      // Draw mode: 1 or 3 cards
+      for (let i = 0; i < drawMode; i++) {
+        if (piles.stock.isEmpty()) break;
+        const c = piles.stock.top();
+        c.setFaceUp(true);
+        piles.waste.push(c, { silent: true });
+      }
     }
     NG.audio.play('flip');
     afterMove();
@@ -332,12 +337,12 @@
   /* --------------------------------------------------------
      Save / load
      Lightweight — we save the visible game state (which card
-     is in which pile, face state, score, moves, startTs).
+     is in which pile, face state, score, moves, startTs, drawMode).
      -------------------------------------------------------- */
   function buildSaveData() {
     const cardKey = (c) => c.suit + ':' + c.rank;
     return {
-      score, moves, startTs,
+      score, moves, startTs, drawMode,
       piles: allPiles().map(p => ({
         pile: p.id,
         cards: p.cards.map(c => ({ key: cardKey(c), faceUp: c.faceUp })),
@@ -384,6 +389,7 @@
     score = data.score || 0;
     moves = data.moves || 0;
     startTs = data.startTs || Date.now();
+    drawMode = data.drawMode || 1;  // restore draw mode, default to 1
     updateStats();
     return true;
   }
@@ -589,15 +595,71 @@
   }
 
   /* --------------------------------------------------------
+     Draw mode selection - shown on new game
+     -------------------------------------------------------- */
+  async function selectDrawMode() {
+    return new Promise(resolve => {
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 9999;
+        backdrop-filter: blur(2px);
+      `;
+
+      const card = document.createElement('div');
+      card.style.cssText = `
+        background: var(--ng-bg-surface);
+        border-radius: var(--ng-radius-xl);
+        box-shadow: var(--ng-shadow-lg);
+        padding: var(--ng-space-6);
+        max-width: 420px;
+        text-align: center;
+      `;
+
+      card.innerHTML = `
+        <h2 style="margin: 0 0 var(--ng-space-3) 0; color: var(--ng-text-strong);">Draw Mode</h2>
+        <p style="margin: 0 0 var(--ng-space-5) 0; color: var(--ng-text-muted);">How many cards to draw per click?</p>
+        <div style="display: flex; gap: var(--ng-space-3);">
+          <button class="btn btn--primary" style="flex: 1;" id="draw-1">Draw 1</button>
+          <button class="btn btn--ghost" style="flex: 1;" id="draw-3">Draw 3</button>
+        </div>
+      `;
+
+      modal.appendChild(card);
+      document.body.appendChild(modal);
+
+      const handle = (mode) => {
+        modal.remove();
+        drawMode = mode;
+        resolve(mode);
+      };
+
+      card.querySelector('#draw-1').addEventListener('click', () => handle(1));
+      card.querySelector('#draw-3').addEventListener('click', () => handle(3));
+    });
+  }
+
+  /* --------------------------------------------------------
      Init
      -------------------------------------------------------- */
   function init() {
     setupSplashScreen();
     buildPiles();
 
-    // Try to restore a save; otherwise deal fresh
-    if (!tryRestore()) deal();
-    startTimer();
+    // Try to restore a save; otherwise show draw mode selection for fresh game
+    if (!tryRestore()) {
+      selectDrawMode().then(() => {
+        deal();
+        startTimer();
+      });
+    } else {
+      startTimer();
+    }
 
     // Setup keyboard shortcuts
     document.addEventListener('keydown', onKeyDown);
@@ -652,14 +714,16 @@
       });
       if (ok) {
         $('#win-banner').classList.remove('is-open');
+        await selectDrawMode();
         deal();
         startTs = Date.now();
         startTimer();
       }
     });
 
-    NG.on($('#win-again'), 'click', () => {
+    NG.on($('#win-again'), 'click', async () => {
       $('#win-banner').classList.remove('is-open');
+      await selectDrawMode();
       deal();
       startTs = Date.now();
       startTimer();

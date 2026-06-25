@@ -213,31 +213,41 @@
      ACTIONS
      -------------------------------------------------------- */
 
-  function spawnSprinkle(startX, startY) {
-    const sprinkleNum = Math.floor(Math.random() * 5) + 1;
-    const s = document.createElement('img');
-    s.src = `img/sprinkles/sprinkle${sprinkleNum}.png`;
-    s.className = 'sprinkle-particle';
-    s.style.left = startX + 'px';
-    s.style.top = startY + 'px';
-    document.body.appendChild(s);
+  function spawnFullScreenSprinkles() {
+    // Rain sprinkles from top of screen across entire viewport
+    const count = 30 + Math.random() * 20;  // 30-50 sprinkles per rain burst
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        const sprinkleNum = Math.floor(Math.random() * 5) + 1;
+        const s = document.createElement('img');
+        s.src = `img/sprinkles/sprinkle${sprinkleNum}.png`;
+        s.className = 'sprinkle-particle';
 
-    // Random horizontal offset and rotation
-    const offsetX = Math.random() * 120 - 60;
-    const offsetY = 300 + Math.random() * 200;
-    const rotation = Math.random() * 360;
-    const duration = 800 + Math.random() * 400;
+        // Random x position across full viewport width
+        const startX = Math.random() * window.innerWidth;
+        const startY = -20;  // Start above viewport
+        s.style.left = startX + 'px';
+        s.style.top = startY + 'px';
+        document.body.appendChild(s);
 
-    s.animate([
-      { transform: 'translate(-50%, -50%) rotate(0deg)', opacity: 1 },
-      { transform: `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px)) rotate(${rotation}deg)`, opacity: 0 }
-    ], {
-      duration,
-      easing: 'ease-out',
-      fill: 'forwards'
-    });
+        // Random fall distance (viewport height + buffer)
+        const fallDistance = window.innerHeight + 100;
+        const offsetX = (Math.random() - 0.5) * 200;  // -100 to +100px horizontal drift
+        const rotation = Math.random() * 360;
+        const duration = 1200 + Math.random() * 400;  // 1.2-1.6s fall time
 
-    setTimeout(() => s.remove(), duration);
+        s.animate([
+          { transform: 'translate(-50%, 0) rotate(0deg)', opacity: 1 },
+          { transform: `translate(calc(-50% + ${offsetX}px), ${fallDistance}px) rotate(${rotation}deg)`, opacity: 0 }
+        ], {
+          duration,
+          easing: 'ease-in',
+          fill: 'forwards'
+        });
+
+        setTimeout(() => s.remove(), duration);
+      }, i * 20);  // Stagger spawn for continuous rain effect
+    }
   }
 
   function onDonutClick(e) {
@@ -258,10 +268,8 @@
     card.appendChild(float);
     setTimeout(() => float.remove(), 950);
 
-    // Sprinkle particle burst (20-30 sprinkles)
-    for (let i = 0; i < 25; i++) {
-      setTimeout(() => spawnSprinkle(e.clientX, e.clientY), i * 30);
-    }
+    // Full-screen sprinkle rain (instead of localized burst)
+    spawnFullScreenSprinkles();
 
     // Particle burst
     NG.particles.burst(e.clientX, e.clientY, {
@@ -269,10 +277,12 @@
       colors: ['#ffc46b', '#ff9a4a', '#ff8fb1'],
     });
 
-    // Bounce + ripple ring on the donut
+    // Donut squish animation
     const btn = $('#donut-btn');
-    NG.replayAnim(btn, 'ng-press');
-    // Spawn a ripple ring that expands and fades
+    btn.classList.add('is-squishing');
+    setTimeout(() => btn.classList.remove('is-squishing'), 250);
+
+    // Ripple ring on the donut
     const ripple = document.createElement('span');
     ripple.className = 'donut-ripple';
     btn.appendChild(ripple);
