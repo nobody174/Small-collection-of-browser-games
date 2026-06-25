@@ -327,3 +327,154 @@ body.idle-board {
   z-index: var(--ng-z-floating);
   image-rendering: pixelated;
 }
+
+/* ============================================================
+   PHASE 1: WORD-CARD ENGINE
+   ============================================================ */
+
+.word-card {
+  position: fixed;
+  pointer-events: none;
+  z-index: var(--ng-z-floating);
+  font-family: var(--ng-font-display);
+  font-weight: var(--ng-weight-black);
+  text-align: center;
+  text-transform: uppercase;
+  animation: word-card-pop 2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  letter-spacing: 0.05em;
+}
+
+.word-card--sm { font-size: 32px; }
+.word-card--md { font-size: 48px; }
+.word-card--lg { font-size: 64px; }
+.word-card--xl { font-size: 96px; transform: scaleY(1.1); }
+
+@keyframes word-card-pop {
+  0% {
+    transform: scale(0.3) rotateZ(-15deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotateZ(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8) rotateZ(0deg);
+    opacity: 0;
+  }
+}
+
+/* Bonus icon that appears on milestone */
+.bonus-icon {
+  position: fixed;
+  font-size: 48px;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: var(--ng-z-floating);
+  animation: bonus-bounce 3s ease-in;
+}
+
+@keyframes bonus-bounce {
+  0% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.5) translateY(100px);
+    opacity: 0;
+  }
+}
+
+/* Donut buff state indicator */
+.donut-btn.has-buff .donut-gfx {
+  filter: drop-shadow(0 0 12px rgba(255, 200, 107, 0.8));
+  animation: buff-pulse 0.6s ease-in-out infinite;
+}
+
+@keyframes buff-pulse {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(255, 200, 107, 0.6)); }
+  50% { filter: drop-shadow(0 0 16px rgba(255, 200, 107, 1)); }
+}
+
+/* ============================================================
+   PHASE 2: TABS & UI OVERHAUL
+   ============================================================ */
+
+.shop__tabs {
+  display: flex;
+  gap: var(--ng-space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--ng-space-3);
+}
+
+.shop__tabs .btn {
+  flex: 1 1 auto;
+  min-width: 80px;
+  position: relative;
+}
+
+.shop__tabs .btn.is-active {
+  background: var(--ng-color-primary);
+  color: var(--ng-text-on-color);
+  border-color: var(--ng-color-primary);
+}
+
+.badge {
+  display: inline-block;
+  background: var(--ng-color-danger);
+  color: var(--ng-text-on-color);
+  padding: 2px 6px;
+  border-radius: var(--ng-radius-pill);
+  font-size: var(--ng-text-xs);
+  font-weight: var(--ng-weight-bold);
+  margin-left: var(--ng-space-1);
+}
+
+/* ============================================================
+   PHASE 4: WILDCARD MECHANICS UI
+   ============================================================ */
+
+.bakery-radio {
+  background: var(--ng-bg-surface-2);
+  color: var(--ng-text-muted);
+  padding: var(--ng-space-3);
+  border-radius: var(--ng-radius-md);
+  font-size: var(--ng-text-sm);
+  font-style: italic;
+  margin-bottom: var(--ng-space-3);
+  animation: ticker-scroll 6s linear infinite;
+}
+
+@keyframes ticker-scroll {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.health-inspector-event {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e72);
+  color: white;
+  padding: var(--ng-space-4);
+  border-radius: var(--ng-radius-md);
+  margin-bottom: var(--ng-space-3);
+  box-shadow: var(--ng-shadow-md);
+  animation: shake 0.3s ease-in-out;
+  text-align: center;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.rival-event {
+  background: var(--ng-bg-surface-2);
+  color: var(--ng-text-muted);
+  padding: var(--ng-space-3);
+  border-radius: var(--ng-radius-md);
+  margin-bottom: var(--ng-space-3);
+  font-size: var(--ng-text-sm);
+  border-left: 4px solid var(--ng-color-warning);
+}

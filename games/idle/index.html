@@ -24,6 +24,8 @@
     <header class="idle-topbar">
       <h1 class="ng-topbar__title">🍩 Donut Empire</h1>
       <div class="stats">
+        <button class="btn btn--ghost btn--sm" id="btn-evolve" title="Evolve your donut">Evolve</button>
+        <button class="btn btn--ghost btn--sm" id="btn-collection" title="Donut DNA Collection">Collection</button>
         <button class="btn btn--ghost btn--sm" id="btn-reset">Reset save</button>
         <div class="volume-control"><button class="btn btn--ghost btn--sm btn--icon" id="btn-mute" title="Mute">🔊</button><input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="35" title="Volume"></div>
         <a class="btn btn--ghost btn--sm" href="../../index.html">← Hub</a>
@@ -47,6 +49,7 @@
 
       <!-- Right side: shop -->
       <aside class="shop" id="shop">
+        <div id="bakery-radio-ticker" class="bakery-radio"></div>
         <div id="shop-items"></div>
       </aside>
 

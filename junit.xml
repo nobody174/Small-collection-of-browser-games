@@ -1,38 +1,2784 @@
-<testsuites id="" name="" tests="17" failures="0" skipped="0" errors="0" time="14.515636999999998">
-<testsuite name="idle.spec.ts" timestamp="2026-06-25T16:34:23.128Z" hostname="chromium" tests="17" failures="0" skipped="0" time="35.995" errors="0">
-<testcase name="Donut Empire (Idle) › idle game page loads" classname="idle.spec.ts" time="1.12">
+<testsuites id="" name="" tests="515" failures="5" skipped="0" errors="25" time="513.216058">
+<testsuite name="blocks.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="chromium" tests="20" failures="0" skipped="0" time="22.153" errors="0">
+<testcase name="Color Block Escape (Blocks) › game page loads with correct title" classname="blocks.spec.ts" time="1.134">
 </testcase>
-<testcase name="Donut Empire (Idle) › displays coin counter at 0" classname="idle.spec.ts" time="1.009">
+<testcase name="Color Block Escape (Blocks) › level 1 board renders" classname="blocks.spec.ts" time="1.03">
 </testcase>
-<testcase name="Donut Empire (Idle) › displays coin rate" classname="idle.spec.ts" time="1.363">
+<testcase name="Color Block Escape (Blocks) › blocks are rendered on board" classname="blocks.spec.ts" time="1.017">
 </testcase>
-<testcase name="Donut Empire (Idle) › displays click power" classname="idle.spec.ts" time="1.536">
+<testcase name="Color Block Escape (Blocks) › level header displays current level" classname="blocks.spec.ts" time="1.04">
 </testcase>
-<testcase name="Donut Empire (Idle) › donut button is clickable" classname="idle.spec.ts" time="1.519">
+<testcase name="Color Block Escape (Blocks) › move counter starts at 0" classname="blocks.spec.ts" time="1.069">
 </testcase>
-<testcase name="Donut Empire (Idle) › clicking donut increases coins" classname="idle.spec.ts" time="1.798">
+<testcase name="Color Block Escape (Blocks) › hint button is visible" classname="blocks.spec.ts" time="1.069">
 </testcase>
-<testcase name="Donut Empire (Idle) › shop displays generators" classname="idle.spec.ts" time="1.592">
+<testcase name="Color Block Escape (Blocks) › hint button pulses doors" classname="blocks.spec.ts" time="5.745">
 </testcase>
-<testcase name="Donut Empire (Idle) › reset button is visible" classname="idle.spec.ts" time="1.549">
+<testcase name="Color Block Escape (Blocks) › can select/deselect blocks" classname="blocks.spec.ts" time="1.097">
 </testcase>
-<testcase name="Donut Empire (Idle) › mute button toggles state" classname="idle.spec.ts" time="1.239">
+<testcase name="Color Block Escape (Blocks) › undo button is visible" classname="blocks.spec.ts" time="0.718">
 </testcase>
-<testcase name="Donut Empire (Idle) › can navigate back to hub" classname="idle.spec.ts" time="1.047">
+<testcase name="Color Block Escape (Blocks) › reset button is visible" classname="blocks.spec.ts" time="0.691">
 </testcase>
-<testcase name="Idle - Persistence › game state saves to localStorage" classname="idle.spec.ts" time="6.515">
+<testcase name="Color Block Escape (Blocks) › mute button toggles state" classname="blocks.spec.ts" time="0.786">
 </testcase>
-<testcase name="Idle - Persistence › game state restores after reload" classname="idle.spec.ts" time="10.768">
+<testcase name="Color Block Escape (Blocks) › level picker modal opens and closes" classname="blocks.spec.ts" time="0.806">
 </testcase>
-<testcase name="Idle - Persistence › corrupted save does not crash game" classname="idle.spec.ts" time="0.91">
+<testcase name="Color Block Escape (Blocks) › can navigate back to hub" classname="blocks.spec.ts" time="0.806">
 </testcase>
-<testcase name="Idle - Persistence › offline earnings message appears" classname="idle.spec.ts" time="1.457">
+<testcase name="Blocks - Persistence › progress saves and restores" classname="blocks.spec.ts" time="0.679">
 </testcase>
-<testcase name="Idle - Responsive Design › game adapts to mobile" classname="idle.spec.ts" time="0.903">
+<testcase name="Blocks - Persistence › cleared localStorage starts fresh game" classname="blocks.spec.ts" time="0.762">
 </testcase>
-<testcase name="Idle - Responsive Design › game adapts to tablet" classname="idle.spec.ts" time="0.811">
+<testcase name="Blocks - Persistence › corrupted save does not crash game" classname="blocks.spec.ts" time="0.768">
 </testcase>
-<testcase name="Idle - Responsive Design › game adapts to desktop" classname="idle.spec.ts" time="0.859">
+<testcase name="Blocks - Movement › block movement increases move counter" classname="blocks.spec.ts" time="0.896">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to mobile screen" classname="blocks.spec.ts" time="0.63">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to tablet screen" classname="blocks.spec.ts" time="0.701">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to desktop screen" classname="blocks.spec.ts" time="0.709">
+</testcase>
+</testsuite>
+<testsuite name="cards.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="chromium" tests="24" failures="1" skipped="0" time="168.367" errors="5">
+<testcase name="Cards - Klondike Solitaire › klondike page loads with correct title" classname="cards.spec.ts" time="0.938">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays board with piles" classname="cards.spec.ts" time="0.976">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays stats" classname="cards.spec.ts" time="1.318">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme button is visible" classname="cards.spec.ts" time="0.996">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme selector opens modal" classname="cards.spec.ts" time="30.218">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-chromium\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-chromium\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [chromium] › cards.spec.ts:61:7 › Cards - Klondike Solitaire › deck theme selector opens modal ───
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        56 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      62 |
+      63 |     const themeBtn = await page.locator('#btn-deck');
+    > 64 |     await themeBtn.click();
+         |                    ^
+      65 |
+      66 |     // Modal should open
+      67 |     const modal = await page.locator('.modal.is-open');
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:64:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-chromium\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can select different deck themes" classname="cards.spec.ts" time="30.218">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-chromium\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-chromium\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [chromium] › cards.spec.ts:72:7 › Cards - Klondike Solitaire › can select different deck themes ──
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        55 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      73 |
+      74 |     const themeBtn = await page.locator('#btn-deck');
+    > 75 |     await themeBtn.click();
+         |                    ^
+      76 |
+      77 |     // Click Superman theme
+      78 |     const supermanBtn = await page.locator('button:has-text("Superman")');
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:75:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-chromium\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › theme selection persists" classname="cards.spec.ts" time="30.216">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-chromium\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-chromium\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [chromium] › cards.spec.ts:93:7 › Cards - Klondike Solitaire › theme selection persists ──────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        55 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+
+
+       95 |     // Set theme to Superman
+       96 |     const themeBtn = await page.locator('#btn-deck');
+    >  97 |     await themeBtn.click();
+          |                    ^
+       98 |
+       99 |     const supermanBtn = await page.locator('button:has-text("Superman")');
+      100 |     if (await supermanBtn.isVisible()) {
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:97:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-chromium\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › undo button is visible" classname="cards.spec.ts" time="1.12">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › new game button is visible" classname="cards.spec.ts" time="1.173">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › mute button toggles" classname="cards.spec.ts" time="30.196">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-chromium\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-chromium\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [chromium] › cards.spec.ts:129:7 › Cards - Klondike Solitaire › mute button toggles ──────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-mute')
+        - locator resolved to <button title="Mute" id="btn-mute" class="btn btn--ghost btn--sm btn--icon">🔉</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        56 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      132 |     const initialText = await muteBtn.textContent();
+      133 |
+    > 134 |     await muteBtn.click();
+          |                   ^
+      135 |     const afterClick = await muteBtn.textContent();
+      136 |
+      137 |     expect(initialText).not.toBe(afterClick);
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:134:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-chromium\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can navigate back to variants" classname="cards.spec.ts" time="30.222">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-chromium\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-chromium\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [chromium] › cards.spec.ts:140:7 › Cards - Klondike Solitaire › can navigate back to variants ────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('a:has-text("← Variants")')
+        - locator resolved to <a href="index.html" class="btn btn--ghost btn--sm">← Variants</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        56 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      142 |     const backLink = await page.locator('a:has-text("← Variants")');
+      143 |     await expect(backLink).toBeVisible();
+    > 144 |     await backLink.click();
+          |                    ^
+      145 |
+      146 |     await page.waitForURL(/.*cards\/index\.html/);
+      147 |   });
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:144:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-chromium\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider page loads with correct title" classname="cards.spec.ts" time="0.947">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays board" classname="cards.spec.ts" time="0.865">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider has difficulty selector" classname="cards.spec.ts" time="0.774">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays completed sets counter" classname="cards.spec.ts" time="0.774">
+</testcase>
+<testcase name="Cards - FreeCell › freecell page loads with correct title" classname="cards.spec.ts" time="0.905">
+</testcase>
+<testcase name="Cards - FreeCell › freecell displays free cells and foundations" classname="cards.spec.ts" time="0.711">
+</testcase>
+<testcase name="Cards - Persistence › game state saves to localStorage" classname="cards.spec.ts" time="1.204">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-chromium\error-context.md]]
+]]>
+</system-out>
+<failure message="expect(received).toBeTruthy()" type="expect.toBeTruthy">
+<![CDATA[  [chromium] › cards.spec.ts:207:7 › Cards - Persistence › game state saves to localStorage ────────
+
+    Error: expect(received).toBeTruthy()
+
+    Received: null
+
+      219 |
+      220 |     // Should have some save data
+    > 221 |     expect(gameSave).toBeTruthy();
+          |                      ^
+      222 |
+      223 |     const saveData = JSON.parse(gameSave!);
+      224 |     expect(saveData.version).toBe(1);
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:221:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-chromium\error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="Cards - Persistence › deck theme persists across games" classname="cards.spec.ts" time="0.875">
+</testcase>
+<testcase name="Cards - Persistence › corrupted game save does not crash" classname="cards.spec.ts" time="0.721">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to mobile" classname="cards.spec.ts" time="0.638">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to tablet" classname="cards.spec.ts" time="0.734">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to desktop" classname="cards.spec.ts" time="0.95">
+</testcase>
+<testcase name="Cards - Responsive Design › dark theme is applied" classname="cards.spec.ts" time="0.678">
+</testcase>
+</testsuite>
+<testsuite name="digger-avatar-display.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="chromium" tests="1" failures="0" skipped="0" time="0.696" errors="0">
+<testcase name="Digger cosmetics avatar display shows equipped items" classname="digger-avatar-display.spec.js" time="0.696">
+<system-out>
+<![CDATA[✓ Cosmetics avatar display visible
+✓ Head image loaded
+✓ Avatar shows equipped items: "⚔️ Viking Helm"
+✓ Avatar display working perfectly!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger-comic-shop.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="chromium" tests="1" failures="0" skipped="0" time="0.869" errors="0">
+<testcase name="Digger comic-style shop displays correctly" classname="digger-comic-shop.spec.js" time="0.869">
+<system-out>
+<![CDATA[✓ Comic shop panel loaded
+✓ Found 6 section titles
+✓ Found 22 comic list items
+✓ Comic shop is scrollable with max-height constraint
+✓ Comic shop looks great!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger-cosmetics.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="chromium" tests="1" failures="0" skipped="0" time="1.125" errors="0">
+<testcase name="Digger cosmetics shop shows sections and allows purchases" classname="digger-cosmetics.spec.js" time="1.125">
+<system-out>
+<![CDATA[✓ All cosmetics sections visible in shop
+✓ Found 22 shop items in cosmetics menu
+✓ Cosmetics state structure is correct
+✓ Cosmetics shop fully functional!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="chromium" tests="25" failures="0" skipped="0" time="20.987" errors="0">
+<testcase name="Around the World Digger › digger game page loads" classname="digger.spec.ts" time="0.605">
+</testcase>
+<testcase name="Around the World Digger › displays viewport with world" classname="digger.spec.ts" time="0.584">
+</testcase>
+<testcase name="Around the World Digger › displays player sprite" classname="digger.spec.ts" time="0.564">
+</testcase>
+<testcase name="Around the World Digger › displays topbar with stats" classname="digger.spec.ts" time="0.578">
+</testcase>
+<testcase name="Around the World Digger › displays gold counter" classname="digger.spec.ts" time="0.556">
+</testcase>
+<testcase name="Around the World Digger › displays cart information" classname="digger.spec.ts" time="0.541">
+</testcase>
+<testcase name="Around the World Digger › shop button is visible" classname="digger.spec.ts" time="0.586">
+</testcase>
+<testcase name="Around the World Digger › reset button is visible" classname="digger.spec.ts" time="0.553">
+</testcase>
+<testcase name="Around the World Digger › mute button toggles state" classname="digger.spec.ts" time="0.587">
+</testcase>
+<testcase name="Around the World Digger › can navigate back to hub" classname="digger.spec.ts" time="0.628">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains tiles" classname="digger.spec.ts" time="0.603">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains various tile types" classname="digger.spec.ts" time="0.584">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › displays adjacent tile hints" classname="digger.spec.ts" time="0.632">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › elevator tiles are present" classname="digger.spec.ts" time="0.619">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › mineral visuals render" classname="digger.spec.ts" time="0.601">
+</testcase>
+<testcase name="Digger - Persistence › world state saves to localStorage" classname="digger.spec.ts" time="5.875">
+</testcase>
+<testcase name="Digger - Persistence › world persists across reloads" classname="digger.spec.ts" time="1.17">
+</testcase>
+<testcase name="Digger - Persistence › corrupted save does not crash game" classname="digger.spec.ts" time="0.675">
+</testcase>
+<testcase name="Digger - Persistence › multiple countries maintain separate worlds" classname="digger.spec.ts" time="0.585">
+</testcase>
+<testcase name="Digger - Movement › player can click adjacent tiles" classname="digger.spec.ts" time="0.637">
+</testcase>
+<testcase name="Digger - Movement › keyboard arrow keys work" classname="digger.spec.ts" time="0.656">
+</testcase>
+<testcase name="Digger - Movement › swipe/drag movement works on viewport" classname="digger.spec.ts" time="0.736">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to mobile" classname="digger.spec.ts" time="0.612">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to tablet" classname="digger.spec.ts" time="0.582">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to desktop" classname="digger.spec.ts" time="0.638">
+</testcase>
+</testsuite>
+<testsuite name="example.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="chromium" tests="2" failures="0" skipped="0" time="7.215" errors="0">
+<testcase name="has title" classname="example.spec.js" time="3.621">
+</testcase>
+<testcase name="get started link" classname="example.spec.js" time="3.594">
+</testcase>
+</testsuite>
+<testsuite name="idle-donut-image.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="chromium" tests="1" failures="0" skipped="0" time="0.91" errors="0">
+<testcase name="Idle donut image loads and displays correctly" classname="idle-donut-image.spec.js" time="0.91">
+<system-out>
+<![CDATA[✓ Donut image loaded successfully
+✓ Donut button is interactive
+✓ Donut click works smoothly
+✓ Donut Empire looks great with the new image!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="idle.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="chromium" tests="17" failures="0" skipped="0" time="25.314" errors="0">
+<testcase name="Donut Empire (Idle) › idle game page loads" classname="idle.spec.ts" time="0.542">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin counter at 0" classname="idle.spec.ts" time="0.567">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin rate" classname="idle.spec.ts" time="0.555">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays click power" classname="idle.spec.ts" time="0.522">
+</testcase>
+<testcase name="Donut Empire (Idle) › donut button is clickable" classname="idle.spec.ts" time="0.534">
+</testcase>
+<testcase name="Donut Empire (Idle) › clicking donut increases coins" classname="idle.spec.ts" time="0.713">
+</testcase>
+<testcase name="Donut Empire (Idle) › shop displays generators" classname="idle.spec.ts" time="0.539">
+</testcase>
+<testcase name="Donut Empire (Idle) › reset button is visible" classname="idle.spec.ts" time="0.522">
+</testcase>
+<testcase name="Donut Empire (Idle) › mute button toggles state" classname="idle.spec.ts" time="0.574">
+</testcase>
+<testcase name="Donut Empire (Idle) › can navigate back to hub" classname="idle.spec.ts" time="0.612">
+</testcase>
+<testcase name="Idle - Persistence › game state saves to localStorage" classname="idle.spec.ts" time="6.071">
+</testcase>
+<testcase name="Idle - Persistence › game state restores after reload" classname="idle.spec.ts" time="10.507">
+</testcase>
+<testcase name="Idle - Persistence › corrupted save does not crash game" classname="idle.spec.ts" time="0.53">
+</testcase>
+<testcase name="Idle - Persistence › offline earnings message appears" classname="idle.spec.ts" time="1.038">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to mobile" classname="idle.spec.ts" time="0.469">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to tablet" classname="idle.spec.ts" time="0.494">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to desktop" classname="idle.spec.ts" time="0.525">
+</testcase>
+</testsuite>
+<testsuite name="site.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="chromium" tests="11" failures="0" skipped="0" time="6.175" errors="0">
+<testcase name="New Games - Site Smoke Tests › hub page loads with correct title" classname="site.spec.ts" time="0.481">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub displays hero header" classname="site.spec.ts" time="0.493">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub shows all 4 game cards" classname="site.spec.ts" time="0.528">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards have correct titles" classname="site.spec.ts" time="0.516">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards are clickable links" classname="site.spec.ts" time="0.518">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hero button plays sound on click" classname="site.spec.ts" time="0.836">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › footer displays credit text" classname="site.spec.ts" time="0.528">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub navigation returns when clicking back from a game" classname="site.spec.ts" time="0.709">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to mobile viewport" classname="site.spec.ts" time="0.511">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to tablet viewport" classname="site.spec.ts" time="0.512">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to desktop viewport" classname="site.spec.ts" time="0.543">
+</testcase>
+</testsuite>
+<testsuite name="blocks.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="firefox" tests="20" failures="0" skipped="0" time="51.543" errors="0">
+<testcase name="Color Block Escape (Blocks) › game page loads with correct title" classname="blocks.spec.ts" time="1.533">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level 1 board renders" classname="blocks.spec.ts" time="1.244">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › blocks are rendered on board" classname="blocks.spec.ts" time="0.997">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level header displays current level" classname="blocks.spec.ts" time="2.39">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › move counter starts at 0" classname="blocks.spec.ts" time="0.778">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › hint button is visible" classname="blocks.spec.ts" time="1.083">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › hint button pulses doors" classname="blocks.spec.ts" time="6.199">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › can select/deselect blocks" classname="blocks.spec.ts" time="2.812">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › undo button is visible" classname="blocks.spec.ts" time="3.355">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › reset button is visible" classname="blocks.spec.ts" time="6.649">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › mute button toggles state" classname="blocks.spec.ts" time="1.311">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level picker modal opens and closes" classname="blocks.spec.ts" time="4.876">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › can navigate back to hub" classname="blocks.spec.ts" time="5.615">
+</testcase>
+<testcase name="Blocks - Persistence › progress saves and restores" classname="blocks.spec.ts" time="1.031">
+</testcase>
+<testcase name="Blocks - Persistence › cleared localStorage starts fresh game" classname="blocks.spec.ts" time="2.395">
+</testcase>
+<testcase name="Blocks - Persistence › corrupted save does not crash game" classname="blocks.spec.ts" time="2.406">
+</testcase>
+<testcase name="Blocks - Movement › block movement increases move counter" classname="blocks.spec.ts" time="2.409">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to mobile screen" classname="blocks.spec.ts" time="1.487">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to tablet screen" classname="blocks.spec.ts" time="1.833">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to desktop screen" classname="blocks.spec.ts" time="1.14">
+</testcase>
+</testsuite>
+<testsuite name="cards.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="firefox" tests="24" failures="1" skipped="0" time="180.579" errors="5">
+<testcase name="Cards - Klondike Solitaire › klondike page loads with correct title" classname="cards.spec.ts" time="2.212">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays board with piles" classname="cards.spec.ts" time="2.386">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays stats" classname="cards.spec.ts" time="1.482">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme button is visible" classname="cards.spec.ts" time="1.715">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme selector opens modal" classname="cards.spec.ts" time="30.191">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-firefox\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-firefox\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [firefox] › cards.spec.ts:61:7 › Cards - Klondike Solitaire › deck theme selector opens modal ────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        51 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      62 |
+      63 |     const themeBtn = await page.locator('#btn-deck');
+    > 64 |     await themeBtn.click();
+         |                    ^
+      65 |
+      66 |     // Modal should open
+      67 |     const modal = await page.locator('.modal.is-open');
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:64:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-firefox\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can select different deck themes" classname="cards.spec.ts" time="30.174">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-firefox\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-firefox\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [firefox] › cards.spec.ts:72:7 › Cards - Klondike Solitaire › can select different deck themes ───
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        49 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+
+
+      73 |
+      74 |     const themeBtn = await page.locator('#btn-deck');
+    > 75 |     await themeBtn.click();
+         |                    ^
+      76 |
+      77 |     // Click Superman theme
+      78 |     const supermanBtn = await page.locator('button:has-text("Superman")');
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:75:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-firefox\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › theme selection persists" classname="cards.spec.ts" time="30.181">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-firefox\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-firefox\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [firefox] › cards.spec.ts:93:7 › Cards - Klondike Solitaire › theme selection persists ───────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        50 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+       95 |     // Set theme to Superman
+       96 |     const themeBtn = await page.locator('#btn-deck');
+    >  97 |     await themeBtn.click();
+          |                    ^
+       98 |
+       99 |     const supermanBtn = await page.locator('button:has-text("Superman")');
+      100 |     if (await supermanBtn.isVisible()) {
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:97:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-firefox\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › undo button is visible" classname="cards.spec.ts" time="2.216">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › new game button is visible" classname="cards.spec.ts" time="2.21">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › mute button toggles" classname="cards.spec.ts" time="30.201">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-firefox\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-firefox\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [firefox] › cards.spec.ts:129:7 › Cards - Klondike Solitaire › mute button toggles ───────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-mute')
+        - locator resolved to <button title="Mute" id="btn-mute" class="btn btn--ghost btn--sm btn--icon">🔉</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        51 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      132 |     const initialText = await muteBtn.textContent();
+      133 |
+    > 134 |     await muteBtn.click();
+          |                   ^
+      135 |     const afterClick = await muteBtn.textContent();
+      136 |
+      137 |     expect(initialText).not.toBe(afterClick);
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:134:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-firefox\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can navigate back to variants" classname="cards.spec.ts" time="30.172">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-firefox\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-firefox\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [firefox] › cards.spec.ts:140:7 › Cards - Klondike Solitaire › can navigate back to variants ─────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('a:has-text("← Variants")')
+        - locator resolved to <a href="index.html" class="btn btn--ghost btn--sm">← Variants</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        51 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      142 |     const backLink = await page.locator('a:has-text("← Variants")');
+      143 |     await expect(backLink).toBeVisible();
+    > 144 |     await backLink.click();
+          |                    ^
+      145 |
+      146 |     await page.waitForURL(/.*cards\/index\.html/);
+      147 |   });
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:144:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-firefox\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider page loads with correct title" classname="cards.spec.ts" time="1.805">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays board" classname="cards.spec.ts" time="2.558">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider has difficulty selector" classname="cards.spec.ts" time="1.265">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays completed sets counter" classname="cards.spec.ts" time="1.495">
+</testcase>
+<testcase name="Cards - FreeCell › freecell page loads with correct title" classname="cards.spec.ts" time="1.188">
+</testcase>
+<testcase name="Cards - FreeCell › freecell displays free cells and foundations" classname="cards.spec.ts" time="0.918">
+</testcase>
+<testcase name="Cards - Persistence › game state saves to localStorage" classname="cards.spec.ts" time="1.622">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-firefox\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-firefox\error-context.md is missing]]>
+</system-err>
+<failure message="expect(received).toBeTruthy()" type="expect.toBeTruthy">
+<![CDATA[  [firefox] › cards.spec.ts:207:7 › Cards - Persistence › game state saves to localStorage ─────────
+
+    Error: expect(received).toBeTruthy()
+
+    Received: null
+
+      219 |
+      220 |     // Should have some save data
+    > 221 |     expect(gameSave).toBeTruthy();
+          |                      ^
+      222 |
+      223 |     const saveData = JSON.parse(gameSave!);
+      224 |     expect(saveData.version).toBe(1);
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:221:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-firefox\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-firefox\error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="Cards - Persistence › deck theme persists across games" classname="cards.spec.ts" time="1.228">
+</testcase>
+<testcase name="Cards - Persistence › corrupted game save does not crash" classname="cards.spec.ts" time="1.376">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to mobile" classname="cards.spec.ts" time="0.713">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to tablet" classname="cards.spec.ts" time="0.743">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to desktop" classname="cards.spec.ts" time="1.909">
+</testcase>
+<testcase name="Cards - Responsive Design › dark theme is applied" classname="cards.spec.ts" time="0.619">
+</testcase>
+</testsuite>
+<testsuite name="digger-avatar-display.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="firefox" tests="1" failures="0" skipped="0" time="0.754" errors="0">
+<testcase name="Digger cosmetics avatar display shows equipped items" classname="digger-avatar-display.spec.js" time="0.754">
+<system-out>
+<![CDATA[✓ Cosmetics avatar display visible
+✓ Head image loaded
+✓ Avatar shows equipped items: "⚔️ Viking Helm"
+✓ Avatar display working perfectly!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger-comic-shop.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="firefox" tests="1" failures="0" skipped="0" time="0.895" errors="0">
+<testcase name="Digger comic-style shop displays correctly" classname="digger-comic-shop.spec.js" time="0.895">
+<system-out>
+<![CDATA[✓ Comic shop panel loaded
+✓ Found 6 section titles
+✓ Found 22 comic list items
+✓ Comic shop is scrollable with max-height constraint
+✓ Comic shop looks great!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger-cosmetics.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="firefox" tests="1" failures="0" skipped="0" time="1.113" errors="0">
+<testcase name="Digger cosmetics shop shows sections and allows purchases" classname="digger-cosmetics.spec.js" time="1.113">
+<system-out>
+<![CDATA[✓ All cosmetics sections visible in shop
+✓ Found 22 shop items in cosmetics menu
+✓ Cosmetics state structure is correct
+✓ Cosmetics shop fully functional!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="firefox" tests="25" failures="0" skipped="0" time="25.045" errors="0">
+<testcase name="Around the World Digger › digger game page loads" classname="digger.spec.ts" time="0.582">
+</testcase>
+<testcase name="Around the World Digger › displays viewport with world" classname="digger.spec.ts" time="0.844">
+</testcase>
+<testcase name="Around the World Digger › displays player sprite" classname="digger.spec.ts" time="0.6">
+</testcase>
+<testcase name="Around the World Digger › displays topbar with stats" classname="digger.spec.ts" time="0.537">
+</testcase>
+<testcase name="Around the World Digger › displays gold counter" classname="digger.spec.ts" time="0.6">
+</testcase>
+<testcase name="Around the World Digger › displays cart information" classname="digger.spec.ts" time="0.565">
+</testcase>
+<testcase name="Around the World Digger › shop button is visible" classname="digger.spec.ts" time="0.528">
+</testcase>
+<testcase name="Around the World Digger › reset button is visible" classname="digger.spec.ts" time="0.991">
+</testcase>
+<testcase name="Around the World Digger › mute button toggles state" classname="digger.spec.ts" time="0.832">
+</testcase>
+<testcase name="Around the World Digger › can navigate back to hub" classname="digger.spec.ts" time="0.972">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains tiles" classname="digger.spec.ts" time="0.849">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains various tile types" classname="digger.spec.ts" time="0.792">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › displays adjacent tile hints" classname="digger.spec.ts" time="0.828">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › elevator tiles are present" classname="digger.spec.ts" time="0.989">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › mineral visuals render" classname="digger.spec.ts" time="0.834">
+</testcase>
+<testcase name="Digger - Persistence › world state saves to localStorage" classname="digger.spec.ts" time="6.127">
+</testcase>
+<testcase name="Digger - Persistence › world persists across reloads" classname="digger.spec.ts" time="1.548">
+</testcase>
+<testcase name="Digger - Persistence › corrupted save does not crash game" classname="digger.spec.ts" time="1.131">
+</testcase>
+<testcase name="Digger - Persistence › multiple countries maintain separate worlds" classname="digger.spec.ts" time="0.582">
+</testcase>
+<testcase name="Digger - Movement › player can click adjacent tiles" classname="digger.spec.ts" time="0.697">
+</testcase>
+<testcase name="Digger - Movement › keyboard arrow keys work" classname="digger.spec.ts" time="0.673">
+</testcase>
+<testcase name="Digger - Movement › swipe/drag movement works on viewport" classname="digger.spec.ts" time="0.903">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to mobile" classname="digger.spec.ts" time="0.668">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to tablet" classname="digger.spec.ts" time="0.716">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to desktop" classname="digger.spec.ts" time="0.657">
+</testcase>
+</testsuite>
+<testsuite name="example.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="firefox" tests="2" failures="0" skipped="0" time="1.992" errors="0">
+<testcase name="has title" classname="example.spec.js" time="0.818">
+</testcase>
+<testcase name="get started link" classname="example.spec.js" time="1.174">
+</testcase>
+</testsuite>
+<testsuite name="idle-donut-image.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="firefox" tests="1" failures="0" skipped="0" time="1.121" errors="0">
+<testcase name="Idle donut image loads and displays correctly" classname="idle-donut-image.spec.js" time="1.121">
+<system-out>
+<![CDATA[✓ Donut image loaded successfully
+✓ Donut button is interactive
+✓ Donut click works smoothly
+✓ Donut Empire looks great with the new image!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="idle.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="firefox" tests="17" failures="0" skipped="0" time="27.605" errors="0">
+<testcase name="Donut Empire (Idle) › idle game page loads" classname="idle.spec.ts" time="0.479">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin counter at 0" classname="idle.spec.ts" time="0.611">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin rate" classname="idle.spec.ts" time="0.569">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays click power" classname="idle.spec.ts" time="0.707">
+</testcase>
+<testcase name="Donut Empire (Idle) › donut button is clickable" classname="idle.spec.ts" time="0.766">
+</testcase>
+<testcase name="Donut Empire (Idle) › clicking donut increases coins" classname="idle.spec.ts" time="0.801">
+</testcase>
+<testcase name="Donut Empire (Idle) › shop displays generators" classname="idle.spec.ts" time="0.699">
+</testcase>
+<testcase name="Donut Empire (Idle) › reset button is visible" classname="idle.spec.ts" time="0.671">
+</testcase>
+<testcase name="Donut Empire (Idle) › mute button toggles state" classname="idle.spec.ts" time="0.65">
+</testcase>
+<testcase name="Donut Empire (Idle) › can navigate back to hub" classname="idle.spec.ts" time="0.721">
+</testcase>
+<testcase name="Idle - Persistence › game state saves to localStorage" classname="idle.spec.ts" time="7.004">
+</testcase>
+<testcase name="Idle - Persistence › game state restores after reload" classname="idle.spec.ts" time="10.984">
+</testcase>
+<testcase name="Idle - Persistence › corrupted save does not crash game" classname="idle.spec.ts" time="0.723">
+</testcase>
+<testcase name="Idle - Persistence › offline earnings message appears" classname="idle.spec.ts" time="1.07">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to mobile" classname="idle.spec.ts" time="0.384">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to tablet" classname="idle.spec.ts" time="0.35">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to desktop" classname="idle.spec.ts" time="0.416">
+</testcase>
+</testsuite>
+<testsuite name="site.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="firefox" tests="11" failures="0" skipped="0" time="11.573" errors="0">
+<testcase name="New Games - Site Smoke Tests › hub page loads with correct title" classname="site.spec.ts" time="0.526">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub displays hero header" classname="site.spec.ts" time="0.45">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub shows all 4 game cards" classname="site.spec.ts" time="0.503">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards have correct titles" classname="site.spec.ts" time="0.626">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards are clickable links" classname="site.spec.ts" time="0.487">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hero button plays sound on click" classname="site.spec.ts" time="0.743">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › footer displays credit text" classname="site.spec.ts" time="0.575">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub navigation returns when clicking back from a game" classname="site.spec.ts" time="1.256">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to mobile viewport" classname="site.spec.ts" time="2.952">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to tablet viewport" classname="site.spec.ts" time="0.721">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to desktop viewport" classname="site.spec.ts" time="2.734">
+</testcase>
+</testsuite>
+<testsuite name="blocks.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="webkit" tests="20" failures="0" skipped="0" time="35.097" errors="0">
+<testcase name="Color Block Escape (Blocks) › game page loads with correct title" classname="blocks.spec.ts" time="1.373">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level 1 board renders" classname="blocks.spec.ts" time="1.485">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › blocks are rendered on board" classname="blocks.spec.ts" time="1.598">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level header displays current level" classname="blocks.spec.ts" time="1.285">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › move counter starts at 0" classname="blocks.spec.ts" time="1.397">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › hint button is visible" classname="blocks.spec.ts" time="1.263">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › hint button pulses doors" classname="blocks.spec.ts" time="6.088">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › can select/deselect blocks" classname="blocks.spec.ts" time="1.388">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › undo button is visible" classname="blocks.spec.ts" time="1.285">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › reset button is visible" classname="blocks.spec.ts" time="1.243">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › mute button toggles state" classname="blocks.spec.ts" time="1.801">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level picker modal opens and closes" classname="blocks.spec.ts" time="1.676">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › can navigate back to hub" classname="blocks.spec.ts" time="1.949">
+</testcase>
+<testcase name="Blocks - Persistence › progress saves and restores" classname="blocks.spec.ts" time="1.374">
+</testcase>
+<testcase name="Blocks - Persistence › cleared localStorage starts fresh game" classname="blocks.spec.ts" time="1.809">
+</testcase>
+<testcase name="Blocks - Persistence › corrupted save does not crash game" classname="blocks.spec.ts" time="1.792">
+</testcase>
+<testcase name="Blocks - Movement › block movement increases move counter" classname="blocks.spec.ts" time="1.908">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to mobile screen" classname="blocks.spec.ts" time="1.186">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to tablet screen" classname="blocks.spec.ts" time="1.408">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to desktop screen" classname="blocks.spec.ts" time="1.789">
+</testcase>
+</testsuite>
+<testsuite name="cards.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="webkit" tests="24" failures="1" skipped="0" time="182.827" errors="5">
+<testcase name="Cards - Klondike Solitaire › klondike page loads with correct title" classname="cards.spec.ts" time="1.95">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays board with piles" classname="cards.spec.ts" time="1.731">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays stats" classname="cards.spec.ts" time="1.871">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme button is visible" classname="cards.spec.ts" time="1.568">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme selector opens modal" classname="cards.spec.ts" time="30.711">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-webkit\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-webkit\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [webkit] › cards.spec.ts:61:7 › Cards - Klondike Solitaire › deck theme selector opens modal ─────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        41 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      62 |
+      63 |     const themeBtn = await page.locator('#btn-deck');
+    > 64 |     await themeBtn.click();
+         |                    ^
+      65 |
+      66 |     // Modal should open
+      67 |     const modal = await page.locator('.modal.is-open');
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:64:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-webkit\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-webkit\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can select different deck themes" classname="cards.spec.ts" time="30.739">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-webkit\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-webkit\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [webkit] › cards.spec.ts:72:7 › Cards - Klondike Solitaire › can select different deck themes ────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        40 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      73 |
+      74 |     const themeBtn = await page.locator('#btn-deck');
+    > 75 |     await themeBtn.click();
+         |                    ^
+      76 |
+      77 |     // Click Superman theme
+      78 |     const supermanBtn = await page.locator('button:has-text("Superman")');
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:75:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-webkit\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-webkit\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › theme selection persists" classname="cards.spec.ts" time="30.806">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-webkit\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-webkit\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [webkit] › cards.spec.ts:93:7 › Cards - Klondike Solitaire › theme selection persists ────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        40 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+       95 |     // Set theme to Superman
+       96 |     const themeBtn = await page.locator('#btn-deck');
+    >  97 |     await themeBtn.click();
+          |                    ^
+       98 |
+       99 |     const supermanBtn = await page.locator('button:has-text("Superman")');
+      100 |     if (await supermanBtn.isVisible()) {
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:97:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-webkit\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-webkit\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › undo button is visible" classname="cards.spec.ts" time="1.884">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › new game button is visible" classname="cards.spec.ts" time="1.572">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › mute button toggles" classname="cards.spec.ts" time="30.611">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-webkit\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-webkit\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [webkit] › cards.spec.ts:129:7 › Cards - Klondike Solitaire › mute button toggles ────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-mute')
+        - locator resolved to <button title="Mute" id="btn-mute" class="btn btn--ghost btn--sm btn--icon">🔉</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        41 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      132 |     const initialText = await muteBtn.textContent();
+      133 |
+    > 134 |     await muteBtn.click();
+          |                   ^
+      135 |     const afterClick = await muteBtn.textContent();
+      136 |
+      137 |     expect(initialText).not.toBe(afterClick);
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:134:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-webkit\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-webkit\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can navigate back to variants" classname="cards.spec.ts" time="30.813">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-webkit\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-webkit\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [webkit] › cards.spec.ts:140:7 › Cards - Klondike Solitaire › can navigate back to variants ──────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('a:has-text("← Variants")')
+        - locator resolved to <a href="index.html" class="btn btn--ghost btn--sm">← Variants</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        41 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      142 |     const backLink = await page.locator('a:has-text("← Variants")');
+      143 |     await expect(backLink).toBeVisible();
+    > 144 |     await backLink.click();
+          |                    ^
+      145 |
+      146 |     await page.waitForURL(/.*cards\/index\.html/);
+      147 |   });
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:144:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-webkit\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-webkit\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider page loads with correct title" classname="cards.spec.ts" time="1.663">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays board" classname="cards.spec.ts" time="1.707">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider has difficulty selector" classname="cards.spec.ts" time="1.612">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays completed sets counter" classname="cards.spec.ts" time="1.345">
+</testcase>
+<testcase name="Cards - FreeCell › freecell page loads with correct title" classname="cards.spec.ts" time="1.279">
+</testcase>
+<testcase name="Cards - FreeCell › freecell displays free cells and foundations" classname="cards.spec.ts" time="1.301">
+</testcase>
+<testcase name="Cards - Persistence › game state saves to localStorage" classname="cards.spec.ts" time="1.624">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-webkit\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-webkit\error-context.md is missing]]>
+</system-err>
+<failure message="expect(received).toBeTruthy()" type="expect.toBeTruthy">
+<![CDATA[  [webkit] › cards.spec.ts:207:7 › Cards - Persistence › game state saves to localStorage ──────────
+
+    Error: expect(received).toBeTruthy()
+
+    Received: null
+
+      219 |
+      220 |     // Should have some save data
+    > 221 |     expect(gameSave).toBeTruthy();
+          |                      ^
+      222 |
+      223 |     const saveData = JSON.parse(gameSave!);
+      224 |     expect(saveData.version).toBe(1);
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:221:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-webkit\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-webkit\error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="Cards - Persistence › deck theme persists across games" classname="cards.spec.ts" time="1.586">
+</testcase>
+<testcase name="Cards - Persistence › corrupted game save does not crash" classname="cards.spec.ts" time="1.417">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to mobile" classname="cards.spec.ts" time="1.014">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to tablet" classname="cards.spec.ts" time="1.279">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to desktop" classname="cards.spec.ts" time="1.648">
+</testcase>
+<testcase name="Cards - Responsive Design › dark theme is applied" classname="cards.spec.ts" time="1.096">
+</testcase>
+</testsuite>
+<testsuite name="digger-avatar-display.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="webkit" tests="1" failures="0" skipped="0" time="1.358" errors="0">
+<testcase name="Digger cosmetics avatar display shows equipped items" classname="digger-avatar-display.spec.js" time="1.358">
+<system-out>
+<![CDATA[✓ Cosmetics avatar display visible
+✓ Head image loaded
+✓ Avatar shows equipped items: "⚔️ Viking Helm"
+✓ Avatar display working perfectly!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger-comic-shop.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="webkit" tests="1" failures="0" skipped="0" time="2.408" errors="0">
+<testcase name="Digger comic-style shop displays correctly" classname="digger-comic-shop.spec.js" time="2.408">
+<system-out>
+<![CDATA[✓ Comic shop panel loaded
+✓ Found 6 section titles
+✓ Found 22 comic list items
+✓ Comic shop is scrollable with max-height constraint
+✓ Comic shop looks great!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger-cosmetics.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="webkit" tests="1" failures="0" skipped="0" time="2.197" errors="0">
+<testcase name="Digger cosmetics shop shows sections and allows purchases" classname="digger-cosmetics.spec.js" time="2.197">
+<system-out>
+<![CDATA[✓ All cosmetics sections visible in shop
+✓ Found 22 shop items in cosmetics menu
+✓ Cosmetics state structure is correct
+✓ Cosmetics shop fully functional!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="webkit" tests="25" failures="0" skipped="0" time="40.153" errors="0">
+<testcase name="Around the World Digger › digger game page loads" classname="digger.spec.ts" time="1.053">
+</testcase>
+<testcase name="Around the World Digger › displays viewport with world" classname="digger.spec.ts" time="1.087">
+</testcase>
+<testcase name="Around the World Digger › displays player sprite" classname="digger.spec.ts" time="1.127">
+</testcase>
+<testcase name="Around the World Digger › displays topbar with stats" classname="digger.spec.ts" time="1.129">
+</testcase>
+<testcase name="Around the World Digger › displays gold counter" classname="digger.spec.ts" time="1.159">
+</testcase>
+<testcase name="Around the World Digger › displays cart information" classname="digger.spec.ts" time="1.183">
+</testcase>
+<testcase name="Around the World Digger › shop button is visible" classname="digger.spec.ts" time="1.164">
+</testcase>
+<testcase name="Around the World Digger › reset button is visible" classname="digger.spec.ts" time="1.065">
+</testcase>
+<testcase name="Around the World Digger › mute button toggles state" classname="digger.spec.ts" time="1.835">
+</testcase>
+<testcase name="Around the World Digger › can navigate back to hub" classname="digger.spec.ts" time="1.924">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains tiles" classname="digger.spec.ts" time="1.279">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains various tile types" classname="digger.spec.ts" time="1.392">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › displays adjacent tile hints" classname="digger.spec.ts" time="1.436">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › elevator tiles are present" classname="digger.spec.ts" time="1.32">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › mineral visuals render" classname="digger.spec.ts" time="1.403">
+</testcase>
+<testcase name="Digger - Persistence › world state saves to localStorage" classname="digger.spec.ts" time="7.105">
+</testcase>
+<testcase name="Digger - Persistence › world persists across reloads" classname="digger.spec.ts" time="2.113">
+</testcase>
+<testcase name="Digger - Persistence › corrupted save does not crash game" classname="digger.spec.ts" time="1.573">
+</testcase>
+<testcase name="Digger - Persistence › multiple countries maintain separate worlds" classname="digger.spec.ts" time="1.289">
+</testcase>
+<testcase name="Digger - Movement › player can click adjacent tiles" classname="digger.spec.ts" time="1.357">
+</testcase>
+<testcase name="Digger - Movement › keyboard arrow keys work" classname="digger.spec.ts" time="2.08">
+</testcase>
+<testcase name="Digger - Movement › swipe/drag movement works on viewport" classname="digger.spec.ts" time="1.849">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to mobile" classname="digger.spec.ts" time="0.865">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to tablet" classname="digger.spec.ts" time="0.979">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to desktop" classname="digger.spec.ts" time="1.387">
+</testcase>
+</testsuite>
+<testsuite name="example.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="webkit" tests="2" failures="0" skipped="0" time="2.03" errors="0">
+<testcase name="has title" classname="example.spec.js" time="0.761">
+</testcase>
+<testcase name="get started link" classname="example.spec.js" time="1.269">
+</testcase>
+</testsuite>
+<testsuite name="idle-donut-image.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="webkit" tests="1" failures="0" skipped="0" time="1.862" errors="0">
+<testcase name="Idle donut image loads and displays correctly" classname="idle-donut-image.spec.js" time="1.862">
+<system-out>
+<![CDATA[✓ Donut image loaded successfully
+✓ Donut button is interactive
+✓ Donut click works smoothly
+✓ Donut Empire looks great with the new image!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="idle.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="webkit" tests="17" failures="0" skipped="0" time="40.002" errors="0">
+<testcase name="Donut Empire (Idle) › idle game page loads" classname="idle.spec.ts" time="1.224">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin counter at 0" classname="idle.spec.ts" time="0.897">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin rate" classname="idle.spec.ts" time="1.202">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays click power" classname="idle.spec.ts" time="0.89">
+</testcase>
+<testcase name="Donut Empire (Idle) › donut button is clickable" classname="idle.spec.ts" time="0.923">
+</testcase>
+<testcase name="Donut Empire (Idle) › clicking donut increases coins" classname="idle.spec.ts" time="1.48">
+</testcase>
+<testcase name="Donut Empire (Idle) › shop displays generators" classname="idle.spec.ts" time="1.22">
+</testcase>
+<testcase name="Donut Empire (Idle) › reset button is visible" classname="idle.spec.ts" time="0.899">
+</testcase>
+<testcase name="Donut Empire (Idle) › mute button toggles state" classname="idle.spec.ts" time="1.472">
+</testcase>
+<testcase name="Donut Empire (Idle) › can navigate back to hub" classname="idle.spec.ts" time="1.612">
+</testcase>
+<testcase name="Idle - Persistence › game state saves to localStorage" classname="idle.spec.ts" time="6.626">
+</testcase>
+<testcase name="Idle - Persistence › game state restores after reload" classname="idle.spec.ts" time="14.277">
+</testcase>
+<testcase name="Idle - Persistence › corrupted save does not crash game" classname="idle.spec.ts" time="1.394">
+</testcase>
+<testcase name="Idle - Persistence › offline earnings message appears" classname="idle.spec.ts" time="2.119">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to mobile" classname="idle.spec.ts" time="1.171">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to tablet" classname="idle.spec.ts" time="1.14">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to desktop" classname="idle.spec.ts" time="1.456">
+</testcase>
+</testsuite>
+<testsuite name="site.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="webkit" tests="11" failures="0" skipped="0" time="15.53" errors="0">
+<testcase name="New Games - Site Smoke Tests › hub page loads with correct title" classname="site.spec.ts" time="1.271">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub displays hero header" classname="site.spec.ts" time="1.175">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub shows all 4 game cards" classname="site.spec.ts" time="1.262">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards have correct titles" classname="site.spec.ts" time="1.253">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards are clickable links" classname="site.spec.ts" time="1.248">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hero button plays sound on click" classname="site.spec.ts" time="1.749">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › footer displays credit text" classname="site.spec.ts" time="1.462">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub navigation returns when clicking back from a game" classname="site.spec.ts" time="2.463">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to mobile viewport" classname="site.spec.ts" time="1.231">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to tablet viewport" classname="site.spec.ts" time="1.165">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to desktop viewport" classname="site.spec.ts" time="1.251">
+</testcase>
+</testsuite>
+<testsuite name="blocks.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Chrome" tests="20" failures="0" skipped="0" time="20.845" errors="0">
+<testcase name="Color Block Escape (Blocks) › game page loads with correct title" classname="blocks.spec.ts" time="0.942">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level 1 board renders" classname="blocks.spec.ts" time="0.958">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › blocks are rendered on board" classname="blocks.spec.ts" time="0.621">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level header displays current level" classname="blocks.spec.ts" time="0.872">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › move counter starts at 0" classname="blocks.spec.ts" time="0.941">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › hint button is visible" classname="blocks.spec.ts" time="0.914">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › hint button pulses doors" classname="blocks.spec.ts" time="5.353">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › can select/deselect blocks" classname="blocks.spec.ts" time="0.774">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › undo button is visible" classname="blocks.spec.ts" time="0.736">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › reset button is visible" classname="blocks.spec.ts" time="0.692">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › mute button toggles state" classname="blocks.spec.ts" time="0.764">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level picker modal opens and closes" classname="blocks.spec.ts" time="0.757">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › can navigate back to hub" classname="blocks.spec.ts" time="0.74">
+</testcase>
+<testcase name="Blocks - Persistence › progress saves and restores" classname="blocks.spec.ts" time="0.677">
+</testcase>
+<testcase name="Blocks - Persistence › cleared localStorage starts fresh game" classname="blocks.spec.ts" time="0.7">
+</testcase>
+<testcase name="Blocks - Persistence › corrupted save does not crash game" classname="blocks.spec.ts" time="0.699">
+</testcase>
+<testcase name="Blocks - Movement › block movement increases move counter" classname="blocks.spec.ts" time="0.839">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to mobile screen" classname="blocks.spec.ts" time="0.717">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to tablet screen" classname="blocks.spec.ts" time="0.863">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to desktop screen" classname="blocks.spec.ts" time="1.286">
+</testcase>
+</testsuite>
+<testsuite name="cards.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Chrome" tests="24" failures="1" skipped="0" time="177.872" errors="5">
+<testcase name="Cards - Klondike Solitaire › klondike page loads with correct title" classname="cards.spec.ts" time="1.044">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays board with piles" classname="cards.spec.ts" time="1.643">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays stats" classname="cards.spec.ts" time="1.438">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme button is visible" classname="cards.spec.ts" time="1.615">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme selector opens modal" classname="cards.spec.ts" time="30.447">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-Mobile-Chrome\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-Mobile-Chrome\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [Mobile Chrome] › cards.spec.ts:61:7 › Cards - Klondike Solitaire › deck theme selector opens modal 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        57 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      62 |
+      63 |     const themeBtn = await page.locator('#btn-deck');
+    > 64 |     await themeBtn.click();
+         |                    ^
+      65 |
+      66 |     // Modal should open
+      67 |     const modal = await page.locator('.modal.is-open');
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:64:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-Mobile-Chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-Mobile-Chrome\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can select different deck themes" classname="cards.spec.ts" time="30.461">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-Mobile-Chrome\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-Mobile-Chrome\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [Mobile Chrome] › cards.spec.ts:72:7 › Cards - Klondike Solitaire › can select different deck themes 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        57 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      73 |
+      74 |     const themeBtn = await page.locator('#btn-deck');
+    > 75 |     await themeBtn.click();
+         |                    ^
+      76 |
+      77 |     // Click Superman theme
+      78 |     const supermanBtn = await page.locator('button:has-text("Superman")');
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:75:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-Mobile-Chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-Mobile-Chrome\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › theme selection persists" classname="cards.spec.ts" time="30.487">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-Mobile-Chrome\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-Mobile-Chrome\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [Mobile Chrome] › cards.spec.ts:93:7 › Cards - Klondike Solitaire › theme selection persists ─────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        57 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+       95 |     // Set theme to Superman
+       96 |     const themeBtn = await page.locator('#btn-deck');
+    >  97 |     await themeBtn.click();
+          |                    ^
+       98 |
+       99 |     const supermanBtn = await page.locator('button:has-text("Superman")');
+      100 |     if (await supermanBtn.isVisible()) {
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:97:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-Mobile-Chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-Mobile-Chrome\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › undo button is visible" classname="cards.spec.ts" time="0.924">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › new game button is visible" classname="cards.spec.ts" time="0.947">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › mute button toggles" classname="cards.spec.ts" time="30.502">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-Mobile-Chrome\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-Mobile-Chrome\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [Mobile Chrome] › cards.spec.ts:129:7 › Cards - Klondike Solitaire › mute button toggles ─────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-mute')
+        - locator resolved to <button title="Mute" id="btn-mute" class="btn btn--ghost btn--sm btn--icon">🔉</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        57 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      132 |     const initialText = await muteBtn.textContent();
+      133 |
+    > 134 |     await muteBtn.click();
+          |                   ^
+      135 |     const afterClick = await muteBtn.textContent();
+      136 |
+      137 |     expect(initialText).not.toBe(afterClick);
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:134:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-Mobile-Chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-Mobile-Chrome\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can navigate back to variants" classname="cards.spec.ts" time="30.526">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-Mobile-Chrome\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-Mobile-Chrome\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [Mobile Chrome] › cards.spec.ts:140:7 › Cards - Klondike Solitaire › can navigate back to variants 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('a:has-text("← Variants")')
+        - locator resolved to <a href="index.html" class="btn btn--ghost btn--sm">← Variants</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        57 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      142 |     const backLink = await page.locator('a:has-text("← Variants")');
+      143 |     await expect(backLink).toBeVisible();
+    > 144 |     await backLink.click();
+          |                    ^
+      145 |
+      146 |     await page.waitForURL(/.*cards\/index\.html/);
+      147 |   });
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:144:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-Mobile-Chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-Mobile-Chrome\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider page loads with correct title" classname="cards.spec.ts" time="1.331">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays board" classname="cards.spec.ts" time="1.142">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider has difficulty selector" classname="cards.spec.ts" time="1.077">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays completed sets counter" classname="cards.spec.ts" time="1.131">
+</testcase>
+<testcase name="Cards - FreeCell › freecell page loads with correct title" classname="cards.spec.ts" time="0.904">
+</testcase>
+<testcase name="Cards - FreeCell › freecell displays free cells and foundations" classname="cards.spec.ts" time="0.928">
+</testcase>
+<testcase name="Cards - Persistence › game state saves to localStorage" classname="cards.spec.ts" time="1.411">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-Mobile-Chrome\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-Mobile-Chrome\error-context.md is missing]]>
+</system-err>
+<failure message="expect(received).toBeTruthy()" type="expect.toBeTruthy">
+<![CDATA[  [Mobile Chrome] › cards.spec.ts:207:7 › Cards - Persistence › game state saves to localStorage ───
+
+    Error: expect(received).toBeTruthy()
+
+    Received: null
+
+      219 |
+      220 |     // Should have some save data
+    > 221 |     expect(gameSave).toBeTruthy();
+          |                      ^
+      222 |
+      223 |     const saveData = JSON.parse(gameSave!);
+      224 |     expect(saveData.version).toBe(1);
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:221:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-Mobile-Chrome\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-Mobile-Chrome\error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="Cards - Persistence › deck theme persists across games" classname="cards.spec.ts" time="1.377">
+</testcase>
+<testcase name="Cards - Persistence › corrupted game save does not crash" classname="cards.spec.ts" time="0.899">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to mobile" classname="cards.spec.ts" time="0.809">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to tablet" classname="cards.spec.ts" time="1.849">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to desktop" classname="cards.spec.ts" time="4.046">
+</testcase>
+<testcase name="Cards - Responsive Design › dark theme is applied" classname="cards.spec.ts" time="0.934">
+</testcase>
+</testsuite>
+<testsuite name="digger-avatar-display.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Chrome" tests="1" failures="0" skipped="0" time="1.029" errors="0">
+<testcase name="Digger cosmetics avatar display shows equipped items" classname="digger-avatar-display.spec.js" time="1.029">
+<system-out>
+<![CDATA[✓ Cosmetics avatar display visible
+✓ Head image loaded
+✓ Avatar shows equipped items: "⚔️ Viking Helm"
+✓ Avatar display working perfectly!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger-comic-shop.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Chrome" tests="1" failures="0" skipped="0" time="1.254" errors="0">
+<testcase name="Digger comic-style shop displays correctly" classname="digger-comic-shop.spec.js" time="1.254">
+<system-out>
+<![CDATA[✓ Comic shop panel loaded
+✓ Found 6 section titles
+✓ Found 22 comic list items
+✓ Comic shop is scrollable with max-height constraint
+✓ Comic shop looks great!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger-cosmetics.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Chrome" tests="1" failures="0" skipped="0" time="1.622" errors="0">
+<testcase name="Digger cosmetics shop shows sections and allows purchases" classname="digger-cosmetics.spec.js" time="1.622">
+<system-out>
+<![CDATA[✓ All cosmetics sections visible in shop
+✓ Found 22 shop items in cosmetics menu
+✓ Cosmetics state structure is correct
+✓ Cosmetics shop fully functional!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Chrome" tests="25" failures="0" skipped="0" time="25.616" errors="0">
+<testcase name="Around the World Digger › digger game page loads" classname="digger.spec.ts" time="0.743">
+</testcase>
+<testcase name="Around the World Digger › displays viewport with world" classname="digger.spec.ts" time="0.725">
+</testcase>
+<testcase name="Around the World Digger › displays player sprite" classname="digger.spec.ts" time="0.718">
+</testcase>
+<testcase name="Around the World Digger › displays topbar with stats" classname="digger.spec.ts" time="0.759">
+</testcase>
+<testcase name="Around the World Digger › displays gold counter" classname="digger.spec.ts" time="0.74">
+</testcase>
+<testcase name="Around the World Digger › displays cart information" classname="digger.spec.ts" time="0.75">
+</testcase>
+<testcase name="Around the World Digger › shop button is visible" classname="digger.spec.ts" time="0.74">
+</testcase>
+<testcase name="Around the World Digger › reset button is visible" classname="digger.spec.ts" time="0.754">
+</testcase>
+<testcase name="Around the World Digger › mute button toggles state" classname="digger.spec.ts" time="0.763">
+</testcase>
+<testcase name="Around the World Digger › can navigate back to hub" classname="digger.spec.ts" time="0.709">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains tiles" classname="digger.spec.ts" time="0.739">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains various tile types" classname="digger.spec.ts" time="0.76">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › displays adjacent tile hints" classname="digger.spec.ts" time="0.754">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › elevator tiles are present" classname="digger.spec.ts" time="0.771">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › mineral visuals render" classname="digger.spec.ts" time="0.767">
+</testcase>
+<testcase name="Digger - Persistence › world state saves to localStorage" classname="digger.spec.ts" time="6.073">
+</testcase>
+<testcase name="Digger - Persistence › world persists across reloads" classname="digger.spec.ts" time="1.242">
+</testcase>
+<testcase name="Digger - Persistence › corrupted save does not crash game" classname="digger.spec.ts" time="0.78">
+</testcase>
+<testcase name="Digger - Persistence › multiple countries maintain separate worlds" classname="digger.spec.ts" time="0.708">
+</testcase>
+<testcase name="Digger - Movement › player can click adjacent tiles" classname="digger.spec.ts" time="0.711">
+</testcase>
+<testcase name="Digger - Movement › keyboard arrow keys work" classname="digger.spec.ts" time="0.804">
+</testcase>
+<testcase name="Digger - Movement › swipe/drag movement works on viewport" classname="digger.spec.ts" time="0.839">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to mobile" classname="digger.spec.ts" time="0.857">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to tablet" classname="digger.spec.ts" time="1.052">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to desktop" classname="digger.spec.ts" time="1.358">
+</testcase>
+</testsuite>
+<testsuite name="example.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Chrome" tests="2" failures="0" skipped="0" time="1.039" errors="0">
+<testcase name="has title" classname="example.spec.js" time="0.565">
+</testcase>
+<testcase name="get started link" classname="example.spec.js" time="0.474">
+</testcase>
+</testsuite>
+<testsuite name="idle-donut-image.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Chrome" tests="1" failures="0" skipped="0" time="1.065" errors="0">
+<testcase name="Idle donut image loads and displays correctly" classname="idle-donut-image.spec.js" time="1.065">
+<system-out>
+<![CDATA[✓ Donut image loaded successfully
+✓ Donut button is interactive
+✓ Donut click works smoothly
+✓ Donut Empire looks great with the new image!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="idle.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Chrome" tests="17" failures="0" skipped="0" time="29.517" errors="0">
+<testcase name="Donut Empire (Idle) › idle game page loads" classname="idle.spec.ts" time="0.645">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin counter at 0" classname="idle.spec.ts" time="0.678">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin rate" classname="idle.spec.ts" time="0.636">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays click power" classname="idle.spec.ts" time="0.674">
+</testcase>
+<testcase name="Donut Empire (Idle) › donut button is clickable" classname="idle.spec.ts" time="0.687">
+</testcase>
+<testcase name="Donut Empire (Idle) › clicking donut increases coins" classname="idle.spec.ts" time="0.899">
+</testcase>
+<testcase name="Donut Empire (Idle) › shop displays generators" classname="idle.spec.ts" time="0.738">
+</testcase>
+<testcase name="Donut Empire (Idle) › reset button is visible" classname="idle.spec.ts" time="0.789">
+</testcase>
+<testcase name="Donut Empire (Idle) › mute button toggles state" classname="idle.spec.ts" time="0.896">
+</testcase>
+<testcase name="Donut Empire (Idle) › can navigate back to hub" classname="idle.spec.ts" time="0.749">
+</testcase>
+<testcase name="Idle - Persistence › game state saves to localStorage" classname="idle.spec.ts" time="6.293">
+</testcase>
+<testcase name="Idle - Persistence › game state restores after reload" classname="idle.spec.ts" time="10.888">
+</testcase>
+<testcase name="Idle - Persistence › corrupted save does not crash game" classname="idle.spec.ts" time="0.803">
+</testcase>
+<testcase name="Idle - Persistence › offline earnings message appears" classname="idle.spec.ts" time="1.292">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to mobile" classname="idle.spec.ts" time="0.712">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to tablet" classname="idle.spec.ts" time="0.936">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to desktop" classname="idle.spec.ts" time="1.202">
+</testcase>
+</testsuite>
+<testsuite name="site.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Chrome" tests="11" failures="0" skipped="0" time="8.191" errors="0">
+<testcase name="New Games - Site Smoke Tests › hub page loads with correct title" classname="site.spec.ts" time="0.682">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub displays hero header" classname="site.spec.ts" time="0.657">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub shows all 4 game cards" classname="site.spec.ts" time="0.661">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards have correct titles" classname="site.spec.ts" time="0.716">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards are clickable links" classname="site.spec.ts" time="0.666">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hero button plays sound on click" classname="site.spec.ts" time="1.002">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › footer displays credit text" classname="site.spec.ts" time="0.592">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub navigation returns when clicking back from a game" classname="site.spec.ts" time="0.827">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to mobile viewport" classname="site.spec.ts" time="0.652">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to tablet viewport" classname="site.spec.ts" time="0.755">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to desktop viewport" classname="site.spec.ts" time="0.981">
+</testcase>
+</testsuite>
+<testsuite name="blocks.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Safari" tests="20" failures="0" skipped="0" time="30.644" errors="0">
+<testcase name="Color Block Escape (Blocks) › game page loads with correct title" classname="blocks.spec.ts" time="1.092">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level 1 board renders" classname="blocks.spec.ts" time="1.132">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › blocks are rendered on board" classname="blocks.spec.ts" time="1.092">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level header displays current level" classname="blocks.spec.ts" time="1.073">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › move counter starts at 0" classname="blocks.spec.ts" time="0.969">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › hint button is visible" classname="blocks.spec.ts" time="1.136">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › hint button pulses doors" classname="blocks.spec.ts" time="6.213">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › can select/deselect blocks" classname="blocks.spec.ts" time="1.318">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › undo button is visible" classname="blocks.spec.ts" time="1.119">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › reset button is visible" classname="blocks.spec.ts" time="0.997">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › mute button toggles state" classname="blocks.spec.ts" time="1.144">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › level picker modal opens and closes" classname="blocks.spec.ts" time="1.307">
+</testcase>
+<testcase name="Color Block Escape (Blocks) › can navigate back to hub" classname="blocks.spec.ts" time="1.537">
+</testcase>
+<testcase name="Blocks - Persistence › progress saves and restores" classname="blocks.spec.ts" time="0.845">
+</testcase>
+<testcase name="Blocks - Persistence › cleared localStorage starts fresh game" classname="blocks.spec.ts" time="1.165">
+</testcase>
+<testcase name="Blocks - Persistence › corrupted save does not crash game" classname="blocks.spec.ts" time="1.454">
+</testcase>
+<testcase name="Blocks - Movement › block movement increases move counter" classname="blocks.spec.ts" time="1.819">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to mobile screen" classname="blocks.spec.ts" time="1.069">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to tablet screen" classname="blocks.spec.ts" time="1.565">
+</testcase>
+<testcase name="Blocks - Responsive Design › game adapts to desktop screen" classname="blocks.spec.ts" time="2.598">
+</testcase>
+</testsuite>
+<testsuite name="cards.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Safari" tests="24" failures="1" skipped="0" time="183.56" errors="5">
+<testcase name="Cards - Klondike Solitaire › klondike page loads with correct title" classname="cards.spec.ts" time="1.94">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays board with piles" classname="cards.spec.ts" time="1.988">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › klondike displays stats" classname="cards.spec.ts" time="3.03">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme button is visible" classname="cards.spec.ts" time="2.781">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › deck theme selector opens modal" classname="cards.spec.ts" time="30.529">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-Mobile-Safari\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-Mobile-Safari\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [Mobile Safari] › cards.spec.ts:61:7 › Cards - Klondike Solitaire › deck theme selector opens modal 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        40 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      62 |
+      63 |     const themeBtn = await page.locator('#btn-deck');
+    > 64 |     await themeBtn.click();
+         |                    ^
+      65 |
+      66 |     // Modal should open
+      67 |     const modal = await page.locator('.modal.is-open');
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:64:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-Mobile-Safari\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-80077--theme-selector-opens-modal-Mobile-Safari\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can select different deck themes" classname="cards.spec.ts" time="30.54">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-Mobile-Safari\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-Mobile-Safari\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [Mobile Safari] › cards.spec.ts:72:7 › Cards - Klondike Solitaire › can select different deck themes 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        40 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      73 |
+      74 |     const themeBtn = await page.locator('#btn-deck');
+    > 75 |     await themeBtn.click();
+         |                    ^
+      76 |
+      77 |     // Click Superman theme
+      78 |     const supermanBtn = await page.locator('button:has-text("Superman")');
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:75:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-Mobile-Safari\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-fc730-elect-different-deck-themes-Mobile-Safari\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › theme selection persists" classname="cards.spec.ts" time="30.549">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-Mobile-Safari\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-Mobile-Safari\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [Mobile Safari] › cards.spec.ts:93:7 › Cards - Klondike Solitaire › theme selection persists ─────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-deck')
+        - locator resolved to <button id="btn-deck" title="Deck theme" class="btn btn--ghost btn--sm">🂮</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        40 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+       95 |     // Set theme to Superman
+       96 |     const themeBtn = await page.locator('#btn-deck');
+    >  97 |     await themeBtn.click();
+          |                    ^
+       98 |
+       99 |     const supermanBtn = await page.locator('button:has-text("Superman")');
+      100 |     if (await supermanBtn.isVisible()) {
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:97:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-Mobile-Safari\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Solitaire-theme-selection-persists-Mobile-Safari\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › undo button is visible" classname="cards.spec.ts" time="1.193">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › new game button is visible" classname="cards.spec.ts" time="2.009">
+</testcase>
+<testcase name="Cards - Klondike Solitaire › mute button toggles" classname="cards.spec.ts" time="30.749">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-Mobile-Safari\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-Mobile-Safari\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [Mobile Safari] › cards.spec.ts:129:7 › Cards - Klondike Solitaire › mute button toggles ─────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('#btn-mute')
+        - locator resolved to <button title="Mute" id="btn-mute" class="btn btn--ghost btn--sm btn--icon">🔉</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        41 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      132 |     const initialText = await muteBtn.textContent();
+      133 |
+    > 134 |     await muteBtn.click();
+          |                   ^
+      135 |     const afterClick = await muteBtn.textContent();
+      136 |
+      137 |     expect(initialText).not.toBe(afterClick);
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:134:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-Mobile-Safari\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Solitaire-mute-button-toggles-Mobile-Safari\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Klondike Solitaire › can navigate back to variants" classname="cards.spec.ts" time="30.93">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-Mobile-Safari\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-Mobile-Safari\error-context.md is missing]]>
+</system-err>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [Mobile Safari] › cards.spec.ts:140:7 › Cards - Klondike Solitaire › can navigate back to variants 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('a:has-text("← Variants")')
+        - locator resolved to <a href="index.html" class="btn btn--ghost btn--sm">← Variants</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div>…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        41 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div>…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      142 |     const backLink = await page.locator('a:has-text("← Variants")');
+      143 |     await expect(backLink).toBeVisible();
+    > 144 |     await backLink.click();
+          |                    ^
+      145 |
+      146 |     await page.waitForURL(/.*cards\/index\.html/);
+      147 |   });
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:144:20
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-Mobile-Safari\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Klondike-Sol-551cd-n-navigate-back-to-variants-Mobile-Safari\error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider page loads with correct title" classname="cards.spec.ts" time="1.293">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays board" classname="cards.spec.ts" time="1.144">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider has difficulty selector" classname="cards.spec.ts" time="1.188">
+</testcase>
+<testcase name="Cards - Spider Solitaire › spider displays completed sets counter" classname="cards.spec.ts" time="1.197">
+</testcase>
+<testcase name="Cards - FreeCell › freecell page loads with correct title" classname="cards.spec.ts" time="1.135">
+</testcase>
+<testcase name="Cards - FreeCell › freecell displays free cells and foundations" classname="cards.spec.ts" time="1.118">
+</testcase>
+<testcase name="Cards - Persistence › game state saves to localStorage" classname="cards.spec.ts" time="1.497">
+<system-err>
+<![CDATA[
+Warning: attachment test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-Mobile-Safari\test-failed-1.png is missing
+Warning: attachment test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-Mobile-Safari\error-context.md is missing]]>
+</system-err>
+<failure message="expect(received).toBeTruthy()" type="expect.toBeTruthy">
+<![CDATA[  [Mobile Safari] › cards.spec.ts:207:7 › Cards - Persistence › game state saves to localStorage ───
+
+    Error: expect(received).toBeTruthy()
+
+    Received: null
+
+      219 |
+      220 |     // Should have some save data
+    > 221 |     expect(gameSave).toBeTruthy();
+          |                      ^
+      222 |
+      223 |     const saveData = JSON.parse(gameSave!);
+      224 |     expect(saveData.version).toBe(1);
+        at D:\Claude AI Projects\projects\GitHub\Small Collection of browser games\tests\cards.spec.ts:221:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-Mobile-Safari\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\cards-Cards---Persistence-game-state-saves-to-localStorage-Mobile-Safari\error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="Cards - Persistence › deck theme persists across games" classname="cards.spec.ts" time="1.361">
+</testcase>
+<testcase name="Cards - Persistence › corrupted game save does not crash" classname="cards.spec.ts" time="1.272">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to mobile" classname="cards.spec.ts" time="1.046">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to tablet" classname="cards.spec.ts" time="1.456">
+</testcase>
+<testcase name="Cards - Responsive Design › klondike adapts to desktop" classname="cards.spec.ts" time="2.25">
+</testcase>
+<testcase name="Cards - Responsive Design › dark theme is applied" classname="cards.spec.ts" time="1.365">
+</testcase>
+</testsuite>
+<testsuite name="digger-avatar-display.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Safari" tests="1" failures="0" skipped="0" time="1.835" errors="0">
+<testcase name="Digger cosmetics avatar display shows equipped items" classname="digger-avatar-display.spec.js" time="1.835">
+<system-out>
+<![CDATA[✓ Cosmetics avatar display visible
+✓ Head image loaded
+✓ Avatar shows equipped items: "⚔️ Viking Helm"
+✓ Avatar display working perfectly!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger-comic-shop.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Safari" tests="1" failures="0" skipped="0" time="2.102" errors="0">
+<testcase name="Digger comic-style shop displays correctly" classname="digger-comic-shop.spec.js" time="2.102">
+<system-out>
+<![CDATA[✓ Comic shop panel loaded
+✓ Found 6 section titles
+✓ Found 22 comic list items
+✓ Comic shop is scrollable with max-height constraint
+✓ Comic shop looks great!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger-cosmetics.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Safari" tests="1" failures="0" skipped="0" time="2" errors="0">
+<testcase name="Digger cosmetics shop shows sections and allows purchases" classname="digger-cosmetics.spec.js" time="2">
+<system-out>
+<![CDATA[✓ All cosmetics sections visible in shop
+✓ Found 22 shop items in cosmetics menu
+✓ Cosmetics state structure is correct
+✓ Cosmetics shop fully functional!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="digger.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Safari" tests="25" failures="0" skipped="0" time="47.979" errors="0">
+<testcase name="Around the World Digger › digger game page loads" classname="digger.spec.ts" time="0.972">
+</testcase>
+<testcase name="Around the World Digger › displays viewport with world" classname="digger.spec.ts" time="0.922">
+</testcase>
+<testcase name="Around the World Digger › displays player sprite" classname="digger.spec.ts" time="0.95">
+</testcase>
+<testcase name="Around the World Digger › displays topbar with stats" classname="digger.spec.ts" time="0.93">
+</testcase>
+<testcase name="Around the World Digger › displays gold counter" classname="digger.spec.ts" time="0.943">
+</testcase>
+<testcase name="Around the World Digger › displays cart information" classname="digger.spec.ts" time="0.946">
+</testcase>
+<testcase name="Around the World Digger › shop button is visible" classname="digger.spec.ts" time="0.927">
+</testcase>
+<testcase name="Around the World Digger › reset button is visible" classname="digger.spec.ts" time="0.926">
+</testcase>
+<testcase name="Around the World Digger › mute button toggles state" classname="digger.spec.ts" time="1.683">
+</testcase>
+<testcase name="Around the World Digger › can navigate back to hub" classname="digger.spec.ts" time="1.77">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains tiles" classname="digger.spec.ts" time="1.263">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › world contains various tile types" classname="digger.spec.ts" time="1.192">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › displays adjacent tile hints" classname="digger.spec.ts" time="1.206">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › elevator tiles are present" classname="digger.spec.ts" time="1.242">
+</testcase>
+<testcase name="Digger - World &amp; Gameplay › mineral visuals render" classname="digger.spec.ts" time="1.308">
+</testcase>
+<testcase name="Digger - Persistence › world state saves to localStorage" classname="digger.spec.ts" time="6.929">
+</testcase>
+<testcase name="Digger - Persistence › world persists across reloads" classname="digger.spec.ts" time="1.949">
+</testcase>
+<testcase name="Digger - Persistence › corrupted save does not crash game" classname="digger.spec.ts" time="1.461">
+</testcase>
+<testcase name="Digger - Persistence › multiple countries maintain separate worlds" classname="digger.spec.ts" time="1.173">
+</testcase>
+<testcase name="Digger - Movement › player can click adjacent tiles" classname="digger.spec.ts" time="1.223">
+</testcase>
+<testcase name="Digger - Movement › keyboard arrow keys work" classname="digger.spec.ts" time="3.424">
+</testcase>
+<testcase name="Digger - Movement › swipe/drag movement works on viewport" classname="digger.spec.ts" time="5.762">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to mobile" classname="digger.spec.ts" time="2.532">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to tablet" classname="digger.spec.ts" time="2.715">
+</testcase>
+<testcase name="Digger - Responsive Design › game adapts to desktop" classname="digger.spec.ts" time="3.631">
+</testcase>
+</testsuite>
+<testsuite name="example.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Safari" tests="2" failures="0" skipped="0" time="6.091" errors="0">
+<testcase name="has title" classname="example.spec.js" time="2.168">
+</testcase>
+<testcase name="get started link" classname="example.spec.js" time="3.923">
+</testcase>
+</testsuite>
+<testsuite name="idle-donut-image.spec.js" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Safari" tests="1" failures="0" skipped="0" time="4.228" errors="0">
+<testcase name="Idle donut image loads and displays correctly" classname="idle-donut-image.spec.js" time="4.228">
+<system-out>
+<![CDATA[✓ Donut image loaded successfully
+✓ Donut button is interactive
+✓ Donut click works smoothly
+✓ Donut Empire looks great with the new image!
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="idle.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Safari" tests="17" failures="0" skipped="0" time="61.896" errors="0">
+<testcase name="Donut Empire (Idle) › idle game page loads" classname="idle.spec.ts" time="2.403">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin counter at 0" classname="idle.spec.ts" time="2.347">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays coin rate" classname="idle.spec.ts" time="2.432">
+</testcase>
+<testcase name="Donut Empire (Idle) › displays click power" classname="idle.spec.ts" time="2.938">
+</testcase>
+<testcase name="Donut Empire (Idle) › donut button is clickable" classname="idle.spec.ts" time="2.936">
+</testcase>
+<testcase name="Donut Empire (Idle) › clicking donut increases coins" classname="idle.spec.ts" time="3.563">
+</testcase>
+<testcase name="Donut Empire (Idle) › shop displays generators" classname="idle.spec.ts" time="2.645">
+</testcase>
+<testcase name="Donut Empire (Idle) › reset button is visible" classname="idle.spec.ts" time="2.377">
+</testcase>
+<testcase name="Donut Empire (Idle) › mute button toggles state" classname="idle.spec.ts" time="3.284">
+</testcase>
+<testcase name="Donut Empire (Idle) › can navigate back to hub" classname="idle.spec.ts" time="2.811">
+</testcase>
+<testcase name="Idle - Persistence › game state saves to localStorage" classname="idle.spec.ts" time="7.712">
+</testcase>
+<testcase name="Idle - Persistence › game state restores after reload" classname="idle.spec.ts" time="15.324">
+</testcase>
+<testcase name="Idle - Persistence › corrupted save does not crash game" classname="idle.spec.ts" time="1.845">
+</testcase>
+<testcase name="Idle - Persistence › offline earnings message appears" classname="idle.spec.ts" time="2.572">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to mobile" classname="idle.spec.ts" time="1.29">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to tablet" classname="idle.spec.ts" time="2.302">
+</testcase>
+<testcase name="Idle - Responsive Design › game adapts to desktop" classname="idle.spec.ts" time="3.115">
+</testcase>
+</testsuite>
+<testsuite name="site.spec.ts" timestamp="2026-06-25T16:31:40.051Z" hostname="Mobile Safari" tests="11" failures="0" skipped="0" time="18.915" errors="0">
+<testcase name="New Games - Site Smoke Tests › hub page loads with correct title" classname="site.spec.ts" time="1.629">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub displays hero header" classname="site.spec.ts" time="1.107">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub shows all 4 game cards" classname="site.spec.ts" time="1.39">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards have correct titles" classname="site.spec.ts" time="1.189">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › game cards are clickable links" classname="site.spec.ts" time="1.364">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hero button plays sound on click" classname="site.spec.ts" time="2.008">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › footer displays credit text" classname="site.spec.ts" time="1.565">
+</testcase>
+<testcase name="New Games - Site Smoke Tests › hub navigation returns when clicking back from a game" classname="site.spec.ts" time="2.395">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to mobile viewport" classname="site.spec.ts" time="1.713">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to tablet viewport" classname="site.spec.ts" time="2.392">
+</testcase>
+<testcase name="Hub Responsiveness › layout adapts to desktop viewport" classname="site.spec.ts" time="2.163">
 </testcase>
 </testsuite>
 </testsuites>
