@@ -39,6 +39,18 @@
     { id: 'cosmic',   name: 'Cosmic Frosting',  emoji: '🌌', cost: 25000000,    multiplier: 5 },
   ];
 
+  // Short boosts: temporary consumable buffs
+  const SHORT_BOOSTS = [
+    { id: 'double-rate', name: 'Double Rate Boost', emoji: '⏱️', cost: 5000, duration: 60, effect: 'double_rate' },
+    { id: 'triple-clicks', name: 'Triple Click Power', emoji: '🎯', cost: 10000, duration: 45, effect: 'triple_clicks' },
+  ];
+
+  // Clickerino automators: auto-clicker upgrades (scale independently)
+  const CLICKERINOS = [
+    { id: 'auto-clicker-1', name: 'Basic Auto-Clicker', emoji: '🤖', baseCost: 500, baseRate: 0.1, unlockAt: 100 },
+    { id: 'auto-clicker-2', name: 'Turbo Auto-Clicker', emoji: '⚡', baseCost: 5000, baseRate: 1, unlockAt: 5000 },
+  ];
+
   /* --------------------------------------------------------
      WORD-CARD ENGINE (Phase 1)
      -------------------------------------------------------- */
@@ -277,18 +289,6 @@
     { id: 'synergies', label: '🌟 Synergies', icon: '🌟' },
   ];
 
-  // Short boosts: temporary consumable buffs
-  const SHORT_BOOSTS = [
-    { id: 'double-rate', name: 'Double Rate Boost', emoji: '⏱️', cost: 5000, duration: 60, effect: 'double_rate' },
-    { id: 'triple-clicks', name: 'Triple Click Power', emoji: '🎯', cost: 10000, duration: 45, effect: 'triple_clicks' },
-  ];
-
-  // Clickerino automators: auto-clicker upgrades (scale independently)
-  const CLICKERINOS = [
-    { id: 'auto-clicker-1', name: 'Basic Auto-Clicker', emoji: '🤖', baseCost: 500, baseRate: 0.1, unlockAt: 100 },
-    { id: 'auto-clicker-2', name: 'Turbo Auto-Clicker', emoji: '⚡', baseCost: 5000, baseRate: 1, unlockAt: 5000 },
-  ];
-
   let currentShopTab = 'bakers';
   let renderedGenIds = null;
   let renderedUpgradeIds = null;
@@ -503,9 +503,16 @@
     const visGens = visibleGenerators();
     const visUps = visibleUpgrades();
 
-    // If the visible set changed (unlock crossed, upgrade purchased), rebuild structure.
-    if (visGens.map(g => g.id).join(',') !== renderedGenIds ||
-        visUps.map(u => u.id).join(',') !== renderedUpgradeIds) {
+    // Only compare against the tab that's actually in the DOM right now —
+    // the other tab's renderedXIds stays stale (null/outdated) whenever it
+    // isn't the active tab, which previously caused renderShop() to be
+    // called every time (mismatch never resolves) → infinite recursion via
+    // renderBakersTab/renderClicksTab each re-calling refreshShopValues().
+    if (currentShopTab === 'bakers' && visGens.map(g => g.id).join(',') !== renderedGenIds) {
+      renderShop();
+      return;
+    }
+    if (currentShopTab === 'clicks' && visUps.map(u => u.id).join(',') !== renderedUpgradeIds) {
       renderShop();
       return;
     }
