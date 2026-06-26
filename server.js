@@ -83,13 +83,14 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, 'localhost', () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`
 ╔════════════════════════════════════════════════════════════╗
 ║  🍩 Donut Empire Server Running                           ║
 ╚════════════════════════════════════════════════════════════╝
 
-📍 URL: http://localhost:${PORT}/games/idle/index.html
+📍 Local URL: http://localhost:${PORT}/games/idle/index.html
+📱 Network URL: http://10.0.0.108:${PORT}/games/idle/index.html
 
 Press Ctrl+C to stop the server.
   `);
