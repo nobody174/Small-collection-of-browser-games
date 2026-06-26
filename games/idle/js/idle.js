@@ -542,8 +542,13 @@
      -------------------------------------------------------- */
 
   function spawnFullScreenSprinkles() {
-    // Rain sprinkles from top of screen across entire viewport
-    const count = 30 + Math.random() * 20;  // 30-50 sprinkles per rain burst
+    // Rain sprinkles inside the coin-card (game board) only
+    const coinCard = $('#coin-card');
+    if (!coinCard) return;
+
+    const rect = coinCard.getBoundingClientRect();
+    const count = 25 + Math.random() * 15;  // 25-40 sprinkles per rain burst
+
     for (let i = 0; i < count; i++) {
       setTimeout(() => {
         const sprinkleNum = Math.floor(Math.random() * 5) + 1;
@@ -551,18 +556,22 @@
         s.src = `img/sprinkles/sprinkle${sprinkleNum}.png`;
         s.className = 'sprinkle-particle';
 
-        // Random x position across full viewport width
-        const startX = Math.random() * window.innerWidth;
-        const startY = -20;  // Start above viewport
+        // Position absolutely within coin-card
+        s.style.position = 'absolute';
+        s.style.pointerEvents = 'none';
+
+        // Random x position WITHIN coin-card bounds
+        const startX = rect.left + Math.random() * rect.width;
+        const startY = rect.top - 20;  // Start above the card
         s.style.left = startX + 'px';
         s.style.top = startY + 'px';
         document.body.appendChild(s);
 
-        // Random fall distance (viewport height + buffer)
-        const fallDistance = window.innerHeight + 100;
-        const offsetX = (Math.random() - 0.5) * 200;  // -100 to +100px horizontal drift
+        // Fall distance: from top of card to bottom
+        const fallDistance = rect.height + 40;
+        const offsetX = (Math.random() - 0.5) * 100;  // -50 to +50px horizontal drift within bounds
         const rotation = Math.random() * 360;
-        const duration = 1200 + Math.random() * 400;  // 1.2-1.6s fall time
+        const duration = 1000 + Math.random() * 400;  // 1.0-1.4s fall time
 
         s.animate([
           { transform: 'translate(-50%, 0) rotate(0deg)', opacity: 1 },
@@ -613,10 +622,10 @@
     // Full-screen sprinkle rain (instead of localized burst)
     spawnFullScreenSprinkles();
 
-    // Particle burst
+    // Particle burst with rainbow colors
     NG.particles.burst(e.clientX, e.clientY, {
-      count: 6, spread: 36, size: 6,
-      colors: ['#ffc46b', '#ff9a4a', '#ff8fb1'],
+      count: 8, spread: 45, size: 6,
+      colors: ['#ffc46b', '#ff9a4a', '#ff8fb1', '#ff6b9d', '#4a90e2', '#7b68ee', '#50c878', '#ffd700'],
     });
 
     // Donut squish animation
