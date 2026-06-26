@@ -468,23 +468,6 @@ body.idle-board {
   100% { opacity: 0.6; }
 }
 
-.health-inspector-event {
-  background: linear-gradient(135deg, #ff6b6b, #ff8e72);
-  color: white;
-  padding: var(--ng-space-4);
-  border-radius: var(--ng-radius-md);
-  margin-bottom: var(--ng-space-3);
-  box-shadow: var(--ng-shadow-md);
-  animation: shake 0.3s ease-in-out;
-  text-align: center;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
-}
-
 .rival-event {
   background: linear-gradient(135deg, #6c63ff 0%, #8e7dff 100%);
   color: #ffffff;

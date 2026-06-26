@@ -106,7 +106,6 @@
     worldIndex: 0,                      // 0=Bakery, 1=Park, 2=City, etc.
     // Phase 4: Wildcard mechanics
     donutDNA: [],                       // collection of unlocked flavors/worlds
-    healthInspectorLastTime: 0,
     miniDonuts: 0,                      // accumulated from milestones
     loreSnippetsUnlocked: {},           // thresholdCoin → true
     rivalPaceState: {},                 // for Frosting Wars ghost
@@ -921,67 +920,6 @@
      PHASE 4: WILDCARD MECHANICS
      -------------------------------------------------------- */
 
-  // Health Inspector minigame
-  function maybeSpawnHealthInspector() {
-    const now = Date.now();
-    if (now - state.healthInspectorLastTime < 120000) return; // Min 2 min between inspections
-
-    const chance = Math.random();
-    const scaledChance = Math.min(0.15, state.totalEarned / 10000000000); // Max 15% chance at high play
-    if (chance > scaledChance) return;
-
-    showHealthInspectorEvent();
-    state.healthInspectorLastTime = now;
-  }
-
-  function showHealthInspectorEvent() {
-    const banner = document.createElement('div');
-    banner.className = 'health-inspector-event';
-    banner.innerHTML = `
-      <div style="font-size: 24px;">🚨 HEALTH INSPECTOR INCOMING! 🚨</div>
-      <div style="margin: 8px 0;">Tap to clean up! (3 taps required)</div>
-      <div class="inspector-buttons" style="display: flex; gap: 8px; margin-top: 8px;">
-        <button class="btn btn--primary" style="flex: 1;">Clean 1</button>
-        <button class="btn btn--primary" style="flex: 1;">Clean 2</button>
-        <button class="btn btn--primary" style="flex: 1;">Clean 3</button>
-      </div>
-    `;
-
-    const shop = $('#shop');
-    shop.prepend(banner);
-
-    let cleanTaps = 0;
-    const taps = banner.querySelectorAll('.inspector-buttons button');
-    taps.forEach((btn, i) => {
-      btn.addEventListener('click', () => {
-        cleanTaps++;
-        btn.disabled = true;
-        btn.style.opacity = '0.5';
-
-        if (cleanTaps === 3) {
-          // Success!
-          fireWordCard(pickRandomWordCard(3));
-          earn(state.coins * 0.10);
-          NG.audio.play('success');
-
-          // Remove banner
-          setTimeout(() => banner.remove(), 1000);
-        }
-      });
-    });
-
-    // If not cleaned in 15 seconds, inspector leaves disappointed
-    setTimeout(() => {
-      if (cleanTaps < 3 && banner.parentElement) {
-        const fine = Math.max(1000, state.coins * 0.05);
-        spend(fine);
-        NG.toast('Health Inspector fined you ' + fmt(fine) + ' coins! 📉', { type: 'warning' });
-        fireWordCard({ text: 'BUSTED! 🚨', size: 'lg', color: '#ff0000', tier: 3 });
-        banner.remove();
-        renderTotals();
-      }
-    }, 15000);
-  }
 
   // Bakery Radio ticker
   function generateRadioLine() {
@@ -1097,9 +1035,6 @@
     renderShop();
     lastTick = performance.now();
     requestAnimationFrame(tick);
-
-    // Health Inspector random events
-    setInterval(maybeSpawnHealthInspector, 10000);
 
     // Update radio ticker every 30 seconds
     setInterval(updateRadioTicker, 30000);
