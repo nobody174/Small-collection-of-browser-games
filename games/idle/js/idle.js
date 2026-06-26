@@ -1116,9 +1116,10 @@
     // Collection button (DNA)
     NG.on($('#btn-collection'), 'click', showCollection);
 
-    // Dev/Tester button - add 10 million coins
+    // Dev/Tester button - add 10 million coins (bypass word-card triggers)
     NG.on($('#btn-dev-coins'), 'click', () => {
-      earn(10000000, 'dev-test');
+      state.coins += 10000000;
+      state.totalEarned += 10000000;
       NG.toast('💰 +10M coins added (dev mode)', { type: 'info' });
       renderTotals();
       renderShop();
