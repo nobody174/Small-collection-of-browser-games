@@ -18,10 +18,16 @@ body.idle-board {
     linear-gradient(180deg, #fff7e8 0%, #ffe7d4 100%);
   /* Prevent double-tap zoom on the whole game page */
   touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
-/* Prevent double-tap zoom on coin card area */
-.coin-card {
+/* Prevent double-tap zoom on all interactive elements */
+.coin-card,
+.shop,
+.donut-btn,
+button {
   touch-action: manipulation;
 }
 
