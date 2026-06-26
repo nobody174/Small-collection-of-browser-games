@@ -55,26 +55,60 @@
      WORD-CARD ENGINE (Phase 1)
      -------------------------------------------------------- */
   const WORD_CARDS = [
-    // Tier 1 — Tap words (every Nth click, small)
-    { tier: 1, text: 'POP!', color: '#ff8fb1', size: 'sm' },
-    { tier: 1, text: 'GLAZE!', color: '#ffc46b', size: 'sm' },
-    { tier: 1, text: 'NIBBLE!', color: '#ff9a4a', size: 'sm' },
+    // Tier 1 — Raw Clicking & Dough Actions (tap words, every Nth click, small)
+    { tier: 1, text: 'BAKE!', color: '#ff9a4a', size: 'sm' },
+    { tier: 1, text: 'BATTER!', color: '#ffb380', size: 'sm' },
+    { tier: 1, text: 'BEAT!', color: '#ff8fb1', size: 'sm' },
+    { tier: 1, text: 'CUFF!', color: '#ffc46b', size: 'sm' },
+    { tier: 1, text: 'DASH!', color: '#ff9a4a', size: 'sm' },
     { tier: 1, text: 'DOUGH!', color: '#ffb380', size: 'sm' },
-    // Tier 2 — Combo words (click streaks)
-    { tier: 2, text: 'SUGAR RUSH!', color: '#ff6b9d', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'DOUGH-NADO!', color: '#ffa500', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'FROSTED FRENZY!', color: '#ff7e5f', size: 'md', payload: 'temp_click_buff' },
-    // Tier 3 — Purchase milestone (10/25/50/100 of a generator)
-    { tier: 3, text: 'KA-DOUGH!', color: '#4a90e2', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'BAKED IN!', color: '#7b68ee', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'RISE & GRIND!', color: '#50c878', size: 'lg', payload: 'bonus_icon' },
-    // Tier 4 — Record/threshold (lifetime coins order-of-magnitude)
-    { tier: 4, text: 'HOLY SPRINKLES!', color: '#ff1493', size: 'xl', payload: 'lore_snippet' },
-    { tier: 4, text: 'DONUT-PALOOZA!', color: '#ffd700', size: 'xl', payload: 'lore_snippet' },
-    { tier: 4, text: 'BATTER UP!', color: '#00ced1', size: 'xl', payload: 'lore_snippet' },
-    // Tier 5 — Evolution (special)
-    { tier: 5, text: 'GLAZE ASCENDANT!', color: '#ffd700', size: 'xl', payload: null },
-    { tier: 5, text: 'THE GREAT RISING!', color: '#ff69b4', size: 'xl', payload: null },
+    { tier: 1, text: 'DOLLOP!', color: '#ff8fb1', size: 'sm' },
+    { tier: 1, text: 'MASH!', color: '#ffc46b', size: 'sm' },
+    { tier: 1, text: 'MIX!', color: '#ff9a4a', size: 'sm' },
+    { tier: 1, text: 'POUND!', color: '#ffb380', size: 'sm' },
+    { tier: 1, text: 'ROLL!', color: '#ff8fb1', size: 'sm' },
+    { tier: 1, text: 'SLAP!', color: '#ffc46b', size: 'sm' },
+    { tier: 1, text: 'SMACK!', color: '#ff9a4a', size: 'sm' },
+    { tier: 1, text: 'THUMP!', color: '#ffb380', size: 'sm' },
+    { tier: 1, text: 'WHIP!', color: '#ff8fb1', size: 'sm' },
+    // Tier 2 — Fryer, Glaze & Topping Actions (combo words, click streaks, medium)
+    { tier: 2, text: 'DIP!', color: '#ff6b9d', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'DRIZZLE!', color: '#ffa500', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'DROP!', color: '#ff7e5f', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'FIZZ!', color: '#ff6b9d', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'FLIP!', color: '#ffa500', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'GLAZE!', color: '#ff7e5f', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'GUSH!', color: '#ff6b9d', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'PLOP!', color: '#ffa500', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'POP!', color: '#ff7e5f', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'POUR!', color: '#ff6b9d', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'SIZZLE!', color: '#ffa500', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'SPLAT!', color: '#ff7e5f', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'SPLASH!', color: '#ff6b9d', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'SPRINKLE!', color: '#ffa500', size: 'md', payload: 'temp_click_buff' },
+    { tier: 2, text: 'SQUIRT!', color: '#ff7e5f', size: 'md', payload: 'temp_click_buff' },
+    // Tier 3 — Milestone & Combo Words (purchase milestones, large)
+    { tier: 3, text: 'BOOM!', color: '#4a90e2', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'BURST!', color: '#7b68ee', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'CRUNCH!', color: '#50c878', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'CRUMB!', color: '#4a90e2', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'DONUT!', color: '#7b68ee', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'EXPLOSION!', color: '#50c878', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'GIGA-GLAZE!', color: '#4a90e2', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'HOLY-HOLE!', color: '#7b68ee', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'MEGA-MUNCH!', color: '#50c878', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'SHOCK!', color: '#4a90e2', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'SMASH!', color: '#7b68ee', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'SPRINKLE-SHOWER!', color: '#50c878', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'SWEET!', color: '#4a90e2', size: 'lg', payload: 'bonus_icon' },
+    { tier: 3, text: 'YEAST!', color: '#7b68ee', size: 'lg', payload: 'bonus_icon' },
+    // Tier 4 — Record/threshold (lifetime coins order-of-magnitude, extra large)
+    { tier: 4, text: 'GLAZE ASCENDANT!', color: '#ffd700', size: 'xl', payload: 'lore_snippet' },
+    { tier: 4, text: 'THE GREAT RISING!', color: '#ff1493', size: 'xl', payload: 'lore_snippet' },
+    { tier: 4, text: 'DONUT-PALOOZA!', color: '#00ced1', size: 'xl', payload: 'lore_snippet' },
+    // Tier 5 — Evolution (special, dramatic)
+    { tier: 5, text: 'TRANSCENDENCE!', color: '#ffd700', size: 'xl', payload: null },
+    { tier: 5, text: 'INFINITY GLAZE!', color: '#ff69b4', size: 'xl', payload: null },
   ];
 
   const WORD_CARD_LORE = {
