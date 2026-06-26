@@ -622,8 +622,8 @@
     state.clicks++;
     const now = Date.now();
 
-    // CRITICAL CLICKS: 5% chance per click to fire word-card (era-based)
-    if (Math.random() < 0.05 && now - state.lastCriticalClickTime > 1000) {
+    // CRITICAL CLICKS: 1% chance per click to fire word-card (era-based, rare and special)
+    if (Math.random() < 0.01 && now - state.lastCriticalClickTime > 3000) {
       const available = getAvailableWordCards();
       const word = available[Math.floor(Math.random() * available.length)];
       fireWordCard(word);
