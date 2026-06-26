@@ -1019,8 +1019,8 @@
     const playerRate = totalRate() * elapsed;
     state.rivalPaceState.coins += playerRate * 0.8;
 
-    // Check for flavor milestones (every 10M coins)
-    const rivalFlavorsUnlocked = Math.floor(state.rivalPaceState.coins / 10000000);
+    // Check for flavor milestones (every 50M coins - much rarer)
+    const rivalFlavorsUnlocked = Math.floor(state.rivalPaceState.coins / 50000000);
     if (rivalFlavorsUnlocked > state.rivalPaceState.flavors) {
       state.rivalPaceState.flavors = rivalFlavorsUnlocked;
       const rival = RIVALS[state.rivalPaceState.currentRival];
@@ -1034,8 +1034,8 @@
       showRivalBanner(text, rival.emoji);
     }
 
-    // Check for coin milestones (every 100M coins)
-    const rivalMilestone = Math.floor(state.rivalPaceState.coins / 100000000);
+    // Check for coin milestones (every 500M coins - rare major events)
+    const rivalMilestone = Math.floor(state.rivalPaceState.coins / 500000000);
     if (rivalMilestone > state.rivalPaceState.lastMilestoneReached && rivalMilestone > 0) {
       state.rivalPaceState.lastMilestoneReached = rivalMilestone;
       const rival = RIVALS[state.rivalPaceState.currentRival];
@@ -1044,7 +1044,7 @@
       const msg = RIVAL_MESSAGES.milestone[Math.floor(Math.random() * RIVAL_MESSAGES.milestone.length)];
       const text = msg
         .replace('{rival}', rival.name)
-        .replace('{milestone}', rivalMilestone * 100)
+        .replace('{milestone}', rivalMilestone * 500)
         .replace('{status}', status);
       showRivalBanner(text, rival.emoji);
     }
