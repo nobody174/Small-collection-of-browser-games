@@ -161,6 +161,7 @@
       c.setFaceUp(false);
       piles.stock.push(c, { silent: true });
     }
+    updateStockPileState();
     flushSave();
   }
 
@@ -253,6 +254,15 @@
      After every move: flip newly-exposed tableau top,
      auto-send eligible cards, update stats, check win, save.
      -------------------------------------------------------- */
+  function updateStockPileState() {
+    // Show visual indicator when stock is empty and waste has cards (recyclable)
+    if (piles.stock.isEmpty() && !piles.waste.isEmpty()) {
+      piles.stock.el.classList.add('can-recycle');
+    } else {
+      piles.stock.el.classList.remove('can-recycle');
+    }
+  }
+
   function afterMove() {
     // Auto-flip face-down tableau tops — must run AFTER any card has been
     // removed from a column (e.g. sent to a foundation via tap) so a newly
@@ -267,6 +277,7 @@
     moves++;
     updateStats();
     checkWin();
+    updateStockPileState();
     flushSave();
   }
 
@@ -395,6 +406,7 @@
     startTs = data.startTs || Date.now();
     drawMode = data.drawMode || 1;  // restore draw mode, default to 1
     updateStats();
+    updateStockPileState();
     return true;
   }
 

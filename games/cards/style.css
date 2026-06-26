@@ -212,6 +212,33 @@ body.cards-board::before {
   font-size: 38px;
   color: rgba(124, 92, 255, 0.35);
   pointer-events: none;
+  transition: color 200ms ease, transform 200ms ease;
+}
+
+/* Stock pile is always clickable — provide cursor feedback */
+.pile--stock {
+  cursor: pointer;
+}
+
+.pile--stock:hover::after {
+  color: rgba(124, 92, 255, 0.7);
+  transform: scale(1.15) rotate(20deg);
+}
+
+/* When stock is empty and waste has cards, show it's recyclable */
+.pile--stock.can-recycle::after {
+  color: rgba(34, 197, 94, 0.6);
+  animation: pulse-recycle 1.5s ease-in-out infinite;
+}
+
+.pile--stock.can-recycle:hover::after {
+  color: rgba(34, 197, 94, 0.9);
+  transform: scale(1.2) rotate(25deg);
+}
+
+@keyframes pulse-recycle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
 
