@@ -469,16 +469,16 @@ body.idle-board {
 }
 
 .rival-event {
-  background: linear-gradient(135deg, #6c63ff 0%, #8e7dff 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #ffc46b 0%, #ff9800 100%);
+  color: #3e2723;
   padding: var(--ng-space-4);
   border-radius: var(--ng-radius-md);
   margin: var(--ng-space-3) auto;
   max-width: 1100px;
   font-size: var(--ng-text-base);
   font-weight: var(--ng-weight-bold);
-  border-left: 4px solid #ff6b9d;
-  box-shadow: 0 8px 16px rgba(108, 99, 255, 0.25);
+  border-left: 4px solid #d76e3a;
+  box-shadow: 0 8px 16px rgba(255, 152, 0, 0.25);
   animation: pulse-rival 0.6s ease-out;
   text-align: center;
 }
