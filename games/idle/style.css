@@ -168,6 +168,15 @@ body.idle-board {
 }
 .click-power b { color: var(--ng-color-warning); }
 
+.flavor-display {
+  text-align: center;
+  color: var(--ng-text-muted);
+  font-size: var(--ng-text-sm);
+  margin-top: var(--ng-space-1);
+  font-style: italic;
+}
+.flavor-display b { color: #d4a574; font-style: normal; }
+
 @media (max-width: 600px) {
   .donut-btn { width: 220px; height: 220px; margin-top: var(--ng-space-5); }
   .coin-amount { font-size: 64px; }

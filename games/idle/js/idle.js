@@ -277,6 +277,11 @@
     $('#coin-amount').textContent = fmt(state.coins);
     $('#coin-rate').textContent   = fmt(totalRate()) + ' coins / second';
     $('#click-power').innerHTML   = 'Click power: <b>' + fmt(clickPower()) + '</b>';
+
+    const currentFlavorObj = FLAVORS.find(f => f.id === state.currentFlavor);
+    const flavorName = currentFlavorObj?.name || 'Plain';
+    const bonus = flavorMultiplier() > 1 ? ` (+${Math.round((flavorMultiplier() - 1) * 100)}%)` : '';
+    $('#flavor-display').innerHTML = 'Flavor: <b>' + flavorName + '</b>' + bonus;
   }
 
   /* --------------------------------------------------------
