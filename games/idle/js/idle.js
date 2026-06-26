@@ -976,12 +976,33 @@
     ticker.innerHTML = `📻 ${line}`;
   }
 
-  // Frosting Wars rival system
+  // Frosting Wars rival system with multiple competitors
+  const RIVALS = [
+    { name: 'Glenda', emoji: '👵', color: '#ff9a9a' },
+    { name: 'Marco', emoji: '👨', color: '#9ab5ff' },
+    { name: 'Sakura', emoji: '👩', color: '#ffc46b' },
+  ];
+
+  const RIVAL_MESSAGES = {
+    unlocked_flavor: [
+      '{rival} just unlocked flavor #{num}! {status}',
+      '{rival}\'s bakery reached flavor #{num}. {status}',
+      '{rival} mastered flavor #{num}. {status}',
+    ],
+    milestone: [
+      '{rival} hit {milestone}M coins! {status}',
+      '{rival}\'s empire reached {milestone}M coins. {status}',
+      'Breaking news: {rival} earned {milestone}M! {status}',
+    ],
+  };
+
   function initRivalPace() {
     state.rivalPaceState = {
       coins: 0,
       flavors: 0,
       lastUpdateTime: Date.now(),
+      currentRival: Math.floor(Math.random() * RIVALS.length),
+      lastMilestoneReached: 0,
     };
   }
 
@@ -998,21 +1019,48 @@
     const playerRate = totalRate() * elapsed;
     state.rivalPaceState.coins += playerRate * 0.8;
 
-    // Rival occasionally "unlocks" flavors (every 10M coins)
+    // Check for flavor milestones (every 10M coins)
     const rivalFlavorsUnlocked = Math.floor(state.rivalPaceState.coins / 10000000);
     if (rivalFlavorsUnlocked > state.rivalPaceState.flavors) {
       state.rivalPaceState.flavors = rivalFlavorsUnlocked;
-      const banner = document.createElement('div');
-      banner.className = 'rival-event';
-      const rivalFlavorNum = rivalFlavorsUnlocked;
+      const rival = RIVALS[state.rivalPaceState.currentRival];
       const playerFlavorNum = Object.keys(state.flavors).length;
-      const ahead = playerFlavorNum > rivalFlavorNum ? '👑 still ahead!' : '⚠️ catching up!';
-      banner.innerHTML = `<span style="font-size: 16px;">👻 Glenda just unlocked flavor #${rivalFlavorNum}... ${ahead}</span>`;
-      document.querySelector('.ng-app').appendChild(banner);
-      setTimeout(() => banner.remove(), 6000);
+      const status = playerFlavorNum > rivalFlavorsUnlocked ? '👑 You\'re ahead' : '⚠️ They\'re catching up';
+      const msg = RIVAL_MESSAGES.unlocked_flavor[Math.floor(Math.random() * RIVAL_MESSAGES.unlocked_flavor.length)];
+      const text = msg
+        .replace('{rival}', rival.name)
+        .replace('{num}', rivalFlavorsUnlocked)
+        .replace('{status}', status);
+      showRivalBanner(text, rival.emoji);
+    }
+
+    // Check for coin milestones (every 100M coins)
+    const rivalMilestone = Math.floor(state.rivalPaceState.coins / 100000000);
+    if (rivalMilestone > state.rivalPaceState.lastMilestoneReached && rivalMilestone > 0) {
+      state.rivalPaceState.lastMilestoneReached = rivalMilestone;
+      const rival = RIVALS[state.rivalPaceState.currentRival];
+      const playerCoins = state.totalEarned;
+      const status = playerCoins > state.rivalPaceState.coins ? '👑 You\'re ahead' : '⚠️ They\'re catching up';
+      const msg = RIVAL_MESSAGES.milestone[Math.floor(Math.random() * RIVAL_MESSAGES.milestone.length)];
+      const text = msg
+        .replace('{rival}', rival.name)
+        .replace('{milestone}', rivalMilestone * 100)
+        .replace('{status}', status);
+      showRivalBanner(text, rival.emoji);
     }
 
     state.rivalPaceState.lastUpdateTime = now;
+  }
+
+  function showRivalBanner(text, emoji) {
+    const banner = document.createElement('div');
+    banner.className = 'rival-event';
+    banner.innerHTML = `<span>${emoji} ${text}</span>`;
+    const mainLayout = document.querySelector('.idle-layout');
+    if (mainLayout && mainLayout.parentElement) {
+      mainLayout.parentElement.insertBefore(banner, mainLayout.nextSibling);
+    }
+    setTimeout(() => banner.remove(), 6000);
   }
 
   // Donut DNA collection display
