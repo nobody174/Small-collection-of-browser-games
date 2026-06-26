@@ -79,7 +79,7 @@
 ---
 
 ## 🐛 Known Issues
-- None currently reported
+- Stock pile clickability: The ↻ cycle symbol is decorative (pointer-events: none). Click the pile background to recycle the deck. Could be improved with hover effect or animation to make it more obvious.
 
 ---
 
