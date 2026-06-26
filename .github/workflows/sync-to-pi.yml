@@ -19,7 +19,7 @@ jobs:
 
       - name: Pull Latest on Pi
         run: |
-          ssh -i ~/.ssh/pi_deploy_key vartdalffs@pi-menu.local << 'ENDSSH'
+          ssh -i ~/.ssh/pi_deploy_key -o ConnectTimeout=10 vartdalffs@10.0.0.54 << 'ENDSSH'
           cd ~/browser-games
           git fetch origin
           git reset --hard origin/main || git reset --hard origin/master
