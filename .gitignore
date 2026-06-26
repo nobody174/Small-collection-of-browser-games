@@ -19,6 +19,26 @@ node_modules/
 *.swo
 *~
 
+# Session work / reference docs (keep locally, don't commit)
+*SUMMARY.md
+*REFERENCE.md
+*GUIDE.md
+*CHECKLIST.md
+*PRIORITIES.txt
+SESSION_*.md
+TODAY_*.md
+FIXES_*.md
+NEXT_*.md
+WORK_*.md
+CODE_CHANGES*.md
+IMPLEMENTATION_*.md
+INDEX_OF_*.md
+
+# Test artifacts / screenshots (keep locally for reference)
+junit.xml
+test-results.json
+*.png
+
 # Build artifacts
 dist/
 build/
