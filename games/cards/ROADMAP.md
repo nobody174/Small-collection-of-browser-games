@@ -4,8 +4,8 @@
 ✅ Klondike Solitaire (fully playable)
 ✅ Spider Solitaire 
 ✅ FreeCell
-✅ Infinite deck recycling
-✅ 3-card draw with visual fan
+✅ Infinite deck recycling (waste cards cycle back to stock without shuffle)
+✅ 3-card draw (cards stack on top of each other)
 
 ---
 
@@ -31,6 +31,7 @@
 - **3D Card Shadows** — Drop shadow and depth effect on all cards
 - **Hint Highlighting** — Golden glow outline on playable cards (only when Hint is active)
 - **Card Animations** — Smooth transitions when moving between piles
+- **Waste Pile Fan Layout** — Visual spread of waste cards (fan-right) instead of stacked
 
 ### Difficulty System
 - **Easy:** 1-card draw, relaxed rules
