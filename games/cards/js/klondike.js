@@ -717,6 +717,10 @@
       }
     });
 
+    // Stock pile click handler (for when stock is empty and needs to be recycled)
+    // The drag system only handles clicks on .card elements, so we need explicit handler for empty stock
+    NG.on(piles.stock.el, 'click', onStockTap);
+
     // Buttons
     NG.on($('#btn-undo'), 'click', undo);
     NG.on($('#btn-hint'), 'click', showHint);
