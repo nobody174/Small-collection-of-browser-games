@@ -1,10 +1,9 @@
 name: Sync to Pi on Push
 
+# DISABLED: GitHub Actions cannot reach local Pi network
+# Manual sync via SSH works: ssh vartdalffs@10.0.0.54 "cd ~/browser-games && git pull"
 on:
-  push:
-    branches:
-      - main
-      - master
+  workflow_dispatch: # Only run manually if needed
 
 jobs:
   sync:
