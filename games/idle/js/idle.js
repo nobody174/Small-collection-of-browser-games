@@ -54,62 +54,50 @@
   /* --------------------------------------------------------
      WORD-CARD ENGINE (Phase 1)
      -------------------------------------------------------- */
-  const WORD_CARDS = [
-    // Tier 1 — Raw Clicking & Dough Actions (tap words, every Nth click, small)
-    { tier: 1, text: 'BAKE!', color: '#ff9a4a', size: 'sm' },
-    { tier: 1, text: 'BATTER!', color: '#ffb380', size: 'sm' },
-    { tier: 1, text: 'BEAT!', color: '#ff8fb1', size: 'sm' },
-    { tier: 1, text: 'CUFF!', color: '#ffc46b', size: 'sm' },
-    { tier: 1, text: 'DASH!', color: '#ff9a4a', size: 'sm' },
-    { tier: 1, text: 'DOUGH!', color: '#ffb380', size: 'sm' },
-    { tier: 1, text: 'DOLLOP!', color: '#ff8fb1', size: 'sm' },
-    { tier: 1, text: 'MASH!', color: '#ffc46b', size: 'sm' },
-    { tier: 1, text: 'MIX!', color: '#ff9a4a', size: 'sm' },
-    { tier: 1, text: 'POUND!', color: '#ffb380', size: 'sm' },
-    { tier: 1, text: 'ROLL!', color: '#ff8fb1', size: 'sm' },
-    { tier: 1, text: 'SLAP!', color: '#ffc46b', size: 'sm' },
-    { tier: 1, text: 'SMACK!', color: '#ff9a4a', size: 'sm' },
-    { tier: 1, text: 'THUMP!', color: '#ffb380', size: 'sm' },
-    { tier: 1, text: 'WHIP!', color: '#ff8fb1', size: 'sm' },
-    // Tier 2 — Fryer, Glaze & Topping Actions (combo words, click streaks, medium)
-    { tier: 2, text: 'DIP!', color: '#ff6b9d', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'DRIZZLE!', color: '#ffa500', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'DROP!', color: '#ff7e5f', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'FIZZ!', color: '#ff6b9d', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'FLIP!', color: '#ffa500', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'GLAZE!', color: '#ff7e5f', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'GUSH!', color: '#ff6b9d', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'PLOP!', color: '#ffa500', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'POP!', color: '#ff7e5f', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'POUR!', color: '#ff6b9d', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'SIZZLE!', color: '#ffa500', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'SPLAT!', color: '#ff7e5f', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'SPLASH!', color: '#ff6b9d', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'SPRINKLE!', color: '#ffa500', size: 'md', payload: 'temp_click_buff' },
-    { tier: 2, text: 'SQUIRT!', color: '#ff7e5f', size: 'md', payload: 'temp_click_buff' },
-    // Tier 3 — Milestone & Combo Words (purchase milestones, large)
-    { tier: 3, text: 'BOOM!', color: '#4a90e2', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'BURST!', color: '#7b68ee', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'CRUNCH!', color: '#50c878', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'CRUMB!', color: '#4a90e2', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'DONUT!', color: '#7b68ee', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'EXPLOSION!', color: '#50c878', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'GIGA-GLAZE!', color: '#4a90e2', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'HOLY-HOLE!', color: '#7b68ee', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'MEGA-MUNCH!', color: '#50c878', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'SHOCK!', color: '#4a90e2', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'SMASH!', color: '#7b68ee', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'SPRINKLE-SHOWER!', color: '#50c878', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'SWEET!', color: '#4a90e2', size: 'lg', payload: 'bonus_icon' },
-    { tier: 3, text: 'YEAST!', color: '#7b68ee', size: 'lg', payload: 'bonus_icon' },
-    // Tier 4 — Record/threshold (lifetime coins order-of-magnitude, extra large)
-    { tier: 4, text: 'GLAZE ASCENDANT!', color: '#ffd700', size: 'xl', payload: 'lore_snippet' },
-    { tier: 4, text: 'THE GREAT RISING!', color: '#ff1493', size: 'xl', payload: 'lore_snippet' },
-    { tier: 4, text: 'DONUT-PALOOZA!', color: '#00ced1', size: 'xl', payload: 'lore_snippet' },
-    // Tier 5 — Evolution (special, dramatic)
-    { tier: 5, text: 'TRANSCENDENCE!', color: '#ffd700', size: 'xl', payload: null },
-    { tier: 5, text: 'INFINITY GLAZE!', color: '#ff69b4', size: 'xl', payload: null },
-  ];
+  // Era-based word progression: words unlock at specific coin thresholds
+  const WORD_CARD_ERAS = {
+    // Era 1: Backyard Bakery (1-1,000 coins)
+    1: [
+      { text: 'DOUGH!', color: '#ffb380', size: 'sm' },
+      { text: 'ROLL!', color: '#ff8fb1', size: 'sm' },
+      { text: 'SLAP!', color: '#ffc46b', size: 'sm' },
+      { text: 'MIX!', color: '#ff9a4a', size: 'sm' },
+      { text: 'BAKE!', color: '#ff9a4a', size: 'sm' },
+    ],
+    // Era 2: Laboratory & Glaze Era (1,000-100,000 coins)
+    2: [
+      { text: 'DIP!', color: '#ff6b9d', size: 'md' },
+      { text: 'SIZZLE!', color: '#ffa500', size: 'md' },
+      { text: 'DRIZZLE!', color: '#ff7e5f', size: 'md' },
+      { text: 'PLOP!', color: '#ffa500', size: 'md' },
+      { text: 'GLAZE-STORM!', color: '#ff1493', size: 'md' },
+    ],
+    // Era 3: Donut Factory (100,000-10,000,000 coins)
+    3: [
+      { text: 'POUND!', color: '#4a90e2', size: 'lg' },
+      { text: 'POUR!', color: '#7b68ee', size: 'lg' },
+      { text: 'SPRINKLE!', color: '#50c878', size: 'lg' },
+      { text: 'GUSH!', color: '#4a90e2', size: 'lg' },
+      { text: 'MEGA-MUNCH!', color: '#ff1493', size: 'lg' },
+    ],
+    // Era 4: Cosmic Empire (10,000,000+ coins)
+    4: [
+      { text: 'HOLY-HOLE!', color: '#ffd700', size: 'xl' },
+      { text: 'YEAST!', color: '#00ced1', size: 'xl' },
+      { text: 'SUGAR-SHOCK!', color: '#ff69b4', size: 'xl' },
+      { text: 'GIGA-GLAZE!', color: '#ffd700', size: 'xl' },
+      { text: 'DONUT-BANG!', color: '#ff1493', size: 'xl' },
+    ],
+  };
+
+  // Helper: Get available words for current coin total
+  function getAvailableWordCards() {
+    let era = 1;
+    if (state.totalEarned >= 10000000) era = 4;
+    else if (state.totalEarned >= 100000) era = 3;
+    else if (state.totalEarned >= 1000) era = 2;
+    return WORD_CARD_ERAS[era] || WORD_CARD_ERAS[1];
+  }
 
   const WORD_CARD_LORE = {
     1000000: 'The plain donut reaches the first million coins. A small victory.',
@@ -143,6 +131,10 @@
     miniDonuts: 0,                      // accumulated from milestones
     loreSnippetsUnlocked: {},           // thresholdCoin → true
     rivalPaceState: {},                 // for Frosting Wars ghost
+    // New: Critical Clicks & Combo-Meter
+    comboClicks: 0,                     // clicks in current combo window (5s)
+    comboStartTime: 0,
+    lastCriticalClickTime: 0,           // throttle critical click text (1s min between)
   };
   // Initialize generator counts to 0
   GENERATORS.forEach(g => state.generators[g.id] = 0);
@@ -199,11 +191,6 @@
   /* --------------------------------------------------------
      WORD-CARD SYSTEM
      -------------------------------------------------------- */
-  function pickRandomWordCard(tier) {
-    const cards = WORD_CARDS.filter(c => c.tier === tier);
-    return cards[Math.floor(Math.random() * cards.length)];
-  }
-
   function fireWordCard(card, position = null) {
     if (!card) return;
 
@@ -277,19 +264,16 @@
   }
 
   function checkWordCardTriggers() {
-    const now = Date.now();
-
-    // Tier 1: every 50th click (throttled, max once per 2 seconds) - much less frequent
-    if (state.clicks % 50 === 0 && now - state.lastWordCardTier1Time > 2000) {
-      fireWordCard(pickRandomWordCard(1));
-      state.lastWordCardTier1Time = now;
-    }
-
     // Tier 4: lifetime coin threshold crossed (only major milestones)
     const logThreshold = Math.floor(Math.log10(state.totalEarned));
     const thresholdCoin = Math.pow(10, logThreshold);
     if (thresholdCoin >= 1000000 && !state.loreSnippetsUnlocked[thresholdCoin]) {
-      const card = pickRandomWordCard(4);
+      const milestoneWords = [
+        { text: 'GLAZE ASCENDANT!', color: '#ffd700', size: 'xl' },
+        { text: 'THE GREAT RISING!', color: '#ff1493', size: 'xl' },
+        { text: 'DONUT-PALOOZA!', color: '#00ced1', size: 'xl' },
+      ];
+      const card = milestoneWords[Math.floor(Math.random() * milestoneWords.length)];
       fireWordCard(card);
       state.loreSnippetsUnlocked[thresholdCoin] = true;  // Mark immediately to prevent repeat fires
     }
@@ -636,19 +620,31 @@
     const power = getClickPowerWithBuff();
     earn(power, 'click');
     state.clicks++;
-
-    // Track click streak for Tier 2 (only fire on huge streaks)
     const now = Date.now();
-    if (now - state.clickStreakTime < 1000) {
-      state.clickStreak++;
-      if (state.clickStreak >= 15) {  // Much higher threshold - only on crazy clicking
-        fireWordCard(pickRandomWordCard(2));
-        state.clickStreak = 0;
-      }
-    } else {
-      state.clickStreak = 1;
+
+    // CRITICAL CLICKS: 5% chance per click to fire word-card (era-based)
+    if (Math.random() < 0.05 && now - state.lastCriticalClickTime > 1000) {
+      const available = getAvailableWordCards();
+      const word = available[Math.floor(Math.random() * available.length)];
+      fireWordCard(word);
+      state.lastCriticalClickTime = now;
     }
-    state.clickStreakTime = now;
+
+    // COMBO-METER: Track clicks in 5-second window for bonus trigger
+    if (now - state.comboStartTime > 5000) {
+      state.comboClicks = 0;
+      state.comboStartTime = now;
+    }
+    state.comboClicks++;
+    // If player hits 20 clicks in 5s, fire a bonus word-card with bigger size
+    if (state.comboClicks === 20) {
+      const available = getAvailableWordCards();
+      const word = { ...available[Math.floor(Math.random() * available.length)] };
+      word.size = 'lg';  // Bigger size for combo achievement
+      fireWordCard(word);
+      NG.toast('🔥 COMBO x20! Nice clicking!', { type: 'success' });
+      state.comboClicks = 0;  // Reset combo counter
+    }
 
     NG.audio.play('coin');
 
