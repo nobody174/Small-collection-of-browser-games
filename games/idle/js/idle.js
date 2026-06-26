@@ -1030,15 +1030,18 @@
     const playerRate = totalRate() * elapsed;
     state.rivalPaceState.coins += playerRate * 0.8;
 
-    // Rival occasionally "unlocks" flavors
-    const rivalFlavorsUnlocked = Math.floor(state.rivalPaceState.coins / 100000000);
+    // Rival occasionally "unlocks" flavors (every 10M coins)
+    const rivalFlavorsUnlocked = Math.floor(state.rivalPaceState.coins / 10000000);
     if (rivalFlavorsUnlocked > state.rivalPaceState.flavors) {
       state.rivalPaceState.flavors = rivalFlavorsUnlocked;
       const banner = document.createElement('div');
       banner.className = 'rival-event';
-      banner.textContent = `👻 Glenda's Glazed Goods just unlocked a new flavor! You're ${state.flavors ? 'still' : 'not'} ahead!`;
-      $('#shop').prepend(banner);
-      setTimeout(() => banner.remove(), 5000);
+      const rivalFlavorNum = rivalFlavorsUnlocked;
+      const playerFlavorNum = Object.keys(state.flavors).length;
+      const ahead = playerFlavorNum > rivalFlavorNum ? '👑 still ahead!' : '⚠️ catching up!';
+      banner.innerHTML = `<span style="font-size: 16px;">👻 Glenda just unlocked flavor #${rivalFlavorNum}... ${ahead}</span>`;
+      document.querySelector('.ng-app').appendChild(banner);
+      setTimeout(() => banner.remove(), 6000);
     }
 
     state.rivalPaceState.lastUpdateTime = now;

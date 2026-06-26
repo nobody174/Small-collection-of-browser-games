@@ -451,7 +451,9 @@ body.idle-board {
   border-radius: var(--ng-radius-md);
   font-size: var(--ng-text-sm);
   font-style: italic;
-  margin-bottom: var(--ng-space-3);
+  margin: var(--ng-space-3) auto var(--ng-space-3) auto;
+  max-width: 1100px;
+  text-align: center;
   animation: ticker-scroll 6s linear infinite;
 }
 
@@ -479,11 +481,19 @@ body.idle-board {
 }
 
 .rival-event {
-  background: var(--ng-bg-surface-2);
-  color: var(--ng-text-muted);
-  padding: var(--ng-space-3);
+  background: linear-gradient(135deg, rgba(158, 158, 255, 0.2), rgba(200, 150, 255, 0.2));
+  color: var(--ng-text);
+  padding: var(--ng-space-4);
   border-radius: var(--ng-radius-md);
-  margin-bottom: var(--ng-space-3);
-  font-size: var(--ng-text-sm);
-  border-left: 4px solid var(--ng-color-warning);
+  margin: var(--ng-space-3) auto;
+  max-width: 1100px;
+  font-size: var(--ng-text-base);
+  border-left: 4px solid #9e9eff;
+  animation: pulse-rival 0.6s ease-out;
+  text-align: center;
+}
+
+@keyframes pulse-rival {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
