@@ -173,11 +173,14 @@
     if (piles.stock.isEmpty()) {
       // Recycle: move all waste cards back to stock (reversed, face-down)
       // Infinite cycling with NO score penalty
-      const wasteCards = piles.waste.cards.slice().reverse();
-      wasteCards.forEach(c => {
-        c.setFaceUp(false);
-        piles.stock.push(c, { silent: true });
-      });
+      if (!piles.waste.isEmpty()) {
+        const wasteCards = piles.waste.cards.slice().reverse();
+        piles.waste.cards = [];  // Clear waste pile
+        wasteCards.forEach(c => {
+          c.setFaceUp(false);
+          piles.stock.push(c, { silent: true });
+        });
+      }
     } else {
       // Draw mode: 1 or 3 cards
       for (let i = 0; i < drawMode; i++) {
