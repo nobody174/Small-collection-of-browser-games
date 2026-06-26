@@ -468,7 +468,7 @@
         <div class="shop-item__icon">${c.emoji}</div>
         <div>
           <div class="shop-item__name">${c.name}</div>
-          <div class="shop-item__sub">+${fmt(c.baseRate)}/s each · total ${fmt(c.baseRate * owned)}/s</div>
+          <div class="shop-item__sub">+${(c.baseRate).toFixed(1)}/s each · total ${(c.baseRate * owned).toFixed(1)}/s</div>
         </div>
         <div class="shop-item__right">
           <div class="shop-item__cost">${fmt(cost)}</div>
@@ -1115,6 +1115,14 @@
 
     // Collection button (DNA)
     NG.on($('#btn-collection'), 'click', showCollection);
+
+    // Dev/Tester button - add 10 million coins
+    NG.on($('#btn-dev-coins'), 'click', () => {
+      earn(10000000, 'dev-test');
+      NG.toast('💰 +10M coins added (dev mode)', { type: 'info' });
+      renderTotals();
+      renderShop();
+    });
 
     // rAF ticks pause while the tab is backgrounded — catch up on the
     // elapsed time when the user returns instead of losing that income.
