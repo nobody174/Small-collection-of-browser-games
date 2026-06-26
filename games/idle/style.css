@@ -445,21 +445,21 @@ body.idle-board {
    ============================================================ */
 
 .bakery-radio {
-  background: linear-gradient(135deg, rgba(255, 196, 107, 0.15), rgba(255, 152, 0, 0.15));
+  background: linear-gradient(135deg, rgba(255, 196, 107, 0.2), rgba(255, 152, 0, 0.2));
   color: var(--ng-text);
-  padding: var(--ng-space-3);
+  padding: var(--ng-space-4);
   border-radius: var(--ng-radius-md);
   font-size: var(--ng-text-sm);
   font-style: italic;
   text-align: center;
-  border-top: 2px solid var(--ng-color-warning);
-  animation: ticker-scroll 6s linear infinite;
-}
-
-.bakery-radio--layout {
-  grid-column: 1 / -1;
+  border-top: 3px solid var(--ng-color-warning);
   margin-top: var(--ng-space-4);
-  margin: var(--ng-space-4) 0 0 0;
+  animation: ticker-scroll 6s linear infinite;
+  line-height: 1.5;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes ticker-scroll {
