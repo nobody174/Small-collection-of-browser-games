@@ -85,7 +85,7 @@ test.describe('Game Collection - Validation Tests', () => {
 
     // Basic checks
     expect(jsFile).toContain('function');
-    expect(jsFile).toContain('const state');
+    expect(jsFile).toMatch(/let\s+state\s*=|const\s+state\s*=/);
   });
 
   test('HTML files are valid markup', async () => {
