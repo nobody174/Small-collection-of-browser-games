@@ -93,8 +93,7 @@
       canAccept: () => false,
     });
     piles.waste = new NG.cards.Pile({
-      id: 'waste', el: $('#waste'), type: 'waste', layout: 'fan-right',
-      fanGapRight: 30,  // Gap between fanned cards
+      id: 'waste', el: $('#waste'), type: 'waste', layout: 'stacked',
       canPickup: wasteCanPickup,
       canAccept: () => false,
     });
