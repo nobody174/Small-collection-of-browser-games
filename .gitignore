@@ -13,6 +13,7 @@ node_modules/
 **/DEBUG_*.md
 **/RUN_*.md
 **/TEST_RESULTS.md
+**/DEV_*.html
 .DS_Store
 *.swp
 *.swo

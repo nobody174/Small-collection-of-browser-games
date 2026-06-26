@@ -1138,20 +1138,6 @@
     // Collection button (DNA)
     NG.on($('#btn-collection'), 'click', showCollection);
 
-    // Dev/Tester button - add 1 billion coins silently (no word-card triggers)
-    NG.on($('#btn-dev-coins'), 'click', () => {
-      state.coins += 1000000000;
-      state.totalEarned += 1000000000;
-      // Mark all major thresholds as already seen to prevent word-card spam
-      state.loreSnippetsUnlocked[1000000] = true;
-      state.loreSnippetsUnlocked[1000000000] = true;
-      state.loreSnippetsUnlocked[1000000000000] = true;
-      state.loreSnippetsUnlocked[1000000000000000] = true;
-      NG.toast('💰 +1B coins added (dev mode)', { type: 'info' });
-      renderTotals();
-      renderShop();
-    });
-
     // rAF ticks pause while the tab is backgrounded — catch up on the
     // elapsed time when the user returns instead of losing that income.
     let hiddenSince = null;
