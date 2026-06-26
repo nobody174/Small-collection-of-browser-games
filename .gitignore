@@ -6,3 +6,20 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Development & Testing (internal use only)
+**/test-*.html
+**/debug.html
+**/DEBUG_*.md
+**/RUN_*.md
+**/TEST_RESULTS.md
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Build artifacts
+dist/
+build/
+*.jar
+*.log
