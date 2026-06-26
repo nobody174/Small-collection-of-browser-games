@@ -246,13 +246,13 @@
   function checkWordCardTriggers() {
     const now = Date.now();
 
-    // Tier 1: every 10th click (throttled, max once per 500ms)
-    if (state.clicks % 10 === 0 && now - state.lastWordCardTier1Time > 500) {
+    // Tier 1: every 50th click (throttled, max once per 2 seconds) - much less frequent
+    if (state.clicks % 50 === 0 && now - state.lastWordCardTier1Time > 2000) {
       fireWordCard(pickRandomWordCard(1));
       state.lastWordCardTier1Time = now;
     }
 
-    // Tier 4: lifetime coin threshold crossed
+    // Tier 4: lifetime coin threshold crossed (only major milestones)
     const logThreshold = Math.floor(Math.log10(state.totalEarned));
     const thresholdCoin = Math.pow(10, logThreshold);
     if (thresholdCoin >= 1000000 && !state.loreSnippetsUnlocked[thresholdCoin]) {
@@ -598,11 +598,11 @@
     earn(power, 'click');
     state.clicks++;
 
-    // Track click streak for Tier 2
+    // Track click streak for Tier 2 (only fire on huge streaks)
     const now = Date.now();
     if (now - state.clickStreakTime < 1000) {
       state.clickStreak++;
-      if (state.clickStreak >= 5) {
+      if (state.clickStreak >= 15) {  // Much higher threshold - only on crazy clicking
         fireWordCard(pickRandomWordCard(2));
         state.clickStreak = 0;
       }
