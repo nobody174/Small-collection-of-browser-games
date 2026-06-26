@@ -174,7 +174,8 @@
       // Infinite cycling with NO score penalty
       if (!piles.waste.isEmpty()) {
         const wasteCards = piles.waste.cards.slice().reverse();
-        piles.waste.cards = [];  // Clear waste pile
+        piles.waste.cards = [];  // Clear waste pile directly
+        piles.waste.relayout();   // Update UI after clearing
         wasteCards.forEach(c => {
           c.setFaceUp(false);
           piles.stock.push(c, { silent: true });
