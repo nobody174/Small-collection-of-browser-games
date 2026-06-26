@@ -258,6 +258,7 @@
     if (thresholdCoin >= 1000000 && !state.loreSnippetsUnlocked[thresholdCoin]) {
       const card = pickRandomWordCard(4);
       fireWordCard(card);
+      state.loreSnippetsUnlocked[thresholdCoin] = true;  // Mark immediately to prevent repeat fires
     }
   }
 
