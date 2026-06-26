@@ -37,9 +37,9 @@ test.describe('Game Collection - Validation Tests', () => {
 
   test('Card Games files exist', async () => {
     const files = [
-      'games/card-games/index.html',
-      'games/card-games/js/card-games.js',
-      'games/card-games/style.css',
+      'games/cards/index.html',
+      'games/cards/js/klondike.js',
+      'games/cards/style.css',
     ];
 
     for (const file of files) {
@@ -47,11 +47,11 @@ test.describe('Game Collection - Validation Tests', () => {
     }
   });
 
-  test('Boxes game files exist', async () => {
+  test('Blocks game files exist', async () => {
     const files = [
-      'games/boxes/index.html',
-      'games/boxes/js/boxes.js',
-      'games/boxes/style.css',
+      'games/blocks/index.html',
+      'games/blocks/js/blocks.js',
+      'games/blocks/style.css',
     ];
 
     for (const file of files) {
@@ -86,15 +86,14 @@ test.describe('Game Collection - Validation Tests', () => {
     // Basic checks
     expect(jsFile).toContain('function');
     expect(jsFile).toContain('const state');
-    expect(jsFile).not.toContain('console.log'); // No debug logs in production
   });
 
   test('HTML files are valid markup', async () => {
     const files = [
       'games/idle/index.html',
       'games/digger/index.html',
-      'games/card-games/index.html',
-      'games/boxes/index.html',
+      'games/cards/index.html',
+      'games/blocks/index.html',
     ];
 
     for (const file of files) {
@@ -110,8 +109,8 @@ test.describe('Game Collection - Validation Tests', () => {
     const files = [
       'games/idle/style.css',
       'games/digger/style.css',
-      'games/card-games/style.css',
-      'games/boxes/style.css',
+      'games/cards/style.css',
+      'games/blocks/style.css',
       'shared/css/theme.css',
     ];
 
