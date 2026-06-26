@@ -542,17 +542,16 @@
      -------------------------------------------------------- */
 
   function spawnFullScreenSprinkles() {
-    // Rain sprinkles inside the coin-card (game board) only - proper rain effect
+    // Rain sprinkles inside the coin-card (game board) only - natural falling rain
     const coinCard = $('#coin-card');
     if (!coinCard) return;
 
     const rect = coinCard.getBoundingClientRect();
-    const count = 35 + Math.random() * 20;  // 35-55 sprinkles per rain burst for fuller coverage
+    const count = 40 + Math.random() * 25;  // 40-65 sprinkles for natural rain coverage
 
     for (let i = 0; i < count; i++) {
-      // Stagger the spawn across the width so it looks like actual rain
-      const delayX = (i % 7) * 40;  // Spread spawns across the card width
-      const delayY = Math.floor(i / 7) * 15;  // Multiple waves for better coverage
+      // Much slower stagger for more natural rainfall (not a dump)
+      const spawnDelay = Math.random() * 200;  // Random spawn over 200ms window
 
       setTimeout(() => {
         const sprinkleNum = Math.floor(Math.random() * 5) + 1;
@@ -566,30 +565,31 @@
         s.style.zIndex = '100';
 
         // Random x position spread across full card width
-        const startX = rect.left + (rect.width * 0.1) + Math.random() * (rect.width * 0.8);
-        const startY = rect.top - 30;  // Start well above the card
+        const startX = rect.left + Math.random() * rect.width;
+        const startY = rect.top - 40;  // Start well above the card
         s.style.left = startX + 'px';
         s.style.top = startY + 'px';
         document.body.appendChild(s);
 
         // Fall distance: from top of card to bottom
-        const fallDistance = rect.height + 50;
-        // Minimal horizontal drift so rain stays mostly vertical
-        const offsetX = (Math.random() - 0.5) * 60;
+        const fallDistance = rect.height + 60;
+        // Slight horizontal drift (wind effect)
+        const offsetX = (Math.random() - 0.5) * 80;
         const rotation = Math.random() * 360;
-        const duration = 1400 + Math.random() * 300;  // 1.4-1.7s fall time
+        // Longer, more consistent fall time for natural rain feel
+        const duration = 1600 + Math.random() * 400;  // 1.6-2.0s fall time
 
         s.animate([
           { transform: 'translate(-50%, 0) rotate(0deg)', opacity: 1 },
-          { transform: `translate(calc(-50% + ${offsetX}px), ${fallDistance}px) rotate(${rotation}deg)`, opacity: 0 }
+          { transform: `translate(calc(-50% + ${offsetX}px), ${fallDistance}px) rotate(${rotation}deg)`, opacity: 0.3 }
         ], {
           duration,
-          easing: 'ease-in',
+          easing: 'ease-in-out',  // More natural easing, not just ease-in
           fill: 'forwards'
         });
 
         setTimeout(() => s.remove(), duration);
-      }, delayY + (i % 7) * 8);  // Stagger spawn for continuous rain effect across the width
+      }, spawnDelay);  // More natural staggering
     }
   }
 
@@ -628,9 +628,9 @@
     // Full-screen sprinkle rain (instead of localized burst)
     spawnFullScreenSprinkles();
 
-    // Particle burst with rainbow colors
+    // Particle burst with rainbow colors - more particles to show all colors
     NG.particles.burst(e.clientX, e.clientY, {
-      count: 12, spread: 50, size: 7,
+      count: 16, spread: 60, size: 8,
       colors: ['#ffc46b', '#ff9a4a', '#ff8fb1', '#ff6b9d', '#4a90e2', '#7b68ee', '#50c878', '#ffd700'],
     });
 
