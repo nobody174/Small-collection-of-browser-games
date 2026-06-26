@@ -2,6 +2,8 @@
 
 A cozy collection of **4 mini games** built with vanilla JavaScript. Play them in your browser, save your progress, and challenge yourself across multiple difficulty levels.
 
+> 🎮 **[Play Now →](https://nobody174.github.io/Small-collection-of-browser-games/)** | 📖 [Read the Roadmap](COLLECTION_ROADMAP.md) | 💻 [GitHub](https://github.com/nobody174/Small-collection-of-browser-games)
+
 **⚠️ Important:** All games in this collection are under development and uncompleted. They are shared for educational purposes and community feedback.
 
 ## 🎯 Games
@@ -51,7 +53,9 @@ Mine your way around the world. Dig through different terrain types and find min
 ## 🚀 Getting Started
 
 ### Play Online
-Coming soon! For now, run locally:
+👉 **[Play Now on GitHub Pages](https://nobody174.github.io/Small-collection-of-browser-games/)**
+
+Or run locally:
 
 ### Run Locally
 
@@ -220,17 +224,27 @@ newgames.<game>.<variant>
 - [ ] Leaderboards
 - [ ] Multiplayer features
 
+## 📦 Releases & Versions
+
+Check the [Releases](https://github.com/nobody174/Small-collection-of-browser-games/releases) page for version history, patch notes, and download archives.
+
+**Current Version:** v1.0 (All games playable)
+- 🎮 4 games ready to play
+- ✅ 95+ validation tests passing
+- 🚀 Auto-deployed to GitHub Pages on every push
+
 ## 📊 CI/CD Status
 
-![Playwright Tests](https://github.com/nobody174/Small-collection-of-browser-games/actions/workflows/playwright.yml/badge.svg)
+![Test Suite](https://github.com/nobody174/Small-collection-of-browser-games/actions/workflows/test.yml/badge.svg)
+![Deploy Status](https://github.com/nobody174/Small-collection-of-browser-games/actions/workflows/deploy.yml/badge.svg)
 
-Tests run automatically on every push. Latest status:
+Tests run automatically on every push:
 
 ```
-✅ 495+ tests passing
-✅ Node.js 18.x & 20.x
-✅ All browsers tested
+✅ 95+ validation tests
+✅ Multi-browser testing (Chromium, Firefox, WebKit, Mobile)
 ✅ All games functional
+✅ Auto-deploy on success
 ```
 
 View full test results: [GitHub Actions](https://github.com/nobody174/Small-collection-of-browser-games/actions)
